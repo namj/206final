@@ -75,7 +75,7 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		
 		//setup JComboBox(s)
 		String[] fonts = {"FreeMono.ttf", "Kinnari.ttf", "Purisa-Oblique.ttf", "TakaoPGothic.ttf", "TlwgTypist-Bold.ttf", "Ubuntu-M.ttf"};
-		String[] sizes = { "10" , "20", "30", "40", "50", "60", "70"};
+		String[] sizes = { "10" , "20", "30", "40", "50", "60"};
 		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "purple", "orange" };
 
 		_font = new JComboBox<String>(fonts);
