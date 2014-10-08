@@ -2,6 +2,8 @@ package project;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,7 +11,9 @@ import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
 
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JTree;
@@ -18,34 +22,27 @@ import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-public class TextInsertFrame extends JFrame {
+import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
+
+import java.awt.Font;
+import java.io.File;
+
+public class TextInsertFrame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	JLabel lblNewLabel, timeLabel1, fontLabel1, colourLabel1, sizeLabel1, lblNewLabel_1, timeLabel2, fontLabel2, colourLabel2, sizeLabel2;
-	JComboBox<String> timeBox1, fontBox1, colourBox1, sizeBox1, timeBox2, fontBox2, colourBox2, sizeBox2;
-	JButton previewBtn1, previewBtn2, generateBtn;
-	JTextArea textArea1, textArea2;
-	JRadioButton checkBtn1, checkBtn2;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TextInsertFrame frame = new TextInsertFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
+	private JLabel lblNewLabel, timeLabel1, fontLabel1, colourLabel1, sizeLabel1, lblNewLabel_1, timeLabel2, fontLabel2, colourLabel2, sizeLabel2;
+	private JComboBox<String> timeBox1, fontBox1, colourBox1, sizeBox1, timeBox2, fontBox2, colourBox2, sizeBox2;
+	private JButton previewBtn1, previewBtn2, generateBtn;
+	private JTextArea textArea1, textArea2;
+	private JRadioButton checkBtn1, checkBtn2;
+	private String _selectedVid;
+	private EmbeddedMediaPlayer _currentVideo;
+	
 
-	/**
-	 * Create the frame.
-	 */
-	public TextInsertFrame() {
+	
+	public TextInsertFrame(String mediaPath, EmbeddedMediaPlayer currentVideo) {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 784, 512);
 		contentPane = new JPanel();
@@ -58,6 +55,8 @@ public class TextInsertFrame extends JFrame {
 		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "purple", "orange" };
 		String[] times = { "5" , "10" , "15" , "20" , "25" , "30" };
 
+		_selectedVid = mediaPath;
+		_currentVideo = currentVideo;
 		
 		lblNewLabel = new JLabel("Beginning");
 		contentPane.add(lblNewLabel, "flowx,cell 0 0,alignx left");
@@ -75,6 +74,8 @@ public class TextInsertFrame extends JFrame {
 		contentPane.add(textArea1, "cell 0 1 3 1,grow");
 		
 		checkBtn1 = new JRadioButton("");
+		checkBtn1.setSelected(true);
+		checkBtn1.addActionListener(this);
 		contentPane.add(checkBtn1, "cell 3 1,aligny top");
 		
 		fontLabel1 = new JLabel("font");
@@ -111,6 +112,8 @@ public class TextInsertFrame extends JFrame {
 		contentPane.add(textArea2, "cell 0 4 3 1,grow");
 		
 		checkBtn2 = new JRadioButton("");
+		checkBtn2.setSelected(true);
+		checkBtn2.addActionListener(this);
 		contentPane.add(checkBtn2, "cell 3 4,aligny top");
 		
 		fontLabel2 = new JLabel("font");
@@ -132,7 +135,95 @@ public class TextInsertFrame extends JFrame {
 		contentPane.add(sizeBox2, "cell 2 5,growx");
 		
 		generateBtn = new JButton("Generate");
+		generateBtn.setFont(new Font("Dialog", Font.PLAIN, 25));
+		generateBtn.addActionListener(this);
 		contentPane.add(generateBtn, "cell 0 6 4 1,alignx center");
+		
+		setVisible(true);
+		
+		
+		
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == checkBtn1){
+			if (!checkBtn1.isSelected()){
+				//disable all components at top half
+				previewBtn1.setEnabled(false);
+				timeBox1.setEnabled(false);
+				textArea1.setEnabled(false);
+				fontBox1.setEnabled(false);
+				colourBox1.setEnabled(false);
+				sizeBox1.setEnabled(false);
+			}else{
+				//or enable them
+				previewBtn1.setEnabled(true);
+				timeBox1.setEnabled(true);
+				textArea1.setEnabled(true);
+				fontBox1.setEnabled(true);
+				colourBox1.setEnabled(true);
+				sizeBox1.setEnabled(true);
+			}
+				
+		} else if (e.getSource() == checkBtn2){
+			if (!checkBtn2.isSelected()){
+				//disable all components at bottom half
+				previewBtn2.setEnabled(false);
+				timeBox2.setEnabled(false);
+				textArea2.setEnabled(false);
+				fontBox2.setEnabled(false);
+				colourBox2.setEnabled(false);
+				sizeBox2.setEnabled(false);
+			}else{
+				//or enable them
+				previewBtn2.setEnabled(true);
+				timeBox2.setEnabled(true);
+				textArea2.setEnabled(true);
+				fontBox2.setEnabled(true);
+				colourBox2.setEnabled(true);
+				sizeBox2.setEnabled(true);
+			}
+		} else if (e.getSource() == generateBtn){
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setDialogTitle("Select directory to save video to");
+			int result = fileChooser.showSaveDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION){	
+				//store path of directory to save it to
+				String savePath = fileChooser.getCurrentDirectory().getAbsolutePath();
+				String outputPathName = fileChooser.getSelectedFile().toString();
+				System.out.println(savePath);
+
+				File out = new File(outputPathName);
+				boolean cancelled = false;
+				//if output name specified exists loop until user selects to overwrite or exits filechooser
+				while (out.exists()){
+					int result2 = JOptionPane.showConfirmDialog(null, "file already exists. Would you like to overwrite?", "", 0);
+					if (result2 == JOptionPane.YES_OPTION){
+						break;
+					} else {
+						int result3 = fileChooser.showSaveDialog(this);
+						if (result3 == JFileChooser.APPROVE_OPTION){	
+							//store path of directory to save it to
+							outputPathName = fileChooser.getSelectedFile().toString();								
+							out = new File(outputPathName);
+						} else if (result3 == JFileChooser.CANCEL_OPTION){
+							cancelled = true;
+							break;
+						}
+					}
+				}
+				//only initialise and execute swingworker is filechooser has exited without being deliberately exited/cancelled
+				if (cancelled == false){
+					
+					TextInserter inserter = new TextInserter(_selectedVid, savePath, outputPathName, textArea1.getText(), fontBox1, sizeBox1, colourBox1, timeBox1,
+							textArea2.getText(), fontBox2, sizeBox2, colourBox2, timeBox2, _currentVideo.getLength());
+					inserter.execute();
+				}
+			}
+			
+		}
 		
 	}
 

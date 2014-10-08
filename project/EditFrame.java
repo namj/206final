@@ -18,8 +18,8 @@ import javax.swing.JLabel;
  */
 
 public class EditFrame extends JFrame{
-	private JButton tP,cP,rm,ex,ov,rp,exit;
-	private JLabel page, audio;
+	private JButton tP,cP,rm,ex,ov,rp,exit,textS,testE;
+	private JLabel page, audio, text;
 	
 	//computer screen dimensions
 	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -28,8 +28,8 @@ public class EditFrame extends JFrame{
 	
 	public EditFrame(ActionListener parent) {
 		//frame set up
-		setSize(430,270);
-		setLocation((_screenWidth-430)/2,(_screenHeight-270)/2);
+		setSize(430,380);
+		setLocation((_screenWidth-430)/2,(_screenHeight-380)/2);
 		setTitle("Edit video");
 		setLayout(null);
 		setResizable(false);
@@ -76,9 +76,20 @@ public class EditFrame extends JFrame{
 		rp.addActionListener(parent);
 		add(rp);
 		
+		text = new JLabel("Text");
+		text.setBounds(195, 215, 80, 30);
+		add(text);
+		textS = new JButton("+ Insert text");
+		textS.setBounds(10, 245, 200, 40);
+		textS.setActionCommand("addText");
+		textS.addActionListener(parent);
+		add(textS);
+		
+		
+		
 		//set up of exit button, which closes the frame when pressed
 		exit = new JButton("Exit");
-		exit.setBounds(140, 210, 150, 30);
+		exit.setBounds(140, 310, 150, 30);
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

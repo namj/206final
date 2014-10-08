@@ -108,13 +108,6 @@ public class Menu extends JFrame implements ActionListener {
 		//embedded media player setup
 		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 		ourMediaPlayer = new EmbeddedMediaPlayerComponent();
-		/**
-		int videoPlayerWidth = this.getWidth()-10;
-		int videoPlayerHeight = 700;
-		ourMediaPlayer.setSize(videoPlayerWidth,videoPlayerHeight);
-		ourMediaPlayer.setLocation((_menuWidth-videoPlayerWidth)/2,70);
-		*/
-		
 		
 		//instantiate main panel passing in Media Player
 		container = new MainPanel(ourMediaPlayer);
@@ -494,6 +487,8 @@ public class Menu extends JFrame implements ActionListener {
 		//when help item is pressed, open the readme file in a scrollpane
 		} else if (e.getActionCommand().equals("Open readme")) {
 			openHelpFrame();
+		} else if (e.getActionCommand().equals("addText")) {
+			TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
 		}
 	}
 
