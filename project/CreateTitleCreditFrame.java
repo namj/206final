@@ -244,7 +244,6 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 					//store path of directory to save it to
 					String savePath = fileChooser.getCurrentDirectory().getAbsolutePath();
 					String outputPathName = fileChooser.getSelectedFile().toString();
-					System.out.println(savePath);
 
 					File out = new File(outputPathName);
 					boolean cancelled = false;

@@ -2,7 +2,10 @@ package project;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -89,6 +92,61 @@ public class Previewer {
 				for (int i = 0; i< chunks.size(); i++){
 					_label.setText(chunks.get(i));
 				}
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error playing preview.");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				//delete video files when done
+				try {
+					Files.deleteIfExists(Paths.get("videoFromImage.mp4"));
+					Files.deleteIfExists(Paths.get("preview.mp4"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+		
+	}
+	
+	public void viewTextOverlay(String vidPath, String text, String font, String size, String colour, String ss, String t){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+
+				//command to play the video through avplay.
+				String cmd3 = "avplay -i "+vidPath+" -ss "+ss+" -t "+t+" -vf \"drawtext=fontcolor="+colour+":fontsize="+size+":fontfile=./fonts/"+font+":text='"+text+"':x=30:y=h-text_h-30\"";
+				ProcessBuilder Builder3 = new ProcessBuilder("/bin/bash","-c",cmd3);
+				Process process3 = Builder3.start();
+				
+				InputStream stdoutC = process3.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+					//if cancel button has been pressed
+					
+				}
+				
+				return 0;
 			}
 			
 			@Override

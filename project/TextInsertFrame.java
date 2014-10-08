@@ -68,6 +68,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		contentPane.add(timeBox1, "cell 1 0,alignx right");
 		
 		previewBtn1 = new JButton("Preview");
+		previewBtn1.addActionListener(this);
 		contentPane.add(previewBtn1, "cell 2 0,alignx right");
 		
 		textArea1 = new JTextArea();
@@ -106,6 +107,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		contentPane.add(timeBox2, "cell 1 3,alignx right");
 		
 		previewBtn2 = new JButton("Preview");
+		previewBtn2.addActionListener(this);
 		contentPane.add(previewBtn2, "cell 2 3,alignx right");
 		
 		textArea2 = new JTextArea();
@@ -223,6 +225,21 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 				}
 			}
 			
+		} else if (e.getSource() == previewBtn1){
+			Previewer p = new Previewer();
+			p.viewTextOverlay(_selectedVid, textArea1.getText(), fontBox1.getSelectedItem().toString(), sizeBox1.getSelectedItem().toString(), colourBox1.getSelectedItem().toString(), 
+					"0", timeBox1.getSelectedItem().toString());
+		} else if (e.getSource() == previewBtn2){
+			Previewer p = new Previewer();
+			
+			int length = (int) (_currentVideo.getLength()/1000);
+			String l = Integer.toString(length);
+			int lengthMinusTime = length - Integer.parseInt(timeBox2.getSelectedItem().toString());
+			String lMinusT = Integer.toString(lengthMinusTime);
+			System.out.println("1");
+			p.viewTextOverlay(_selectedVid, textArea2.getText(), fontBox2.getSelectedItem().toString(), sizeBox2.getSelectedItem().toString(), colourBox2.getSelectedItem().toString(), 
+					lMinusT, l);
+			System.out.println("2");
 		}
 		
 	}
