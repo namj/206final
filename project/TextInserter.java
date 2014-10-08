@@ -119,13 +119,14 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 	@Override
 	protected Integer doInBackground() throws Exception {
 		
-		int endLength = (int) (_videoLength - Integer.parseInt(_time2));
+		System.out.println(_videoLength);
+		System.out.println(_videoLength/1000);
 		
+		int endLength = (int) (_videoLength/1000 - Integer.parseInt(_time2));
 		System.out.println(endLength);
-		System.out.println(_text2);
 		
-		
-		String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='lt(t,"+_time+")', drawtext=fontcolor="+_colour2+":fontsize="+_textSize2+":fontfile=./fonts/"+_font2+":text='"+ _text2 +"':x=30:y=h-text_h-30:draw='gt(t,"+ endLength +") \" -y "+ _outputPathName +".mp4";
+		String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='lt(t,"+_time+")', "
+				+ "drawtext=fontcolor="+_colour2+":fontsize="+_textSize2+":fontfile=./fonts/"+_font2+":text='"+ _text2 +"':x=30:y=h-text_h-30:draw='gt(t,"+ endLength +")'\" -y "+ _outputPathName +".mp4";
 		ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
 		Builder2.redirectErrorStream(true);
 		Process process2 = Builder2.start();
