@@ -43,7 +43,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 	
 	public TextInsertFrame(String mediaPath, EmbeddedMediaPlayer currentVideo) {
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 784, 512);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -243,10 +243,10 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 			String l = Integer.toString(length);
 			int lengthMinusTime = length - Integer.parseInt(timeBox2.getSelectedItem().toString());
 			String lMinusT = Integer.toString(lengthMinusTime);
-			System.out.println("1");
+			
 			p.viewTextOverlay(_selectedVid, textArea2.getText(), fontBox2.getSelectedItem().toString(), sizeBox2.getSelectedItem().toString(), colourBox2.getSelectedItem().toString(), 
 					lMinusT, l);
-			System.out.println("2");
+		
 		}
 		
 	}

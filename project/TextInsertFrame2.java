@@ -38,7 +38,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 	 */
 	public TextInsertFrame2(String mediaPath, EmbeddedMediaPlayer currentVideo) {
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -56,6 +56,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		contentPane.add(lblNewLabel, "cell 0 0");
 		
 		_previewBtn = new JButton("Preview");
+		_previewBtn.addActionListener(this);
 		contentPane.add(_previewBtn, "cell 3 0,alignx right");
 		
 		_textField = new JTextArea();
@@ -96,13 +97,15 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		_generateBtn = new JButton("Generate");
 		_generateBtn.addActionListener(this);
 		contentPane.add(_generateBtn, "cell 1 5 2 1,alignx center,growy");
+		
+		setVisible(true);
 	}
 
 
 	@Override
 	public void actionPerformed(ActionEvent e) { 
 		//when generate button has been pushed
-		if (e.getSource() == _generateBtn ){
+		if (e.getSource() == _generateBtn || e.getSource() == _previewBtn){
 			
 			//Make sure user entered time formats correctly.
 			Boolean _formatCorrect = true;
@@ -155,6 +158,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 			//if outputfield is blank complain to user
 			if (_textField.getText().length() == 0){
 				JOptionPane.showMessageDialog(null, "Output name field is blank");
+				_formatCorrect = false;
 			}
 			
 			Boolean _everythingElseCorrect = true;
@@ -194,52 +198,59 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 				
 			}
 			
-			if(_formatCorrect == true && _everythingElseCorrect == true && _textField.getText().length() > 0){
-				//initialise and execute swing worker to insert text.
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setDialogTitle("Select directory to save video to");
-				int result = fileChooser.showSaveDialog(this);
-				if (result == JFileChooser.APPROVE_OPTION){	
-					//store path of directory to save it to
-					String savePath = fileChooser.getCurrentDirectory().getAbsolutePath();
-					String outputPathName = fileChooser.getSelectedFile().toString();
-					System.out.println(savePath);
-
-					File out = new File(outputPathName);
-					boolean cancelled = false;
-					//if output name specified exists loop until user selects to overwrite or exits filechooser
-					while (out.exists()){
-						int result2 = JOptionPane.showConfirmDialog(null, "file already exists. Would you like to overwrite?", "", 0);
-						if (result2 == JOptionPane.YES_OPTION){
-							break;
-						} else {
-							int result3 = fileChooser.showSaveDialog(this);
-							if (result3 == JFileChooser.APPROVE_OPTION){	
-								//store path of directory to save it to
-								outputPathName = fileChooser.getSelectedFile().toString();								
-								out = new File(outputPathName);
-							} else if (result3 == JFileChooser.CANCEL_OPTION){
-								cancelled = true;
+			if (e.getSource() == _generateBtn){
+				if(_formatCorrect == true && _everythingElseCorrect == true && _textField.getText().length() > 0){
+					//initialise and execute swing worker to insert text.
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setDialogTitle("Select directory to save video to");
+					int result = fileChooser.showSaveDialog(this);
+					if (result == JFileChooser.APPROVE_OPTION){	
+						//store path of directory to save it to
+						String savePath = fileChooser.getCurrentDirectory().getAbsolutePath();
+						String outputPathName = fileChooser.getSelectedFile().toString();
+						System.out.println(savePath);
+	
+						File out = new File(outputPathName);
+						boolean cancelled = false;
+						//if output name specified exists loop until user selects to overwrite or exits filechooser
+						while (out.exists()){
+							int result2 = JOptionPane.showConfirmDialog(null, "file already exists. Would you like to overwrite?", "", 0);
+							if (result2 == JOptionPane.YES_OPTION){
 								break;
+							} else {
+								int result3 = fileChooser.showSaveDialog(this);
+								if (result3 == JFileChooser.APPROVE_OPTION){	
+									//store path of directory to save it to
+									outputPathName = fileChooser.getSelectedFile().toString();								
+									out = new File(outputPathName);
+								} else if (result3 == JFileChooser.CANCEL_OPTION){
+									cancelled = true;
+									break;
+								}
 							}
 						}
-					}
-					//only initialise and execute swingworker is filechooser has exited without being deliberately exited/cancelled
-					if (cancelled == false){
-						
-						TextInserter inserter = new TextInserter(2, _mediaPath, savePath, outputPathName, _textField.getText(), 
-								_fontBox, _sizeBox, _colourBox, _startTime, _endTime);
-						inserter.execute();
-						
+						//only initialise and execute swingworker is filechooser has exited without being deliberately exited/cancelled
+						if (cancelled == false){
+							
+							TextInserter inserter = new TextInserter(2, _mediaPath, savePath, outputPathName, _textField.getText(), 
+									_fontBox, _sizeBox, _colourBox, _startTime, _endTime);
+							inserter.execute();
+							
+						}
 					}
 				}
+			} else if (e.getSource() == _previewBtn){
+				if(_formatCorrect == true && _everythingElseCorrect == true && _textField.getText().length() > 0){
+					
+					_endTime = _endTime - _startTime;
+				
+					Previewer p = new Previewer();
+					p.viewTextOverlay(_mediaPath, _textField.getText(), _fontBox.getSelectedItem().toString(), _sizeBox.getSelectedItem().toString(), _colourBox.getSelectedItem().toString(), 
+							Integer.toString(_startTime), Integer.toString(_endTime));
+				}
 			}
-		
-			
 		}
 		
 	}
-	
-	
 
 }
