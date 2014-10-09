@@ -226,7 +226,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 				//only initialise and execute swingworker is filechooser has exited without being deliberately exited/cancelled
 				if (cancelled == false){
 					
-					TextInserter inserter = new TextInserter(_selectedVid, savePath, outputPathName, textArea1.getText(), fontBox1, sizeBox1, colourBox1, timeBox1,
+					TextInserter inserter = new TextInserter(1, _selectedVid, savePath, outputPathName, textArea1.getText(), fontBox1, sizeBox1, colourBox1, timeBox1,
 							textArea2.getText(), fontBox2, sizeBox2, colourBox2, timeBox2, _currentVideo.getLength());
 					inserter.execute();
 				}

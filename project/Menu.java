@@ -481,15 +481,17 @@ public class Menu extends JFrame implements ActionListener {
 				}
 			}
 		//for command create title/credit page, open appropriate frame
-		} else if (e.getActionCommand().equals("Create title")){
+		} else if (e.getActionCommand().equals("Create title")) {
 			CreateTitleCreditFrame titleFrame = new CreateTitleCreditFrame(_mediaPath, "Create Title page(s)");
-		} else if (e.getActionCommand().equals("Create credit")){
+		} else if (e.getActionCommand().equals("Create credit")) {
 			CreateTitleCreditFrame creditFrame = new CreateTitleCreditFrame(_mediaPath, "Create Credit page(s)");
 		//when help item is pressed, open the readme file in a scrollpane
 		} else if (e.getActionCommand().equals("Open readme")) {
 			openHelpFrame();
-		} else if (e.getActionCommand().equals("addText")) {
+		} else if (e.getActionCommand().equals("addTextStartEnd")) {
 			TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
+		} else if (e.getActionCommand().equals("addTextSpecified")) {
+			TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
 		}
 	}
 

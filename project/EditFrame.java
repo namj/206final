@@ -18,7 +18,7 @@ import javax.swing.JLabel;
  */
 
 public class EditFrame extends JFrame{
-	private JButton tP,cP,rm,ex,ov,rp,exit,textS,testE;
+	private JButton tP,cP,rm,ex,ov,rp,exit,textS,textD;
 	private JLabel page, audio, text;
 	
 	//computer screen dimensions
@@ -76,16 +76,20 @@ public class EditFrame extends JFrame{
 		rp.addActionListener(parent);
 		add(rp);
 		
-		text = new JLabel("Text");
-		text.setBounds(195, 215, 80, 30);
+		text = new JLabel("Insert Text");
+		text.setBounds(175, 215, 80, 30);
 		add(text);
-		textS = new JButton("+ Insert text");
+		textS = new JButton("+ Start/End");
 		textS.setBounds(10, 245, 200, 40);
-		textS.setActionCommand("addText");
+		textS.setActionCommand("addTextStartEnd");
 		textS.addActionListener(parent);
 		add(textS);
 		
-		
+		textD = new JButton("+ Specify Interval");
+		textD.setBounds(220, 245, 200, 40);
+		textD.setActionCommand("addTextSpecified");
+		textD.addActionListener(parent);
+		add(textD);
 		
 		//set up of exit button, which closes the frame when pressed
 		exit = new JButton("Exit");

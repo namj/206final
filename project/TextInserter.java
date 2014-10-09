@@ -33,6 +33,10 @@ import javax.swing.SwingWorker;
 
 public class TextInserter extends SwingWorker<Integer, String> implements ActionListener {
 	
+	private int _whichOne; //int to indicate whether to put text and start/end or at specified interval. 1 means start/end 2 means specified
+	
+	private int _startTime, _finishTime;
+	
 	private String _text; //text to apply
 	private String _text2;
 	
@@ -67,9 +71,11 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 	
 
 	//constructor for this swingworker
-	public TextInserter(String path, String savePath, String outputPathName, String text, JComboBox<String> font, JComboBox<String> size, JComboBox<String> colour, 
+	public TextInserter(int sel, String path, String savePath, String outputPathName, String text, JComboBox<String> font, JComboBox<String> size, JComboBox<String> colour, 
 			JComboBox<String> time, String text2, JComboBox<String> font2, JComboBox<String> size2, JComboBox<String> colour2, JComboBox<String> time2, 
 			long videoLength){
+		
+		_whichOne = sel;
 		
 		_text = text;
 		_text2 = text2;
@@ -112,37 +118,107 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		
 	}
 	
+	public TextInserter(int sel, String path, String savePath, String outputPathName, String text, JComboBox<String> font, JComboBox<String> size, 
+			JComboBox<String> colour, int startTime, int finishTime){
+		
+		_whichOne = sel;
+		
+		_text = text;
+		_videoPath = path;
+		_savePath = savePath;
+		_outputPathName = outputPathName;
+		
+		_font = font.getSelectedItem().toString();
+		_fontIndex = font.getSelectedIndex();
+		_textSize = size.getSelectedItem().toString();
+		_sizeIndex = size.getSelectedIndex();
+		_colour = colour.getSelectedItem().toString();
+		_colourIndex = colour.getSelectedIndex();
+		
+		_startTime = startTime;
+		_finishTime = finishTime;
+		
+		_frame = new JFrame();
+		_progressText = new JLabel("encoding...");
+		_cancelButton = new JButton("Cancel");
+		_cancelButton.addActionListener(this);
+		
+		_frame.setBackground(Color.LIGHT_GRAY);
+		_frame.setLayout(new BorderLayout());
+		_frame.setLocation(600,400);
+		_frame.setSize(300,150);
+		_frame.add(_progressText,BorderLayout.NORTH);
+		_frame.add(_cancelButton,BorderLayout.SOUTH);
+		_frame.setVisible(true);
+		
+	}
+	
+
 	@Override
 	protected Integer doInBackground() throws Exception {
 		
-		int endLength = (int) (_videoLength/1000 - Integer.parseInt(_time2));
+		if (_whichOne == 1){
+			
+			int endLength = (int) (_videoLength/1000 - Integer.parseInt(_time2));
+			
+			String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='lt(t,"+_time+")', "
+					+ "drawtext=fontcolor="+_colour2+":fontsize="+_textSize2+":fontfile=./fonts/"+_font2+":text='"+ _text2 +"':x=30:y=h-text_h-30:draw='gt(t,"+ endLength +")'\" -y "+ _outputPathName +".mp4";
+			ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
+			Builder2.redirectErrorStream(true);
+			Process process2 = Builder2.start();
+			InputStream stdoutC = process2.getInputStream();
+			BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+			String line = null;
+			//print output from terminal to console
+			while ((line = stdoutD.readLine()) != null) {
+				System.out.println(line);
 		
-		String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='lt(t,"+_time+")', "
-				+ "drawtext=fontcolor="+_colour2+":fontsize="+_textSize2+":fontfile=./fonts/"+_font2+":text='"+ _text2 +"':x=30:y=h-text_h-30:draw='gt(t,"+ endLength +")'\" -y "+ _outputPathName +".mp4";
-		ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
-		Builder2.redirectErrorStream(true);
-		Process process2 = Builder2.start();
-		InputStream stdoutC = process2.getInputStream();
-		BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
-		String line = null;
-		//print output from terminal to console
-		while ((line = stdoutD.readLine()) != null) {
-			System.out.println(line);
-
-			//if cancel button has been pressed
-			if (_isCancelled){
-				//destroy process and return exit value
-				process2.destroy();
-				int exitValue = process2.waitFor();
-				return exitValue;
+				//if cancel button has been pressed
+				if (_isCancelled){
+					//destroy process and return exit value
+					process2.destroy();
+					int exitValue = process2.waitFor();
+					return exitValue;
+				}
 			}
-		}
-		//if process hasn't finished happily, return exit value which will be non zero
-		if (process2.waitFor() != 0){
-			return process2.waitFor();
+			//if process hasn't finished happily, return exit value which will be non zero
+			if (process2.waitFor() != 0){
+				return process2.waitFor();
+			}
+			
+			return 0;
+			
+		} else {
+			
+			String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":"
+					+ "fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='gte(t,"+_startTime+")*lte(t,"+_finishTime+")'\" -y "+ _outputPathName +".mp4";
+			ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
+			Builder2.redirectErrorStream(true);
+			Process process2 = Builder2.start();
+			InputStream stdoutC = process2.getInputStream();
+			BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+			String line = null;
+			//print output from terminal to console
+			while ((line = stdoutD.readLine()) != null) {
+				System.out.println(line);
+		
+				//if cancel button has been pressed
+				if (_isCancelled){
+					//destroy process and return exit value
+					process2.destroy();
+					int exitValue = process2.waitFor();
+					return exitValue;
+				}
+			}
+			//if process hasn't finished happily, return exit value which will be non zero
+			if (process2.waitFor() != 0){
+				return process2.waitFor();
+			}
+			
+			
+			return 0;
 		}
 		
-		return 0;
 	}
 	
 	@Override
