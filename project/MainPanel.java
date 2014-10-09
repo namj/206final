@@ -3,6 +3,8 @@ package project;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -37,21 +39,37 @@ public class MainPanel extends JPanel {
 	private EmbeddedMediaPlayer currentVideo;
 	private EmbeddedMediaPlayerComponent videoPlayer;
 	private MediaProgressChecker mPC;
+	private JPanel vPanel;
 	
 	/**
 	 * Create the panel.
 	 */
 	public MainPanel(EmbeddedMediaPlayerComponent vidPlayer) {
 		
-		setLayout(new MigLayout("", "[82.00][130.00,grow][351.00,grow][grow]", "[417.00,grow][18.00][]"));
+		setLayout(new MigLayout("", "[82.00][130.00,grow][40.00%][30.00%]", "[417.00,grow][18.00][]"));
 		setBackground(Color.GRAY);
 		
 		
 		//video player set from the input of the constructor
 		videoPlayer = vidPlayer;
-		//panel = new JPanel();
-		//panel.add(videoPlayer);
-		add(videoPlayer, "cell 0 0 4 1,grow");
+		
+		vPanel = new JPanel();
+		vPanel.add(videoPlayer);
+		vPanel.setBackground(Color.black);
+		vPanel.setLayout(null);
+		
+		vPanel.addComponentListener(new ComponentAdapter(){
+			
+			@Override
+			public void componentResized(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				JPanel panel = (JPanel) e.getSource();
+				panel.getComponent(0).setBounds(5, 5, panel.getWidth(), panel.getHeight());
+			}
+			
+		});
+		
+		add(vPanel, "cell 0 0 4 1,grow");
 		//---------------------MEDIA PLAYER SETUP----------------------------//
 		
 		

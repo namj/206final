@@ -24,14 +24,10 @@ import javax.swing.SwingWorker;
 /**
  * This class extends swingworker. This class processes all the avconv commands that take 
  * a long time. The avconv commands (processes) are those that:
- * 1 - figure out dimension of main vid, 
- * 2 - create a 10sec video from a single image,
- * 3 - apply music and text to it
- * 4 - encode title/credit page
- * 5 - encode main vid
- * 6 - concat the encoded files and produce mp4.
+ * 
+ * 
  *  
- * @author Namjun Park (npar350) Andy Choi (mcho588)
+ * @author Namjun Park (npar350)
  *
  */
 
@@ -132,7 +128,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		//print output from terminal to console
 		while ((line = stdoutD.readLine()) != null) {
 			System.out.println(line);
-			publish("Adding text to video,, this may take a while");
+
 			//if cancel button has been pressed
 			if (_isCancelled){
 				//destroy process and return exit value
@@ -167,36 +163,30 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		}
 		
 		//if user decides to save session
-		int result = JOptionPane.showConfirmDialog(null, "would you like to save your last(this) session?");
+		int result = JOptionPane.showConfirmDialog(null, "would you like to save your last(this) session?", "" , 1);
 		if (result == JOptionPane.OK_OPTION){
-			//Logger.getInstance().update(_text, _musicPath, _imagePath, _fontIndex, _sizeIndex, _colourIndex);
-			JOptionPane.showMessageDialog(null,"Saved");
+			try {
+				Logger.getInstance().updateForText(_text, _timeIndex, _fontIndex, _sizeIndex, _colourIndex, _text2, _timeIndex2, _fontIndex2, _sizeIndex2, _colourIndex2);
+				JOptionPane.showMessageDialog(null,"Saved");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (result == JOptionPane.NO_OPTION){
+			//if user denied to save session delete the edit log file so that next time user creates title/credit page nothing is continued
+			try {
+				Logger.getInstance().deleteLogForInsert();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		//close progress frame;
 		_frame.dispose();
-		try {
-			Files.deleteIfExists(Paths.get(_savePath + "/file1.ts"));
-			Files.deleteIfExists(Paths.get(_savePath + "/file2.ts"));
-			Files.deleteIfExists(Paths.get(_savePath + "/file3.ts"));
-			Files.deleteIfExists(Paths.get(_savePath + "/titleCreditPage.mp4"));
-			Files.deleteIfExists(Paths.get(_savePath + "/videoFromImage.mp4"));
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 	
-	@Override
-	protected void process(List<String> chunks) {
-		//update progress frame/text
-		for (int i = 0 ; i < chunks.size() ; i ++ )
-		_progressText.setText(chunks.get(i));
-		
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
