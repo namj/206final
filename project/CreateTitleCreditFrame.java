@@ -94,12 +94,14 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		//set up text area
 		this.add(_textArea = new JTextArea());
 		_textArea.setBounds(25, 30, 550, 100);
+		
 		/**We chose the character limit to 220 characters. The reason is because the word limit we 
 		agreed upon was 20 as if there were more than 20 words with the maximum fontsize as 70, 
 		it could overflow in the video(even if its dimensions were big). Since average number 
 		of alphabet is 5, we concluded to 220, extra 20 for spaces.
-		_textArea.setDocument(new TextManager(220));
 		*/
+		
+		_textArea.setDocument(new TextManager(220));
 		_textArea.setLineWrap(true);
 		_textArea.setWrapStyleWord(true);
 		Logger.getInstance().pullTextForPage(_textArea);

@@ -60,6 +60,9 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		contentPane.add(_previewBtn, "cell 3 0,alignx right");
 		
 		_textField = new JTextArea();
+		_textField.setDocument(new TextManager(220));
+		_textField.setLineWrap(true);
+		_textField.setWrapStyleWord(true);
 		contentPane.add(_textField, "cell 0 1 4 1,grow");
 		
 		JLabel lblNewLabel_1 = new JLabel("Font    ");

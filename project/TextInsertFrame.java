@@ -26,6 +26,7 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 import java.awt.Font;
 import java.io.File;
+import javax.swing.JScrollPane;
 
 public class TextInsertFrame extends JFrame implements ActionListener {
 
@@ -38,6 +39,8 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 	private JRadioButton checkBtn1, checkBtn2;
 	private String _selectedVid;
 	private EmbeddedMediaPlayer _currentVideo;
+	private JScrollPane scrollPane;
+	private JScrollPane scrollPane_1;
 	
 
 	
@@ -72,9 +75,15 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		previewBtn1.addActionListener(this);
 		contentPane.add(previewBtn1, "cell 2 0,alignx right");
 		
+		scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, "cell 0 1 3 1,grow");
+		
 		textArea1 = new JTextArea();
+		scrollPane.setViewportView(textArea1);
+		textArea1.setDocument(new TextManager(220));
+		textArea1.setLineWrap(true);
+		textArea1.setWrapStyleWord(true);
 		Logger.getInstance().pullTextForInsertTop(textArea1);
-		contentPane.add(textArea1, "cell 0 1 3 1,grow");
 		
 		checkBtn1 = new JRadioButton("");
 		checkBtn1.setSelected(true);
@@ -116,9 +125,15 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		previewBtn2.addActionListener(this);
 		contentPane.add(previewBtn2, "cell 2 3,alignx right");
 		
+		scrollPane_1 = new JScrollPane();
+		contentPane.add(scrollPane_1, "cell 0 4 3 1,grow");
+		
 		textArea2 = new JTextArea();
+		scrollPane_1.setViewportView(textArea2);
+		textArea2.setDocument(new TextManager(220));
+		textArea2.setLineWrap(true);
+		textArea2.setWrapStyleWord(true);
 		Logger.getInstance().pullTextForInsertBot(textArea2);
-		contentPane.add(textArea2, "cell 0 4 3 1,grow");
 		
 		checkBtn2 = new JRadioButton("");
 		checkBtn2.setSelected(true);
