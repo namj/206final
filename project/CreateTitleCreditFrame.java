@@ -102,7 +102,7 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		*/
 		_textArea.setLineWrap(true);
 		_textArea.setWrapStyleWord(true);
-		Logger.getInstance().pullText(_textArea);
+		Logger.getInstance().pullTextForPage(_textArea);
 		
 		//add preview button
 		this.add(_previewButton = new JButton("Preview"));
@@ -115,19 +115,19 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		
 		this.add(_font);
 		_font.setBounds(65, 140, 150, 30);
-		_font.setSelectedIndex(Logger.getInstance().pullFontIndex());
+		_font.setSelectedIndex(Logger.getInstance().pullFontIndexForPage());
 		this.add(_labelFont = new JLabel("font"));
 		_labelFont.setBounds(30, 140, 60, 30);
 		
 		this.add(_textSize);
 		_textSize.setBounds(280, 140, 100, 30);
-		_textSize.setSelectedIndex(Logger.getInstance().pullSizeIndex());
+		_textSize.setSelectedIndex(Logger.getInstance().pullSizeIndexForPage());
 		this.add(_labelSize = new JLabel("Size"));
 		_labelSize.setBounds(245, 140, 60, 30);
 		
 		this.add(_colour);
 		_colour.setBounds(470, 140, 100, 30);
-		_colour.setSelectedIndex(Logger.getInstance().pullColourIndex());
+		_colour.setSelectedIndex(Logger.getInstance().pullColourIndexForPage());
 		this.add(_labelColour = new JLabel("Colour"));
 		_labelColour.setBounds(420, 140, 60, 30);
 		
@@ -136,7 +136,7 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		
 		this.add(_textField1 = new JTextField());
 		_textField1.setBounds(25, 210, 500, 20);
-		_textField1.setText(Logger.getInstance().pullMusicPath());
+		_textField1.setText(Logger.getInstance().pullMusicPathForPage());
 		_textField1.setEditable(false);
 		
 		this.add(_browseButton1);
@@ -148,7 +148,7 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		
 		this.add(_textField2 = new JTextField());
 		_textField2.setBounds(25,250,500,20);
-		_textField2.setText(Logger.getInstance().pullImagePath());
+		_textField2.setText(Logger.getInstance().pullImagePathForPage());
 		_textField2.setEditable(false);
 		
 		this.add(_browseButton2);

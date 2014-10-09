@@ -37,7 +37,6 @@ public class MainPanel extends JPanel {
 	private EmbeddedMediaPlayer currentVideo;
 	private EmbeddedMediaPlayerComponent videoPlayer;
 	private MediaProgressChecker mPC;
-	private JPanel panel;
 	
 	/**
 	 * Create the panel.
@@ -46,6 +45,7 @@ public class MainPanel extends JPanel {
 		
 		setLayout(new MigLayout("", "[82.00][130.00,grow][351.00,grow][grow]", "[417.00,grow][18.00][]"));
 		setBackground(Color.GRAY);
+		
 		
 		//video player set from the input of the constructor
 		videoPlayer = vidPlayer;

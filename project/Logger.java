@@ -44,7 +44,7 @@ public class Logger {
 	}
 	
 	//function which saves editing session by updating log files.
-	public void update(String text, String musicPath, String imagePath, int fontCombo, int sizeCombo, int colourCombo) throws IOException {
+	public void updateForPage(String text, String musicPath, String imagePath, int fontCombo, int sizeCombo, int colourCombo) throws IOException {
 		
 		//update edit log file
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/editlog.txt", false)));
@@ -62,8 +62,40 @@ public class Logger {
 		
 	}
 	
+	public void updateForText(String text1, int timeCombo1, int fontCombo1, int sizeCombo1, int colourCombo1, 
+			String text2, int timeCombo2, int fontCombo2, int sizeCombo2, int colourCombo2) throws IOException {
+		
+		//update 
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLogTop.txt", false)));
+		out.println(timeCombo1);
+		out.println(fontCombo1);
+		out.println(colourCombo1);
+		out.println(sizeCombo1);
+		out.close();
+		
+		//update textlog
+		PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLogTop2.txt", false)));
+		out2.println(text1);
+		out2.close();
+		
+		//update
+		PrintWriter out3 = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLogBot.txt", false)));
+		out3.println(timeCombo2);
+		out3.println(fontCombo2);
+		out3.println(colourCombo2);
+		out3.println(sizeCombo2);
+		out3.close();
+		
+		//update textlog
+		PrintWriter out4 = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLogBot2.txt", false)));
+		out4.println(text2);
+		out4.close();
+		
+		
+	}
+	
 	//this method should return the text, ie first line of editlog file
-	public void pullText(JTextArea text){
+	public void pullTextForPage(JTextArea text){
 		
 		//if textlog exists, write its contents to the textArea.
 		if (new File(_vamixFolder + "/textlog.txt").exists()){
@@ -85,7 +117,7 @@ public class Logger {
 	}
 	
 	//this method should return the path of music file last used. ie second line of edit log file
-	public String pullMusicPath(){
+	public String pullMusicPathForPage(){
 		
 		//check if log file exists
 		if (new File(_vamixFolder + "/editlog.txt").exists()){
@@ -105,7 +137,7 @@ public class Logger {
 	}
 	
 	//this method should return the path of image file last used. ie third line of edit log file
-	public String pullImagePath(){
+	public String pullImagePathForPage(){
 		
 		//check if log file exists
 		if (new File(_vamixFolder + "/editlog.txt").exists()){
@@ -125,7 +157,7 @@ public class Logger {
 		return "";
 	}
 	
-	public int pullFontIndex(){
+	public int pullFontIndexForPage(){
 		
 		//check if log file exists
 		if (new File(_vamixFolder + "/editlog.txt").exists()){
@@ -146,7 +178,7 @@ public class Logger {
 		return 0;
 	}
 
-	public int pullSizeIndex(){
+	public int pullSizeIndexForPage(){
 	
 		//check if log file exists
 		if (new File(_vamixFolder + "/editlog.txt").exists()){
@@ -168,7 +200,7 @@ public class Logger {
 		return 0;
 	}
 
-	public int pullColourIndex(){
+	public int pullColourIndexForPage(){
 	
 		//check if log file exists
 		if (new File(_vamixFolder + "/editlog.txt").exists()){
@@ -191,10 +223,225 @@ public class Logger {
 		return 0;
 	}
 	
+	public void pullTextForInsertTop(JTextArea text){
+		
+		//if textlog exists, write its contents to the textArea.
+		if (new File(_vamixFolder + "/insertLogTop2.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogTop2.txt"));
+				text.setText("");
+				String line = in.readLine();
+				while(line != null){
+				  text.append(line + "\n");
+				  line = in.readLine();
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	
+	}
+	
+	public int pullTimeIndexForInsertTop(){
+		
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLogTop.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogTop.txt"));
+				//should be in 1st line
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+
+	public int pullfontIndexForInsertTop(){
+	
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLogTop.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogTop.txt"));
+				//should be in 2nd line
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+
+	public int pullColourIndexForInsertTop(){
+	
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLogTop.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogTop.txt"));
+				//should be in 3rd line
+				in.readLine();
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+	
+	public int pullSizeIndexForInsertTop(){
+		
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLogTop.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogTop.txt"));
+				//should be in 4th line
+				in.readLine();
+				in.readLine();
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+	
+public void pullTextForInsertBot(JTextArea text){
+		
+		//if textlog exists, write its contents to the textArea.
+		if (new File(_vamixFolder + "/insertLogBot2.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogBot2.txt"));
+				text.setText("");
+				String line = in.readLine();
+				while(line != null){
+				  text.append(line + "\n");
+				  line = in.readLine();
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	
+	}
+	
+	public int pullTimeIndexForInsertBot(){
+		
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLogBot.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogBot.txt"));
+				//should be in 1st line
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+
+	public int pullfontIndexForInsertBot(){
+	
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLogBot.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogBot.txt"));
+				//should be in 2nd line
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+
+	public int pullColourIndexForInsertBot(){
+	
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLogBot.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogBot.txt"));
+				//should be in 3rd line
+				in.readLine();
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+	
+	public int pullSizeIndexForInsertBot(){
+		
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLogBot.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLogBot.txt"));
+				//should be in 4th line
+				in.readLine();
+				in.readLine();
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+	
+	
+	
 	//method that deletes editlog and  textlog if they exist.
-	public void deleteLog() throws IOException{
+	public void deleteLogForPage() throws IOException{
 		Files.deleteIfExists(Paths.get(_vamixFolder + "/editlog.txt"));
 		Files.deleteIfExists(Paths.get(_vamixFolder + "/textlog.txt"));
+	}
+	
+	public void deleteLogForInsert() throws IOException{
+		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLogTop"));
+		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLogTop2"));
+		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLogBot"));
+		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLogBot2"));
 	}
 	
 }

@@ -360,7 +360,7 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		int result = JOptionPane.showConfirmDialog(null, "would you like to save your last(this) session?");
 		if (result == JOptionPane.OK_OPTION){
 			try {
-				Logger.getInstance().update(_text, _musicPath, _imagePath, _fontIndex, _sizeIndex, _colourIndex);
+				Logger.getInstance().updateForPage(_text, _musicPath, _imagePath, _fontIndex, _sizeIndex, _colourIndex);
 				JOptionPane.showMessageDialog(null,"Saved");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -369,7 +369,7 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		} else if (result == JOptionPane.NO_OPTION){
 			//if user denied to save session delete the edit log file so that next time user creates title/credit page nothing is continued
 			try {
-				Logger.getInstance().deleteLog();
+				Logger.getInstance().deleteLogForPage();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

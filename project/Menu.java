@@ -41,6 +41,7 @@ import project.ReplaceFrame;
 import com.sun.jna.Native;
 
 import javax.swing.JTextField;
+import javax.swing.JLayeredPane;
 
 public class Menu extends JFrame implements ActionListener {
 
@@ -83,7 +84,7 @@ public class Menu extends JFrame implements ActionListener {
 	 */
 	public Menu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1200, 900);
+		setSize(810, 481);
 		
 		WindowListener exitListener = new WindowAdapter() {
 			//Before the frame is closed set volume to default, and not mute if muted
