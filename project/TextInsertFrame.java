@@ -1,7 +1,9 @@
 package project;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,6 +28,7 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 import java.awt.Font;
 import java.io.File;
+
 import javax.swing.JScrollPane;
 
 public class TextInsertFrame extends JFrame implements ActionListener {
@@ -42,12 +45,14 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 	private JScrollPane scrollPane;
 	private JScrollPane scrollPane_1;
 	
-
+	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+	private static final int _screenHeight = (int)d.getHeight();
+	private static final int _screenWidth = (int)d.getWidth();
 	
 	public TextInsertFrame(String mediaPath, EmbeddedMediaPlayer currentVideo) {
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 784, 512);
+		setBounds((_screenWidth-780)/2,(_screenHeight-510)/2, 780, 510);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

@@ -1,6 +1,8 @@
 package project;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -32,14 +34,17 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 	private String _mediaPath;
 	private int _startTime, _endTime;
 
-
+	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+	private static final int _screenHeight = (int)d.getHeight();
+	private static final int _screenWidth = (int)d.getWidth();
+	
 	/**
 	 * Create the frame.
 	 */
 	public TextInsertFrame2(String mediaPath, EmbeddedMediaPlayer currentVideo) {
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds((_screenWidth-450)/2,(_screenHeight-300)/2, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -160,7 +165,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 			
 			//if outputfield is blank complain to user
 			if (_textField.getText().length() == 0){
-				JOptionPane.showMessageDialog(null, "Output name field is blank");
+				JOptionPane.showMessageDialog(null, "Text area is blank!");
 				_formatCorrect = false;
 			}
 			

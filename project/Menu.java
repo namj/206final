@@ -18,6 +18,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
@@ -62,6 +64,9 @@ public class Menu extends JFrame implements ActionListener {
 	
 	private JPanel contentPane;
 	private JTextField mediaNameField;
+	
+	private static final int _screenHeight = (int)d.getHeight();
+	private static final int _screenWidth = (int)d.getWidth();
 
 	/**
 	 * Launch the application.
@@ -84,8 +89,12 @@ public class Menu extends JFrame implements ActionListener {
 	 */
 	public Menu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(1200, 900);
+		setBounds((_screenWidth-1200)/2,(_screenHeight-900)/2,1200, 900);
 		
+		//Make sure mediaplaycomp does paint over jmenu
+		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
+
 		WindowListener exitListener = new WindowAdapter() {
 			//Before the frame is closed set volume to default, and not mute if muted
 			@Override

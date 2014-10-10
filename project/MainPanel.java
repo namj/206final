@@ -52,11 +52,6 @@ public class MainPanel extends JPanel {
 		setLayout(new MigLayout("", "[82.00][130.00,grow][40.00%][30.00%]", "[417.00,grow][18.00][]"));
 		setBackground(Color.GRAY);
 		
-		//Make sure mediaplaycomp does paint over jmenu
-		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
-		
-		
 		//video player set from the input of the constructor
 		videoPlayer = vidPlayer;
 		
