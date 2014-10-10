@@ -149,7 +149,7 @@ public class Menu extends JFrame implements ActionListener {
 		JMenu file, edit, help, _space, _space2;
 
 		JMenuItem _open, _exit, _dl, _title, _credit;
-		JMenuItem _rmAudio,_exAudio,_ovAudio, _rpAudio, _read;
+		JMenuItem _rmAudio,_exAudio,_ovAudio, _rpAudio, _read, _addText1, _addText2;
 		JMenuBar menuBar = new JMenuBar();
 		
 		//set the graphics (color) for the Menu bar
@@ -204,6 +204,13 @@ public class Menu extends JFrame implements ActionListener {
 		_rpAudio = new JMenuItem("Replace Audio");
 		_rpAudio.setActionCommand("rpAudio");
 		_rpAudio.addActionListener(this);
+		_addText1 = new JMenuItem("Add text (start/end)");
+		_addText1.setActionCommand("addTextStartEnd");
+		_addText1.addActionListener(this);
+		_addText2 = new JMenuItem("Add text (specified)");
+		_addText2.setActionCommand("addTextSpecified");
+		_addText2.addActionListener(this);
+		
 		edit.add(_title);
 		edit.add(_credit);
 		edit.addSeparator();
@@ -211,6 +218,10 @@ public class Menu extends JFrame implements ActionListener {
 		edit.add(_exAudio);
 		edit.add(_ovAudio);
 		edit.add(_rpAudio);
+		edit.addSeparator();
+		edit.add(_addText1);
+		edit.add(_addText2);
+		
 
 		menuBar.add(edit);
 		menuBar.add(_space2);
