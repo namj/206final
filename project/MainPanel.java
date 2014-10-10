@@ -11,10 +11,13 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.ToolTipManager;
 import javax.swing.plaf.metal.MetalSliderUI;
 
 import project.MediaProgressChecker;
@@ -49,6 +52,10 @@ public class MainPanel extends JPanel {
 		setLayout(new MigLayout("", "[82.00][130.00,grow][40.00%][30.00%]", "[417.00,grow][18.00][]"));
 		setBackground(Color.GRAY);
 		
+		//Make sure mediaplaycomp does paint over jmenu
+		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
+		
 		
 		//video player set from the input of the constructor
 		videoPlayer = vidPlayer;
@@ -64,7 +71,7 @@ public class MainPanel extends JPanel {
 			public void componentResized(ComponentEvent e) {
 				// TODO Auto-generated method stub
 				JPanel panel = (JPanel) e.getSource();
-				panel.getComponent(0).setBounds(5, 5, panel.getWidth(), panel.getHeight());
+				panel.getComponent(0).setSize(panel.getWidth() - 5 , panel.getHeight() - 5);
 			}
 			
 		});

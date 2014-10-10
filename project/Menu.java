@@ -84,7 +84,7 @@ public class Menu extends JFrame implements ActionListener {
 	 */
 	public Menu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(810, 481);
+		setSize(1200, 900);
 		
 		WindowListener exitListener = new WindowAdapter() {
 			//Before the frame is closed set volume to default, and not mute if muted
@@ -101,9 +101,6 @@ public class Menu extends JFrame implements ActionListener {
 			}		
 		};
 		addWindowListener(exitListener);
-		
-		//Add menu bar
-		setJMenuBar(setUpMenuBar());
 		
 		
 		//embedded media player setup
@@ -140,7 +137,10 @@ public class Menu extends JFrame implements ActionListener {
 		contentPane.add(mediaNameField, "cell 3 0,grow");
 		mediaNameField.setColumns(10);
 		
-		contentPane.add(container, "cell 0 1 4 1,grow");			
+		contentPane.add(container, "cell 0 1 4 1,grow");	
+		
+		//Add menu bar
+		setJMenuBar(setUpMenuBar());
 		
 	}
 	
@@ -189,12 +189,9 @@ public class Menu extends JFrame implements ActionListener {
 		_title = new JMenuItem("Add title page(s)");
 		_title.setActionCommand("Create title");
 		_title.addActionListener(this);
-		edit.add(_title);
 		_credit = new JMenuItem("Add credit page(s)");
 		_credit.setActionCommand("Create credit");
 		_credit.addActionListener(this);
-		edit.add(_credit);
-		edit.addSeparator();
 		_rmAudio = new JMenuItem("Remove Audio");
 		_rmAudio.setActionCommand("rmAudio");
 		_rmAudio.addActionListener(this);
@@ -207,6 +204,9 @@ public class Menu extends JFrame implements ActionListener {
 		_rpAudio = new JMenuItem("Replace Audio");
 		_rpAudio.setActionCommand("rpAudio");
 		_rpAudio.addActionListener(this);
+		edit.add(_title);
+		edit.add(_credit);
+		edit.addSeparator();
 		edit.add(_rmAudio);
 		edit.add(_exAudio);
 		edit.add(_ovAudio);
@@ -223,6 +223,7 @@ public class Menu extends JFrame implements ActionListener {
 		_read.addActionListener(this);
 		help.add(_read);
 		menuBar.add(help);
+		//menuBar.requestFocusInWindow();
 		
 		//final menu bar is returned at the end of the setup 
 		return menuBar;
