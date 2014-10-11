@@ -89,7 +89,7 @@ public class Menu extends JFrame implements ActionListener {
 	 */
 	public Menu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds((_screenWidth-1200)/2,(_screenHeight-900)/2,1200, 900);
+		setBounds((_screenWidth-1450)/2,(_screenHeight-900)/2,1450, 900);
 		
 		//Make sure mediaplaycomp does paint over jmenu
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
@@ -513,6 +513,8 @@ public class Menu extends JFrame implements ActionListener {
 			TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
 		} else if (e.getActionCommand().equals("addTextSpecified")) {
 			TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
+		} else if (e.getActionCommand().equals("addEffect")) {
+			EffectInsertFrame frame = new EffectInsertFrame(_mediaPath, currentVideo);
 		}
 	}
 

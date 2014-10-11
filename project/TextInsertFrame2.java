@@ -117,97 +117,14 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 			
 			//Make sure user entered time formats correctly.
 			Boolean _formatCorrect = true;
-			String start = _startField.getText();
-			String finish = _endField.getText();
-			//make sure length is 8, and check for numbers and : at right indexes
-			if (start.length() == 8){
-				for (int i = 0; i<start.length(); i++){
-					if (i == 2 || i == 5){
-						if(start.charAt(i) != ':'){
-							_formatCorrect = false;
-							break;
-						}
-					}
-					else {
-						if (!Character.isDigit(start.charAt(i))){
-							_formatCorrect = false;
-							break;
-						}
-					}
-				}
-			}else{
-				_formatCorrect = false;
-			}
-			//make sure length is 8, and check for numbers and : at right indexes
-			if (finish.length() == 8){
-				for (int i = 0; i<finish.length(); i++){
-					if (i == 2 || i == 5){
-						if(finish.charAt(i) != ':'){
-							_formatCorrect = false;
-							break;
-						}
-					}
-					else {
-						if (!Character.isDigit(finish.charAt(i))){
-							_formatCorrect = false;
-							break;
-						}
-					}
-				}
-			}else{
-				_formatCorrect = false;
-			}
 			
-			//complain to user if time given in wrong format
-			if (_formatCorrect == false){
-				JOptionPane.showMessageDialog(null, "Format of time(s) specified is incorrect");
-			}
-			
-			//if outputfield is blank complain to user
-			if (_textField.getText().length() == 0){
-				JOptionPane.showMessageDialog(null, "Text area is blank!");
-				_formatCorrect = false;
-			}
-			
-			Boolean _everythingElseCorrect = true;
-			if (_formatCorrect == true){
-				// if time formats are given correctly, then make sure time given is within video length range
-				//acquire video length in seconds first
-				int length = (int) (_currentVideo.getLength()/1000);
-				
-				//convert user given time format which will be hrs:mins:secs, into seconds.
-				int hoursToSecs = Integer.parseInt(_startField.getText().substring(0,2)) * 3600;
-				int minsToSecs = Integer.parseInt(_startField.getText().substring(3, 5)) * 60;
-				int secsToSecs = Integer.parseInt(_startField.getText().substring(6));
-				
-				int hoursToSecs2 = Integer.parseInt(_endField.getText().substring(0,2)) * 3600;
-				int minsToSecs2 = Integer.parseInt(_endField.getText().substring(3, 5)) * 60;
-				int secsToSecs2 = Integer.parseInt(_endField.getText().substring(6));
-				
-				//sum the seconds
-				_startTime = hoursToSecs + minsToSecs + secsToSecs;
-				_endTime = hoursToSecs2 + minsToSecs2 + secsToSecs2;
-				
-				//if start time is less than 0 or longer than video length
-				if (_startTime < 0 || _startTime > length){
-					JOptionPane.showMessageDialog(null, "Start time specifed isnt within range of video length");
-					_everythingElseCorrect = false;
-				}
-				//if end time is less thatn 0 or longer than video length
-				if (_endTime < 0 || _endTime > length){
-					JOptionPane.showMessageDialog(null, "End time specifed isnt within range of video length");
-					_everythingElseCorrect = false;
-				}
-				//if start time is equal or longer than end time
-				if (_startTime >= _endTime){
-					JOptionPane.showMessageDialog(null, "Start time must be less than end time");
-					_everythingElseCorrect = false;
-				}
-				
-			}
+			TimeFormatChecker checker = new TimeFormatChecker(_startField, _endField, _textField, _currentVideo);
+			_formatCorrect = checker.checkTimeFormat();
+			System.out.println(_formatCorrect);
 			
 			if (e.getSource() == _generateBtn){
-				if(_formatCorrect == true && _everythingElseCorrect == true && _textField.getText().length() > 0){
+				//if(_formatCorrect == true && _everythingElseCorrect == true && _textField.getText().length() > 0){
+				if(_formatCorrect == true && _textField.getText().length() > 0){
 					//initialise and execute swing worker to insert text.
 					JFileChooser fileChooser = new JFileChooser();
 					fileChooser.setDialogTitle("Select directory to save video to");
@@ -248,7 +165,11 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 					}
 				}
 			} else if (e.getSource() == _previewBtn){
-				if(_formatCorrect == true && _everythingElseCorrect == true && _textField.getText().length() > 0){
+				//if(_formatCorrect == true && _everythingElseCorrect == true && _textField.getText().length() > 0){
+				if(_formatCorrect == true && _textField.getText().length() > 0){
+					
+					int _startTime = checker.getStartTime();
+					int _endTime = checker.getEndTime();
 					
 					_endTime = _endTime - _startTime;
 				

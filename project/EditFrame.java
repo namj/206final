@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import java.awt.Font;
 
 /**
  * Frame that appears when user selects edit button from 
@@ -18,8 +19,8 @@ import javax.swing.JLabel;
  */
 
 public class EditFrame extends JFrame{
-	private JButton tP,cP,rm,ex,ov,rp,exit,textS,textD;
-	private JLabel page, audio, text;
+	private JButton tP,cP,rm,ex,ov,rp,exit,textS,textD, effectA;
+	private JLabel page, audio, text, effect;
 	
 	//computer screen dimensions
 	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -28,79 +29,89 @@ public class EditFrame extends JFrame{
 	
 	public EditFrame(ActionListener parent) {
 		//frame set up
-		setSize(430,380);
-		setLocation((_screenWidth-430)/2,(_screenHeight-380)/2);
+		setSize(430,470);
+		setLocation((_screenWidth-430)/2,(_screenHeight-470)/2);
 		setTitle("Edit video");
-		setLayout(null);
+		getContentPane().setLayout(null);
 		setResizable(false);
 		
 		//set up of all add page buttons and the label
 		//the relative action listeners are applied from the parent
 		page = new JLabel("Add Page");
 		page.setBounds(180, 5, 80, 30);
-		add(page);
+		getContentPane().add(page);
 		tP = new JButton("+ Title Page");
 		tP.setBounds(10, 35, 200, 40);
 		tP.setActionCommand("Create title");
 		tP.addActionListener(parent);
-		add(tP);
+		getContentPane().add(tP);
 		cP = new JButton("+ Credit Page");
 		cP.setActionCommand("Create credit");
 		cP.addActionListener(parent);
 		cP.setBounds(220, 35, 200, 40);
-		add(cP);
+		getContentPane().add(cP);
 		
 		//set up of all Audio operation buttons and the label
 		//the relative action listeners are applied from the parent
 		audio = new JLabel("Audio Operation");
 		audio.setBounds(155, 90, 160, 30);
-		add(audio);
+		getContentPane().add(audio);
 		rm = new JButton("Remove Audio");
 		rm.setBounds(10, 115, 200, 40);
 		rm.setActionCommand("rmAudio");
 		rm.addActionListener(parent);
-		add(rm);
+		getContentPane().add(rm);
 		ex = new JButton("Extract Audio");
 		ex.setBounds(220, 115, 200, 40);
 		ex.setActionCommand("exAudio");
 		ex.addActionListener(parent);
-		add(ex);
+		getContentPane().add(ex);
 		ov = new JButton("Overlay with Audio");
 		ov.setBounds(10, 160, 200, 40);
 		ov.setActionCommand("ovAudio");
 		ov.addActionListener(parent);
-		add(ov);
+		getContentPane().add(ov);
 		rp = new JButton("Replace Audio");
 		rp.setBounds(220, 160, 200, 40);
 		rp.setActionCommand("rpAudio");
 		rp.addActionListener(parent);
-		add(rp);
+		getContentPane().add(rp);
 		
 		text = new JLabel("Insert Text");
 		text.setBounds(175, 215, 80, 30);
-		add(text);
+		getContentPane().add(text);
 		textS = new JButton("+ Start/End");
 		textS.setBounds(10, 245, 200, 40);
 		textS.setActionCommand("addTextStartEnd");
 		textS.addActionListener(parent);
-		add(textS);
+		getContentPane().add(textS);
 		
 		textD = new JButton("+ Specify Interval");
 		textD.setBounds(220, 245, 200, 40);
 		textD.setActionCommand("addTextSpecified");
 		textD.addActionListener(parent);
-		add(textD);
+		getContentPane().add(textD);
+		
+		effect = new JLabel("Apply Effects");
+		effect.setBounds(165, 300, 100, 30);
+		getContentPane().add(effect);
+		effectA = new JButton("+ Effect");
+		effectA.setBounds(10, 330, 200, 40);
+		effectA.setActionCommand("addEffect");
+		effectA.addActionListener(parent);
+		getContentPane().add(effectA);
 		
 		//set up of exit button, which closes the frame when pressed
 		exit = new JButton("Exit");
-		exit.setBounds(140, 310, 150, 30);
+		exit.setFont(new Font("Dialog", Font.BOLD, 20));
+		exit.setBounds(140, 400, 150, 30);
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
 			}
 		});
-		add(exit);
+		getContentPane().add(exit);
 		
 		setVisible(true);
 	}
