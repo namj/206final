@@ -215,4 +215,49 @@ public class Previewer {
 		worker.execute();
 	}
 	
+	public void viewEffectMirror(String vidPath){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				String cmd = "crop=iw/2:ih:0:0,split[tmp],pad=2*iw[left]; [tmp]hflip[right]; [left][right] overlay=W/2";
+				//command to play the video through avplay.
+				String cmd3 = "avplay -i "+vidPath+" -vf \"crop=iw/2:ih:0:0,split[tmp],pad=2*iw[left]; [tmp]hflip[right]; [left][right] overlay=W/2\"";
+				ProcessBuilder Builder3 = new ProcessBuilder("/bin/bash","-c",cmd3);
+				Process process3 = Builder3.start();
+				
+				InputStream stdoutC = process3.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+					//if cancel button has been pressed
+					
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error playing preview.");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+	} 
+	
 }

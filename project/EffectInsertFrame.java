@@ -27,11 +27,10 @@ public class EffectInsertFrame extends JFrame implements ActionListener{
 	private JPanel contentPane;
 	private JTextField _startField;
 	private JTextField _endField;
-	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
-	private JRadioButton rdbtnNewRadioButton;
-	private JRadioButton rdbtnNewRadioButton_1;
+	private JLabel startLabel;
+	private JLabel endLabel;
+	private JLabel entireLengthLabel;
+	private JRadioButton radio1, radio2;
 	private JButton previewBtn;
 	private JButton generateBtn;
 	private JComboBox<String> effectComboBox;
@@ -67,33 +66,37 @@ public class EffectInsertFrame extends JFrame implements ActionListener{
 		JLabel lblSelectFilter = new JLabel("Select effect");
 		contentPane.add(lblSelectFilter, "cell 0 1 6 1,alignx center,aligny bottom");
 		
-		effectComboBox = new JComboBox<String>(effects);
+		effectComboBox = new JComboBox<String>();
 		contentPane.add(effectComboBox, "flowx,cell 0 2 6 1,alignx center,aligny top");
 		
-		rdbtnNewRadioButton = new JRadioButton("\n");
-		contentPane.add(rdbtnNewRadioButton, "cell 1 3,alignx center,aligny bottom");
+		radio1 = new JRadioButton("\n");
+		radio1.setSelected(true);
+		radio1.addActionListener(this);
+		contentPane.add(radio1, "cell 1 3,alignx center,aligny bottom");
 		
 		_startField = new JTextField();
 		_startField.setText("00:00:00");
 		contentPane.add(_startField, "cell 2 3,growx,aligny bottom");
 		_startField.setColumns(10);
 		
-		rdbtnNewRadioButton_1 = new JRadioButton("");
-		contentPane.add(rdbtnNewRadioButton_1, "cell 4 3,aligny bottom");
+		radio2 = new JRadioButton("");
+		radio2.addActionListener(this);
+		contentPane.add(radio2, "cell 4 3,aligny bottom");
 		
-		lblNewLabel_2 = new JLabel("Entire length");
-		contentPane.add(lblNewLabel_2, "cell 5 3,growx,aligny bottom");
+		entireLengthLabel = new JLabel("Entire length");
+		entireLengthLabel.setEnabled(false);
+		contentPane.add(entireLengthLabel, "cell 5 3,growx,aligny bottom");
 		
-		lblNewLabel = new JLabel("Start time");
-		contentPane.add(lblNewLabel, "cell 3 3,alignx left,aligny bottom");
+		startLabel = new JLabel("Start time");
+		contentPane.add(startLabel, "cell 3 3,alignx left,aligny bottom");
 		
 		_endField = new JTextField();
 		_endField.setText("00:00:00");
 		contentPane.add(_endField, "cell 2 4,growx,aligny top");
 		_endField.setColumns(10);
 		
-		lblNewLabel_1 = new JLabel("End time");
-		contentPane.add(lblNewLabel_1, "cell 3 4,alignx left,aligny top");
+		endLabel = new JLabel("End time");
+		contentPane.add(endLabel, "cell 3 4,alignx left,aligny top");
 		
 		generateBtn = new JButton("Generate");
 		generateBtn.addActionListener(this);
@@ -104,24 +107,66 @@ public class EffectInsertFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getSource() == radio1 || e.getSource() == radio2) {
+			
+			if (e.getSource() == radio1) {
+				radio1.setSelected(true);
+				radio2.setSelected(false);
+				
+				startLabel.setEnabled(true);
+				_startField.setEnabled(true);
+				endLabel.setEnabled(true);
+				_endField.setEnabled(true);
+				entireLengthLabel.setEnabled(false);
+				
+			} else {
+				radio1.setSelected(false);
+				radio2.setSelected(true);
+				
+				startLabel.setEnabled(false);
+				_startField.setEnabled(false);
+				endLabel.setEnabled(false);
+				_endField.setEnabled(false);
+				entireLengthLabel.setEnabled(true);
+			}
+			
+		}
+		
 		if (e.getSource() == previewBtn || e.getSource() == generateBtn) {
 			
-			//Make sure user entered time formats correctly.
-			Boolean _formatCorrect = true;
-			
-			TimeFormatChecker checker = new TimeFormatChecker(_startField, _endField, _currentVideo);
-			_formatCorrect = checker.checkTimeFormat();
 			
 			
-			if(_formatCorrect == true){
+
+			if(e.getSource() == previewBtn){
+				if (radio1.isSelected()){
+					//Make sure user entered time formats correctly.
+					Boolean _formatCorrect = true;
+			
+					TimeFormatChecker checker = new TimeFormatChecker(_startField, _endField, _currentVideo);
+					_formatCorrect = checker.checkTimeFormat();
+					
+					if (_formatCorrect == true){
+						int _startTime = checker.getStartTime();
+						int _endTime = checker.getEndTime();
+						
+						_endTime = _endTime - _startTime;
+					
+						Previewer p = new Previewer();
+						p.viewEffectMirror(_mediaPath, _startTime, _endTime );
+					}
+					
+				} else {
+					
+					Previewer p = new Previewer();
+					p.viewEffectMirror(_mediaPath);
+
+				}
 				
-				int _startTime = checker.getStartTime();
-				int _endTime = checker.getEndTime();
+			} else if (e.getSource() == generateBtn){
 				
-				_endTime = _endTime - _startTime;
-			
-				Previewer p = new Previewer();
-				p.viewEffectMirror(_mediaPath, _startTime, _endTime );
+				
+				
 			}
 
 		}
