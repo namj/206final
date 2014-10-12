@@ -2,12 +2,16 @@ package project;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -20,7 +24,9 @@ import project.FastBackwarder;
 import project.FastForwarder;
 
 public class PlaybackPanel extends JPanel implements MouseListener {
-
+	
+	private static PlaybackPanel _playbackPanel = new PlaybackPanel();
+	
 	//all media play back buttons
 	private JButton playButton, ffButton, fbButton;
 	//current media for play back
@@ -45,10 +51,14 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 	private boolean isFastBackwarding = false;
 	private boolean firstPlay = true;
 	
+	public static PlaybackPanel getInstance(){
+		return _playbackPanel;
+	}
+	
 	/**
 	 * Create the panel.
 	 */
-	public PlaybackPanel() {
+	private PlaybackPanel() {
 		setLayout(new MigLayout("", "[grow][grow][grow]", "[grow]"));
 		setBackground(Color.GRAY);
 		
@@ -69,42 +79,7 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 		playButton.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//for when there is no video yet
-				if (currentVideo == null ) {
-					//warning message to be popped up
-					String msg = "Please open a media file before trying to play it!";
-					JOptionPane.showMessageDialog(null, msg);
-					//for when a valid video is there
-				} else {
-					//when video is paused
-					if (isPaused == true) {
-						//when there is an instance of fast forward or backward call stop on the 
-						//swing worker to stop it
-						if (ff != null) {
-							ff.stop();
-							isFastForwarding = false;
-						} 
-						if (fb != null) {
-							fb.stop();
-							isFastBackwarding = false;
-						}
-						//it starts playing, and button changes to pause button
-						currentVideo.play();
-						setToPause();
-						//media player is glitchy? and saves previous sessions settings
-						//so volume and mute reset for the first play of media
-						if (firstPlay) {
-							/**VOLUME MUTE REFRESH*/
-							//only for first play when program opened
-							firstPlay = false;
-						}
-					//when video is playing
-					} else {
-						//video is paused, and button changes to play button
-						currentVideo.pause();
-						setToPlay();
-					}
-				}
+				playBtnPressed();
 			}	
 		});
 		//cannot click the button until it is set to 
@@ -116,28 +91,7 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 		fbButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//if it is rewinding and clicked
-				if (isFastBackwarding) {
-					//rewind stops and video is paused normally
-					fb.stop();
-					isFastBackwarding = false;
-				//if it is not rewinding and clicked
-				} else {
-					if (isFastForwarding) {
-						ff.stop();
-						isFastForwarding = false;
-					}
-					//for when its clicked while video is playing, video is paused first
-					if (isPaused == false) {
-						currentVideo.pause();
-					}
-					setToPlay();
-					//rewinding swing worker is instantiated and executed
-					fb = new FastBackwarder(currentVideo);
-					fb.execute();
-					//hence rewind becomes true
-					isFastBackwarding = true;
-				}
+				rewindBtnPressed();
 			}	
 		});
 		//cannot click button until set to
@@ -149,22 +103,7 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 		ffButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isFastForwarding) {
-					ff.stop();
-					isFastForwarding = false;
-				} else {
-					if (isFastBackwarding) {
-						fb.stop();
-						isFastBackwarding = false;
-					}
-					if (isPaused == false) {
-						currentVideo.pause();
-					}
-					setToPlay();
-					ff = new FastForwarder(currentVideo);
-					ff.execute();
-					isFastForwarding = true;
-				}
+				forwardBtnPressed();
 			}	
 		});
 		//cannot click button until set to
@@ -209,6 +148,90 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 		playButton.setIcon(iconPause);
 		isPaused = false;
 	}
+	
+	public void playBtnPressed(){
+		//for when there is no video yet
+		if (currentVideo == null ) {
+			//warning message to be popped up
+			String msg = "Please open a media file before trying to play it!";
+			JOptionPane.showMessageDialog(null, msg);
+			//for when a valid video is there
+		} else {
+			//when video is paused
+			if (isPaused == true) {
+				//when there is an instance of fast forward or backward call stop on the 
+				//swing worker to stop it
+				if (ff != null) {
+					ff.stop();
+					isFastForwarding = false;
+				} 
+				if (fb != null) {
+					fb.stop();
+					isFastBackwarding = false;
+				}
+				//it starts playing, and button changes to pause button
+				currentVideo.play();
+				setToPause();
+				//media player is glitchy? and saves previous sessions settings
+				//so volume and mute reset for the first play of media
+				if (firstPlay) {
+					/**VOLUME MUTE REFRESH*/
+					//only for first play when program opened
+					firstPlay = false;
+				}
+			//when video is playing
+			} else {
+				//video is paused, and button changes to play button
+				currentVideo.pause();
+				setToPlay();
+			}
+		}
+	}
+	
+	public void rewindBtnPressed(){
+		//if it is rewinding and clicked
+		if (isFastBackwarding) {
+			//rewind stops and video is paused normally
+			fb.stop();
+			isFastBackwarding = false;
+		//if it is not rewinding and clicked
+		} else {
+			if (isFastForwarding) {
+				ff.stop();
+				isFastForwarding = false;
+			}
+			//for when its clicked while video is playing, video is paused first
+			if (isPaused == false) {
+				currentVideo.pause();
+			}
+			setToPlay();
+			//rewinding swing worker is instantiated and executed
+			fb = new FastBackwarder(currentVideo);
+			fb.execute();
+			//hence rewind becomes true
+			isFastBackwarding = true;
+		}
+	}
+	
+	public void forwardBtnPressed(){
+		if (isFastForwarding) {
+			ff.stop();
+			isFastForwarding = false;
+		} else {
+			if (isFastBackwarding) {
+				fb.stop();
+				isFastBackwarding = false;
+			}
+			if (isPaused == false) {
+				currentVideo.pause();
+			}
+			setToPlay();
+			ff = new FastForwarder(currentVideo);
+			ff.execute();
+			isFastForwarding = true;
+		}
+	}
+	
 	//set up and return a button using only an image icon
 	//set up and return a button using only an image icon
 	private JButton setImageButton(ImageIcon img) {

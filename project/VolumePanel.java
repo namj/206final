@@ -21,6 +21,8 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public class VolumePanel extends JPanel implements MouseListener {
 
+	private static VolumePanel _volumePanel = new VolumePanel();
+	
 	private EmbeddedMediaPlayer currentVideo;
 	
 	private String iconPath = "./icons";
@@ -32,7 +34,11 @@ public class VolumePanel extends JPanel implements MouseListener {
 	private JSlider volumeSlider;
 	private JButton volumeUp, volumeDown, muteButton;
 	
-	public VolumePanel() {
+	public static VolumePanel getInstance(){
+		return _volumePanel;
+	}
+	
+	private VolumePanel() {
 		
 		setOpaque(false);
 		setLayout(new MigLayout("", "[grow][grow][grow]", "[grow][grow]"));
@@ -69,12 +75,7 @@ public class VolumePanel extends JPanel implements MouseListener {
 		volumeUp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int currentVol = volumeSlider.getValue();
-				if (currentVol == 100) {
-					//do nothing
-				} else {
-					volumeSlider.setValue(currentVol + 10);
-				}
+				upBtnPressed();
 			}
 		});
 		volumeUp.setEnabled(false);
@@ -89,12 +90,7 @@ public class VolumePanel extends JPanel implements MouseListener {
 		volumeDown.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int currentVol = volumeSlider.getValue();
-				if (currentVol == 0) {
-					//do nothing
-				} else {
-					volumeSlider.setValue(currentVol - 10);
-				}
+				downBtnPressed();
 			}
 		});
 		volumeDown.setEnabled(false);
@@ -143,6 +139,24 @@ public class VolumePanel extends JPanel implements MouseListener {
 		volumeUp.setEnabled(true);
 		volumeDown.setEnabled(true);
 		muteButton.setEnabled(true);
+	}
+	
+	public void upBtnPressed(){
+		int currentVol = volumeSlider.getValue();
+		if (currentVol == 100) {
+			//do nothing
+		} else {
+			volumeSlider.setValue(currentVol + 10);
+		}
+	}
+	
+	public void downBtnPressed(){
+		int currentVol = volumeSlider.getValue();
+		if (currentVol == 0) {
+			//do nothing
+		} else {
+			volumeSlider.setValue(currentVol - 10);
+		}
 	}
 	//set up and return a button using only an image icon
 	private JButton setImageButton(ImageIcon img) {

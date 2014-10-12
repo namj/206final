@@ -78,7 +78,7 @@ public class MainPanel extends JPanel {
 		//setup of media progress slider to keep track of media
 		mediaProgress = new JSlider();
 		mediaProgress.setValue(0);
-		mediaProgress.setBackground(Color.BLACK);
+		mediaProgress.setBackground(Color.GRAY);
 		//modify default UI to remove progress knob of slider
 		mediaProgress.setUI(new MetalSliderUI() {
 			@Override
@@ -141,7 +141,7 @@ public class MainPanel extends JPanel {
 		videoTime = new JLabel("  00:00:00");
 		videoTime.setOpaque(true);
 		videoTime.setForeground(Color.WHITE);
-		videoTime.setBackground(Color.BLACK);
+		videoTime.setBackground(Color.GRAY);
 		add(videoTime, "cell 0 1,growx");
 		
 		//edit the slider for video progress
@@ -154,12 +154,12 @@ public class MainPanel extends JPanel {
 		
 		//-------------------- MEDIA BUTTON SETUP---------------------------------//
 		
-		pbP = new PlaybackPanel();
+		pbP = PlaybackPanel.getInstance();
 		add(pbP, "cell 2 2,growx,aligny center");
 		
 		//---------------------------MEDIA VOLUME CONTROL--------------------------//
 		
-		vP = new VolumePanel();
+		vP = VolumePanel.getInstance();
 		add(vP, "cell 3 2,growx,aligny center");
 		
 	}

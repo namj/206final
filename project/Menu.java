@@ -3,9 +3,14 @@ package project;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -45,7 +50,7 @@ import com.sun.jna.Native;
 import javax.swing.JTextField;
 import javax.swing.JLayeredPane;
 
-public class Menu extends JFrame implements ActionListener {
+public class Menu extends JFrame implements ActionListener{
 
 	//Get user's screen dimension
 	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -67,6 +72,14 @@ public class Menu extends JFrame implements ActionListener {
 	
 	private static final int _screenHeight = (int)d.getHeight();
 	private static final int _screenWidth = (int)d.getWidth();
+	
+	
+	private static Menu frame = new Menu();
+	
+	public static Menu getInstance(){
+		return frame;
+	}
+	
 
 	/**
 	 * Launch the application.
@@ -75,7 +88,7 @@ public class Menu extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Menu frame = new Menu();
+					//Menu frame = new Menu();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -87,13 +100,17 @@ public class Menu extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public Menu() {
+	private Menu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds((_screenWidth-1450)/2,(_screenHeight-900)/2,1450, 900);
 		
 		//Make sure mediaplaycomp does paint over jmenu
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
+
+		//Hijack the keyboard manager
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		manager.addKeyEventDispatcher(new MyKeyListener());
 
 		WindowListener exitListener = new WindowAdapter() {
 			//Before the frame is closed set volume to default, and not mute if muted
@@ -342,6 +359,7 @@ public class Menu extends JFrame implements ActionListener {
 		} else {
 			JOptionPane.showMessageDialog(this, "File is not an audio or video type!");
 		}
+		
 	}
 	
 	//method to extract (method used as it is used more than once)
@@ -409,31 +427,7 @@ public class Menu extends JFrame implements ActionListener {
 				startPlayVideo(fileChooser.getSelectedFile());
 			}
 		} else if (e.getActionCommand().equals("Download File")){
-			String dlURL;
-			//option pane that will take in the URL of download
-			dlURL = JOptionPane.showInputDialog(this, "Please Enter URL:", "Download", 
-					JOptionPane.DEFAULT_OPTION);
-			//if cancelled do nothing
-			if (dlURL == null) {
-				//download cancelled before beginning
-			} else {
-				String msg = "Is this an open source file?";
-				int reply = JOptionPane.showConfirmDialog(null, msg);
-				//Whether its open source is confirmed, if yes
-				if (reply == JOptionPane.YES_OPTION) {
-					int rep = setUpSaveFile();
-					if (rep == JFileChooser.APPROVE_OPTION) {
-						//download frame opened and download commences
-						DownloadFrame downloadFrame = new DownloadFrame(dlURL);
-						downloadFrame.setSaveDir(savePath);
-						downloadFrame.startDownload();
-					}
-				} else if (reply == JOptionPane.NO_OPTION){
-					String warning = "Please only download from open source files\n"
-							+ "Downloading non-open source files are illegal!";
-					JOptionPane.showMessageDialog(null, warning);
-				}
-			}
+			downloadFromUrl();
 		} else if (e.getActionCommand().equals("Edit")) {
 			//pop up edit frame when edit button or item is selected
 			EditFrame editFrame = new EditFrame(this);
@@ -515,6 +509,34 @@ public class Menu extends JFrame implements ActionListener {
 			TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
 		} else if (e.getActionCommand().equals("addEffect")) {
 			EffectInsertFrame frame = new EffectInsertFrame(_mediaPath, currentVideo);
+		}
+	}
+	
+	public void downloadFromUrl() {
+		String dlURL;
+		//option pane that will take in the URL of download
+		dlURL = JOptionPane.showInputDialog(this, "Please Enter URL:", "Download", 
+				JOptionPane.DEFAULT_OPTION);
+		//if cancelled do nothing
+		if (dlURL == null) {
+			//download cancelled before beginning
+		} else {
+			String msg = "Is this an open source file?";
+			int reply = JOptionPane.showConfirmDialog(null, msg);
+			//Whether its open source is confirmed, if yes
+			if (reply == JOptionPane.YES_OPTION) {
+				int rep = setUpSaveFile();
+				if (rep == JFileChooser.APPROVE_OPTION) {
+					//download frame opened and download commences
+					DownloadFrame downloadFrame = new DownloadFrame(dlURL);
+					downloadFrame.setSaveDir(savePath);
+					downloadFrame.startDownload();
+				}
+			} else if (reply == JOptionPane.NO_OPTION){
+				String warning = "Please only download from open source files\n"
+						+ "Downloading non-open source files are illegal!";
+				JOptionPane.showMessageDialog(null, warning);
+			}
 		}
 	}
 
