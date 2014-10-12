@@ -174,8 +174,7 @@ public class Menu extends JFrame implements ActionListener{
 		//create object for all menu bar, menus and items
 		JMenu file, edit, help, _space, _space2;
 
-		JMenuItem _open, _exit, _dl, _title, _credit;
-		JMenuItem _rmAudio,_exAudio,_ovAudio, _rpAudio, _read, _addText1, _addText2;
+		JMenuItem _open, _exit, _dl, _title, _credit,_rmAudio,_exAudio,_ovAudio, _rpAudio, _read, _addText1, _addText2, _hKeys;
 		JMenuBar menuBar = new JMenuBar();
 		
 		//set the graphics (color) for the Menu bar
@@ -258,7 +257,12 @@ public class Menu extends JFrame implements ActionListener{
 		_read = new JMenuItem("Open ReadMe");
 		_read.setActionCommand("Open readme");
 		_read.addActionListener(this);
+		_hKeys = new JMenuItem("Hot keys");
+		_hKeys.setActionCommand("Hot keys");
+		_hKeys.addActionListener(this);
 		help.add(_read);
+		help.addSeparator();
+		help.add(_hKeys);
 		menuBar.add(help);
 		//menuBar.requestFocusInWindow();
 		
@@ -403,6 +407,10 @@ public class Menu extends JFrame implements ActionListener{
 		HelpFrame help = new HelpFrame();
 	}
 	
+	public static void openHotKeyFrame(){
+		HotKeyFrame hot = new HotKeyFrame();
+	}
+	
 	private JButton setImageButton(ImageIcon img) {
 		JButton imgButton = new JButton(img);
 		imgButton.setOpaque(false);
@@ -495,6 +503,10 @@ public class Menu extends JFrame implements ActionListener{
 					ReplaceFrame rpFrame = new ReplaceFrame(currentVideo,_mediaFile, savePath);
 				}
 			}
+		} else if (e.getActionCommand().equals("Hot keys")){
+			//open guide for hotkeys
+			openHotKeyFrame();
+			
 		//for command create title/credit page, open appropriate frame
 		} else if (e.getActionCommand().equals("Create title")) {
 			CreateTitleCreditFrame titleFrame = new CreateTitleCreditFrame(_mediaPath, "Create Title page(s)");
