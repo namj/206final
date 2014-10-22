@@ -93,7 +93,6 @@ public class MainFrame extends JFrame implements ActionListener{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				//Menu frame = new Menu();
 				frame.setVisible(true);
 				int r = JOptionPane.showConfirmDialog(null, "New to this? Would you like to open a helper?", "Welcome" , 2);
 				if (r == JOptionPane.YES_OPTION) {
@@ -110,9 +109,9 @@ public class MainFrame extends JFrame implements ActionListener{
 	 * Create the frame.
 	 */
 	private MainFrame() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds((_screenWidth-1450)/2,(_screenHeight-900)/2,1450, 900);
-		
 		setTitle("npar35_VAMIX");
 		
 		//Make sure mediaplaycomp does paint over jmenu
@@ -147,8 +146,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		//instantiate main panel passing in Media Player
 		container = new SubMainPanel(ourMediaPlayer);
 		
-		
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[][][573.00,grow][:150:300,grow]", "[][137.00,grow]"));
@@ -185,7 +184,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		//create object for all menu bar, menus and items
 		JMenu file, edit, help, _space, _space2;
 
-		JMenuItem _open, _exit, _dl, _title, _credit,_rmAudio,_exAudio,_ovAudio, _rpAudio, _read, _addText1, _addText2, _hKeys;
+		JMenuItem _open, _exit, _dl, _title, _credit,_rmAudio,_exAudio,_ovAudio, _rpAudio, _read, _addText1, _addText2, _hKeys, _addEffect;
 		JMenuBar menuBar = new JMenuBar();
 		
 		//set the graphics (color) for the Menu bar
@@ -246,6 +245,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		_addText2 = new JMenuItem("Add text (specified)");
 		_addText2.setActionCommand("addTextSpecified");
 		_addText2.addActionListener(this);
+		_addEffect = new JMenuItem("Apply effect");
+		_addEffect.setActionCommand("addEffect");
+		_addEffect.addActionListener(this);
+		
 		
 		edit.add(_title);
 		edit.add(_credit);
@@ -257,6 +260,9 @@ public class MainFrame extends JFrame implements ActionListener{
 		edit.addSeparator();
 		edit.add(_addText1);
 		edit.add(_addText2);
+		edit.addSeparator();
+		edit.add(_addEffect);
+		
 		
 
 		menuBar.add(edit);
