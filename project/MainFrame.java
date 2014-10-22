@@ -439,6 +439,7 @@ public class MainFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if (e.getActionCommand().equals("Open File")) {
 			//when item is selected, a File chooser opens to select a file
 			JFileChooser fileChooser = new JFileChooser();
@@ -526,38 +527,45 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		//for command create title/credit page, open appropriate frame
 		} else if (e.getActionCommand().equals("Create title")) {
-			if (_mediaFile != null){
+			
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
 				CreateTitleCreditFrame titleFrame = new CreateTitleCreditFrame(_mediaPath, "Create Title page(s)");
-			} else {
-				JOptionPane.showMessageDialog(null, "Open a file before attempting any operation.");
 			}
 		} else if (e.getActionCommand().equals("Create credit")) {
-			if (_mediaFile != null){
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
 				CreateTitleCreditFrame creditFrame = new CreateTitleCreditFrame(_mediaPath, "Create Credit page(s)");
-			} else {
-				JOptionPane.showMessageDialog(null, "Open a file before attempting any operation.");
 			}
+			
 		//when help item is pressed, open the readme file in a scrollpane
 		} else if (e.getActionCommand().equals("Open readme")) {
 			openHelpFrame();
 		} else if (e.getActionCommand().equals("addTextStartEnd")) {
-			if (_mediaFile != null){
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
 				TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
-			} else {
-				JOptionPane.showMessageDialog(null, "Open a file before attempting any operation.");
 			}
 		} else if (e.getActionCommand().equals("addTextSpecified")) {
-			if (_mediaFile != null){
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
 				TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
-			} else {
-				JOptionPane.showMessageDialog(null, "Open a file before attempting any audio operation.");
 			}
 			
 		} else if (e.getActionCommand().equals("addEffect")) {
-			if (_mediaFile != null){
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
 				EffectInsertFrame frame = new EffectInsertFrame(_mediaPath, currentVideo);
-			} else {
-				JOptionPane.showMessageDialog(null, "Open a file before attempting any operation.");
 			}
 		}
 	}
