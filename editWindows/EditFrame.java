@@ -19,7 +19,7 @@ import java.awt.Font;
  */
 
 public class EditFrame extends JFrame{
-	private JButton tP,cP,rm,ex,ov,rp,exit,textS,textD, effectA;
+	private JButton tP,cP,rm,ex,ov,rp,exit,textS,textD, effectA, effectB, effectC;
 	private JLabel page, audio, text, effect;
 	
 	//computer screen dimensions
@@ -29,8 +29,8 @@ public class EditFrame extends JFrame{
 	
 	public EditFrame(ActionListener parent) {
 		//frame set up
-		setSize(430,470);
-		setLocation((_screenWidth-430)/2,(_screenHeight-470)/2);
+		setSize(430,525);
+		setLocation((_screenWidth-430)/2,(_screenHeight-500)/2);
 		setTitle("Edit video");
 		getContentPane().setLayout(null);
 		setResizable(false);
@@ -100,11 +100,23 @@ public class EditFrame extends JFrame{
 		effectA.setActionCommand("addEffect");
 		effectA.addActionListener(parent);
 		getContentPane().add(effectA);
+		effectB = new JButton("+ Rotate");
+		effectB.setBounds(220, 330, 200, 40);
+		effectB.setActionCommand("addRotate");
+		effectB.addActionListener(parent);
+		getContentPane().add(effectB);
+		effectC = new JButton("+ Fade in/out");
+		effectC.setBounds(10, 375, 200, 40);
+		effectC.setActionCommand("addFade");
+		effectC.addActionListener(parent);
+		getContentPane().add(effectC);
+		
+		
 		
 		//set up of exit button, which closes the frame when pressed
 		exit = new JButton("Exit");
-		exit.setFont(new Font("Dialog", Font.BOLD, 20));
-		exit.setBounds(140, 400, 150, 30);
+		exit.setFont(new Font("Dialog", Font.BOLD, 30));
+		exit.setBounds(140, 440, 150, 50);
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

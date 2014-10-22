@@ -41,7 +41,7 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
-	public void InsertEffectMirror(final String vidPath, final String outputNamePath){
+	public void insertEffectMirror(final String vidPath, final String outputNamePath){
 		
 		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
 
@@ -97,11 +97,7 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
-	public void InsertEffectMirror(String vidPath, String outputNamePath, int ss, int t){
-		
-	}
-	
-	public void InsertEffectBounce(final String vidPath, final String outputNamePath){
+	public void insertEffectBounce(final String vidPath, final String outputNamePath){
 		
 		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
 
@@ -120,7 +116,6 @@ public class EffectInserter implements ActionListener {
 				//print output from terminal to console
 				while ((line = stdoutD.readLine()) != null) {
 					System.out.println(line);
-					//if cancel button has been pressed
 					//if cancel button has been pressed
 					if (_isCancelled){
 						//destroy process and return exit value
@@ -145,6 +140,60 @@ public class EffectInserter implements ActionListener {
 						JOptionPane.showMessageDialog(null, "Error applying effect");
 					}
 				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+		
+	}
+	
+	public void insertEffectRotate(final String vidPath, final String outputNamePath, final String transposeInput){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avconv -i "+vidPath+" -vf \"transpose="+ transposeInput +"\" -c:a copy -y "+ outputNamePath +".mp4";
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+					//if cancel button has been pressed
+					if (_isCancelled){
+						//destroy process and return exit value
+						process.destroy();
+						int exitValue = process.waitFor();
+						return exitValue;
+					}
+					
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() == 0) {
+						JOptionPane.showMessageDialog(null, "Done");
+					} else if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -156,6 +205,7 @@ public class EffectInserter implements ActionListener {
 		worker.execute();
 		
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

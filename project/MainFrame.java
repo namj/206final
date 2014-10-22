@@ -47,9 +47,11 @@ import com.sun.jna.Native;
 import editWindows.CreateTitleCreditFrame;
 import editWindows.DownloadFrame;
 import editWindows.EditFrame;
-import editWindows.EffectInsertFrame;
+import editWindows.EffectApplyFrame;
+import editWindows.FadeApplyFrame;
 import editWindows.OverlayFrame;
 import editWindows.ReplaceFrame;
+import editWindows.RotateApplyFrame;
 import editWindows.TextInsertFrame;
 import editWindows.TextInsertFrame2;
 
@@ -565,7 +567,21 @@ public class MainFrame extends JFrame implements ActionListener{
 			int audioCheck = checkAudioSignal();
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
-				EffectInsertFrame frame = new EffectInsertFrame(_mediaPath, currentVideo);
+				EffectApplyFrame frame = new EffectApplyFrame(_mediaPath, currentVideo);
+			}
+		} else if (e.getActionCommand().equals("addRotate")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				RotateApplyFrame frame = new RotateApplyFrame(_mediaPath, currentVideo);
+			}
+		} else if (e.getActionCommand().equals("addFade")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				FadeApplyFrame frame = new FadeApplyFrame(_mediaPath, currentVideo);
 			}
 		}
 	}
