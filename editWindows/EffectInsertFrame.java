@@ -1,4 +1,6 @@
-package project;
+package editWindows;
+
+import helperClasses.TimeFormatChecker;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,6 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
 
+import longTaskProcessors.EffectInserter;
+import longTaskProcessors.Previewer;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public class EffectInsertFrame extends JFrame implements ActionListener{
@@ -167,7 +171,12 @@ public class EffectInsertFrame extends JFrame implements ActionListener{
 				} else {
 					
 					Previewer p = new Previewer();
-					p.viewEffectMirror(_mediaPath);
+					
+					if (effectComboBox.getSelectedIndex() == 0){
+						p.viewEffectMirror(_mediaPath);
+					} else if (effectComboBox.getSelectedIndex() == 1) {
+						p.viewEffectBounce(_mediaPath);
+					}
 
 				}
 				
@@ -187,9 +196,8 @@ public class EffectInsertFrame extends JFrame implements ActionListener{
 						int result = fileChooser.showSaveDialog(this);
 						if (result == JFileChooser.APPROVE_OPTION){	
 							//store path of directory to save it to
-							String savePath = fileChooser.getCurrentDirectory().getAbsolutePath();
 							String outputPathName = fileChooser.getSelectedFile().toString();
-							System.out.println(savePath);
+		
 
 							File out = new File(outputPathName);
 							boolean cancelled = false;
@@ -228,9 +236,45 @@ public class EffectInsertFrame extends JFrame implements ActionListener{
 					
 				} else {
 					
-					Previewer p = new Previewer();
-					p.viewEffectMirror(_mediaPath);
-
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setDialogTitle("Select directory to save video to");
+					int result = fileChooser.showSaveDialog(this);
+					if (result == JFileChooser.APPROVE_OPTION){	
+						//store path of directory to save it to
+						String outputPathName = fileChooser.getSelectedFile().toString();
+		
+						File out = new File(outputPathName);
+						boolean cancelled = false;
+						//if output name specified exists loop until user selects to overwrite or exits filechooser
+						while (out.exists()){
+							int result2 = JOptionPane.showConfirmDialog(null, "file already exists. Would you like to overwrite?", "", 0);
+							if (result2 == JOptionPane.YES_OPTION){
+								break;
+							} else {
+								int result3 = fileChooser.showSaveDialog(this);
+								if (result3 == JFileChooser.APPROVE_OPTION){	
+									//store path of directory to save it to
+									outputPathName = fileChooser.getSelectedFile().toString();								
+									out = new File(outputPathName);
+								} else if (result3 == JFileChooser.CANCEL_OPTION){
+									cancelled = true;
+									break;
+								}
+							}
+						}
+					
+						//only initialise and execute swingworker is filechooser has exited without being deliberately exited/cancelled
+						if (cancelled == false){
+							System.out.println("why?");
+							EffectInserter inserter = new EffectInserter();
+							System.out.println(effectComboBox.getSelectedIndex());
+							if (effectComboBox.getSelectedIndex() == 0){
+								inserter.InsertEffectMirror(_mediaPath, outputPathName);
+							} else if (effectComboBox.getSelectedIndex() == 1) {
+								inserter.InsertEffectBounce(_mediaPath, outputPathName);
+							}
+						}
+					}
 				}
 				
 			}

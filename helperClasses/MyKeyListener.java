@@ -1,10 +1,15 @@
-package project;
+package helperClasses;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFileChooser;
+
+import editWindows.EditFrame;
+import playback.PlaybackPanel;
+import playback.VolumePanel;
+import project.MainFrame;
 
 public class MyKeyListener implements KeyEventDispatcher {
 	
@@ -24,11 +29,11 @@ public class MyKeyListener implements KeyEventDispatcher {
 					//nothing is to be done
 				//for when a file is selected
 				} else if (result == JFileChooser.APPROVE_OPTION) {
-					Menu.getInstance().startPlayVideo(fileChooser.getSelectedFile());
+					MainFrame.getInstance().startPlayVideo(fileChooser.getSelectedFile());
 				}
 			//when ctrl + h is pressed
 			} else if (72 == code){
-				Menu.openHelpFrame();
+				MainFrame.openHelpFrame();
 			//when ctrl + space is pressed
 			} else if (32 == code) {
 				PlaybackPanel.getInstance().playBtnPressed();
@@ -46,10 +51,10 @@ public class MyKeyListener implements KeyEventDispatcher {
 				VolumePanel.getInstance().downBtnPressed();
 			//E + ctrl 
 			} else if (69 == code) {
-				EditFrame frame = new EditFrame(Menu.getInstance());
+				EditFrame frame = new EditFrame(MainFrame.getInstance());
 			//ctrl + D
 			} else if (68 == code) {
-				Menu.getInstance().downloadFromUrl();
+				MainFrame.getInstance().downloadFromUrl();
 			}
 		}  
 		// pass on this key event  

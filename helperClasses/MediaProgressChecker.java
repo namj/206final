@@ -1,9 +1,10 @@
-package project;
+package helperClasses;
 
 import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import project.SubMainPanel;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 /**
@@ -13,10 +14,10 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
  */
 
 public class MediaProgressChecker extends SwingWorker<Void,Void>{
-	private MainPanel main;
+	private SubMainPanel main;
 	
 	//constructor of swing worker takes in Main panel as input to invoke update on
-	public MediaProgressChecker(MainPanel mp) {
+	public MediaProgressChecker(SubMainPanel mp) {
 		main = mp;
 	}
 	

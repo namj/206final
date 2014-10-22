@@ -1,4 +1,4 @@
-package project;
+package helperClasses;
 
 import java.io.File;
 

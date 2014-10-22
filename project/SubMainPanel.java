@@ -1,5 +1,7 @@
 package project;
 
+import helperClasses.MediaProgressChecker;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -20,15 +22,14 @@ import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 import javax.swing.plaf.metal.MetalSliderUI;
 
-import project.MediaProgressChecker;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 //import a03.MediaProgressChecker;
-import project.PlaybackPanel;
-import project.VolumePanel;
+import playback.PlaybackPanel;
+import playback.VolumePanel;
 import net.miginfocom.swing.MigLayout;
 
-public class MainPanel extends JPanel {
+public class SubMainPanel extends JPanel {
 
 	String iconPath = "./icons";
 	//all GUI/video objects set private for use within class
@@ -47,7 +48,7 @@ public class MainPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public MainPanel(EmbeddedMediaPlayerComponent vidPlayer) {
+	public SubMainPanel(EmbeddedMediaPlayerComponent vidPlayer) {
 		
 		setLayout(new MigLayout("", "[82.00][130.00,grow][40.00%][30.00%]", "[417.00,grow][18.00][]"));
 		setBackground(Color.GRAY);

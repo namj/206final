@@ -22,7 +22,7 @@ import javax.swing.JViewport;
  */
 
 public class HelpFrame extends JFrame{
-	private File readme;
+	private File helpme;
 	
 	//computer screen dimensions
 	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -41,7 +41,7 @@ public class HelpFrame extends JFrame{
 		add(container,BorderLayout.CENTER);
 		
 		//read me file is selected to be read
-		readme = new File("./readme.txt");
+		helpme = new File("./userGuide.txt");
 		//text area with its word limits vertically and horizontally
 		JTextArea logText = new JTextArea(42,32);
 		JScrollPane scroll = new JScrollPane(logText);
@@ -49,7 +49,7 @@ public class HelpFrame extends JFrame{
 		BufferedReader in;
 		try {
 			//text from the readme.txt file is read and put in the log text
-			in = new BufferedReader(new FileReader(readme));
+			in = new BufferedReader(new FileReader(helpme));
 			String line = in.readLine();
 			while(line != null){
 				logText.append(line + "\n");

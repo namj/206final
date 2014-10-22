@@ -1,4 +1,7 @@
-package project;
+package editWindows;
+
+import helperClasses.TextManager;
+import helperClasses.TimeFormatChecker;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -21,6 +24,8 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 
+import longTaskProcessors.Previewer;
+import longTaskProcessors.TextInserter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public class TextInsertFrame2 extends JFrame implements ActionListener {

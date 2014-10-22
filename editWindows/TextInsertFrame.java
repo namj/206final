@@ -1,4 +1,7 @@
-package project;
+package editWindows;
+
+import helperClasses.Logger;
+import helperClasses.TextManager;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,6 +33,9 @@ import java.awt.Font;
 import java.io.File;
 
 import javax.swing.JScrollPane;
+
+import longTaskProcessors.Previewer;
+import longTaskProcessors.TextInserter;
 
 public class TextInsertFrame extends JFrame implements ActionListener {
 

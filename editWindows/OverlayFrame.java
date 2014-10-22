@@ -1,4 +1,6 @@
-package project;
+package editWindows;
+
+import helperClasses.AudioProcessor;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;

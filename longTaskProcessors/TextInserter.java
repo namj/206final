@@ -1,4 +1,6 @@
-package project;
+package longTaskProcessors;
+
+import helperClasses.Logger;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -239,22 +241,24 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		}
 		
 		//if user decides to save session
-		int result = JOptionPane.showConfirmDialog(null, "would you like to save your last(this) session?", "" , 1);
-		if (result == JOptionPane.OK_OPTION){
-			try {
-				Logger.getInstance().updateForText(_text, _timeIndex, _fontIndex, _sizeIndex, _colourIndex, _text2, _timeIndex2, _fontIndex2, _sizeIndex2, _colourIndex2);
-				JOptionPane.showMessageDialog(null,"Saved");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else if (result == JOptionPane.NO_OPTION){
-			//if user denied to save session delete the edit log file so that next time user creates title/credit page nothing is continued
-			try {
-				Logger.getInstance().deleteLogForInsert();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if (_whichOne == 1){
+			int result = JOptionPane.showConfirmDialog(null, "would you like to save your last(this) session?", "" , 1);
+			if (result == JOptionPane.OK_OPTION){
+				try {
+					Logger.getInstance().updateForText(_text, _timeIndex, _fontIndex, _sizeIndex, _colourIndex, _text2, _timeIndex2, _fontIndex2, _sizeIndex2, _colourIndex2);
+					JOptionPane.showMessageDialog(null,"Saved");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else if (result == JOptionPane.NO_OPTION){
+				//if user denied to save session delete the edit log file so that next time user creates title/credit page nothing is continued
+				try {
+					Logger.getInstance().deleteLogForInsert();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		

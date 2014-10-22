@@ -1,4 +1,4 @@
-package project;
+package editWindows;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+
+import longTaskProcessors.Downloader;
 
 /**
  * 

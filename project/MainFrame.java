@@ -1,5 +1,8 @@
 package project;
 
+import helperClasses.AudioProcessor;
+import helperClasses.MyKeyListener;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -36,21 +39,24 @@ import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
-import project.MainPanel;
-import project.AudioProcessor;
+import project.SubMainPanel;
 import project.HelpFrame;
-import project.CreateTitleCreditFrame;
-import project.DownloadFrame;
-import project.EditFrame;
-import project.OverlayFrame;
-import project.ReplaceFrame;
 
 import com.sun.jna.Native;
+
+import editWindows.CreateTitleCreditFrame;
+import editWindows.DownloadFrame;
+import editWindows.EditFrame;
+import editWindows.EffectInsertFrame;
+import editWindows.OverlayFrame;
+import editWindows.ReplaceFrame;
+import editWindows.TextInsertFrame;
+import editWindows.TextInsertFrame2;
 
 import javax.swing.JTextField;
 import javax.swing.JLayeredPane;
 
-public class Menu extends JFrame implements ActionListener{
+public class MainFrame extends JFrame implements ActionListener{
 
 	//Get user's screen dimension
 	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -58,7 +64,7 @@ public class Menu extends JFrame implements ActionListener{
 	private File _mediaFile;
 	private String savePath = "";
 	
-	private MainPanel container;
+	private SubMainPanel container;
 	private EmbeddedMediaPlayerComponent ourMediaPlayer;
 	private EmbeddedMediaPlayer currentVideo;
 	//additional buttons for the main panel
@@ -74,9 +80,9 @@ public class Menu extends JFrame implements ActionListener{
 	private static final int _screenWidth = (int)d.getWidth();
 	
 	
-	private static Menu frame = new Menu();
+	private static MainFrame frame = new MainFrame();
 	
-	public static Menu getInstance(){
+	public static MainFrame getInstance(){
 		return frame;
 	}
 	
@@ -87,11 +93,14 @@ public class Menu extends JFrame implements ActionListener{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					//Menu frame = new Menu();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+				//Menu frame = new Menu();
+				frame.setVisible(true);
+				int r = JOptionPane.showConfirmDialog(null, "New to this? Would you like to open a helper?", "Welcome" , 2);
+				if (r == JOptionPane.YES_OPTION) {
+					openHelpFrame();
+					openHotKeyFrame();
+				} else {
+					//nothing happens
 				}
 			}
 		});
@@ -100,9 +109,11 @@ public class Menu extends JFrame implements ActionListener{
 	/**
 	 * Create the frame.
 	 */
-	private Menu() {
+	private MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds((_screenWidth-1450)/2,(_screenHeight-900)/2,1450, 900);
+		
+		setTitle("npar35_VAMIX");
 		
 		//Make sure mediaplaycomp does paint over jmenu
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
@@ -134,7 +145,7 @@ public class Menu extends JFrame implements ActionListener{
 		ourMediaPlayer = new EmbeddedMediaPlayerComponent();
 		
 		//instantiate main panel passing in Media Player
-		container = new MainPanel(ourMediaPlayer);
+		container = new SubMainPanel(ourMediaPlayer);
 		
 		
 		contentPane = new JPanel();
@@ -509,18 +520,39 @@ public class Menu extends JFrame implements ActionListener{
 			
 		//for command create title/credit page, open appropriate frame
 		} else if (e.getActionCommand().equals("Create title")) {
-			CreateTitleCreditFrame titleFrame = new CreateTitleCreditFrame(_mediaPath, "Create Title page(s)");
+			if (_mediaFile != null){
+				CreateTitleCreditFrame titleFrame = new CreateTitleCreditFrame(_mediaPath, "Create Title page(s)");
+			} else {
+				JOptionPane.showMessageDialog(null, "Open a file before attempting any operation.");
+			}
 		} else if (e.getActionCommand().equals("Create credit")) {
-			CreateTitleCreditFrame creditFrame = new CreateTitleCreditFrame(_mediaPath, "Create Credit page(s)");
+			if (_mediaFile != null){
+				CreateTitleCreditFrame creditFrame = new CreateTitleCreditFrame(_mediaPath, "Create Credit page(s)");
+			} else {
+				JOptionPane.showMessageDialog(null, "Open a file before attempting any operation.");
+			}
 		//when help item is pressed, open the readme file in a scrollpane
 		} else if (e.getActionCommand().equals("Open readme")) {
 			openHelpFrame();
 		} else if (e.getActionCommand().equals("addTextStartEnd")) {
-			TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
+			if (_mediaFile != null){
+				TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
+			} else {
+				JOptionPane.showMessageDialog(null, "Open a file before attempting any operation.");
+			}
 		} else if (e.getActionCommand().equals("addTextSpecified")) {
-			TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
+			if (_mediaFile != null){
+				TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
+			} else {
+				JOptionPane.showMessageDialog(null, "Open a file before attempting any audio operation.");
+			}
+			
 		} else if (e.getActionCommand().equals("addEffect")) {
-			EffectInsertFrame frame = new EffectInsertFrame(_mediaPath, currentVideo);
+			if (_mediaFile != null){
+				EffectInsertFrame frame = new EffectInsertFrame(_mediaPath, currentVideo);
+			} else {
+				JOptionPane.showMessageDialog(null, "Open a file before attempting any operation.");
+			}
 		}
 	}
 	

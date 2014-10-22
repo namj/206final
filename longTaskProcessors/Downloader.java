@@ -1,4 +1,4 @@
-package project;
+package longTaskProcessors;
 
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+
+import editWindows.DownloadFrame;
 
 /**
  * This class downloads file from URL using avconv wget commands

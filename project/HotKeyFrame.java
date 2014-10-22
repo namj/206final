@@ -29,7 +29,7 @@ private File hotkeys;
 		//set up of frame
 		setSize(400, 350);
 		setLocation(_screenWidth-400, (_screenHeight-350)/2);
-		setTitle("Help!");
+		setTitle("Shortcuts");
 		setLayout(new BorderLayout());
 		
 		//panel to contain the scroll pane

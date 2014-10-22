@@ -1,4 +1,7 @@
-package project;
+package editWindows;
+
+import helperClasses.Logger;
+import helperClasses.TextManager;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,6 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import longTaskProcessors.Previewer;
+import longTaskProcessors.TitleCreditGenerator;
 
 
 /**

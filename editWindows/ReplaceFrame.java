@@ -1,4 +1,6 @@
-package project;
+package editWindows;
+
+import helperClasses.AudioProcessor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

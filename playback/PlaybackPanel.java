@@ -1,4 +1,4 @@
-package project;
+package playback;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -20,8 +20,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
 
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
-import project.FastBackwarder;
-import project.FastForwarder;
+import playback.FastBackwarder;
+import playback.FastForwarder;
 
 public class PlaybackPanel extends JPanel implements MouseListener {
 	

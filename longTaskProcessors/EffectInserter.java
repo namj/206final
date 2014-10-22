@@ -1,4 +1,4 @@
-package project;
+package longTaskProcessors;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,7 +41,7 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
-	public void InsertEffectMirror(String vidPath, String outputNamePath){
+	public void InsertEffectMirror(final String vidPath, final String outputNamePath){
 		
 		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
 
@@ -49,8 +49,9 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add mirror effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"crop=iw/2:ih:0:0,split[tmp],pad=2*iw[left]; [tmp]hflip[right]; [left][right] overlay=W/2\" "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"crop=iw/2:ih:0:0,split[tmp],pad=2*iw[left]; [tmp]hflip[right]; [left][right] overlay=W/2\" -c:a copy -y "+ outputNamePath +".mp4";
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
 				
 				InputStream stdoutC = process.getInputStream();
@@ -78,8 +79,70 @@ public class EffectInserter implements ActionListener {
 				
 				//display error message if processes didnt finish happliy
 				try {
-					if (this.get() != 0){
-						JOptionPane.showMessageDialog(null, "Error playing preview.");
+					if (this.get() == 0) {
+						JOptionPane.showMessageDialog(null, "Done");
+					} else if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+
+		worker.execute();
+		
+	}
+	
+	public void InsertEffectMirror(String vidPath, String outputNamePath, int ss, int t){
+		
+	}
+	
+	public void InsertEffectBounce(final String vidPath, final String outputNamePath){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avconv -i "+vidPath+" -vf \"crop=in_w/1.5:in_h/1.5:(in_w-out_w)/1.5+((in_w-out_w)/1.5)*sin(n/10):(in_h-out_h)/1.5 +((in_h-out_h)/1.5)*sin(n/7)\" -c:a copy -y "+ outputNamePath +".mp4";
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+					//if cancel button has been pressed
+					//if cancel button has been pressed
+					if (_isCancelled){
+						//destroy process and return exit value
+						process.destroy();
+						int exitValue = process.waitFor();
+						return exitValue;
+					}
+					
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() ==0) {
+						JOptionPane.showMessageDialog(null, "Done");
+					} else if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
 					}
 				} catch (InterruptedException | ExecutionException e) {
 					// TODO Auto-generated catch block
@@ -93,10 +156,6 @@ public class EffectInserter implements ActionListener {
 		worker.execute();
 		
 	}
-	
-	public void InsertEffectMirror(String vidPath, String outputNamePath, int ss, int t){
-		
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -104,6 +163,5 @@ public class EffectInserter implements ActionListener {
 		_isCancelled = true;
 		
 	}
-	
 
 }

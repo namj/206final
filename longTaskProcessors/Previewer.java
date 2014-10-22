@@ -1,4 +1,4 @@
-package project;
+package longTaskProcessors;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -124,7 +124,7 @@ public class Previewer {
 		
 	}
 	
-	public void viewTextOverlay(String vidPath, String text, String font, String size, String colour, String ss, String t){
+	public void viewTextOverlay(final String vidPath, final String text, final String font, final String size, final String colour, final String ss, final String t){
 		
 		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
 
@@ -170,7 +170,7 @@ public class Previewer {
 		
 	}
 	
-	public void viewEffectMirror(String vidPath, int ss, int t){
+	public void viewEffectMirror(final String vidPath, final int ss, final int t){
 		
 		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
 
@@ -215,13 +215,13 @@ public class Previewer {
 		worker.execute();
 	}
 	
-	public void viewEffectMirror(String vidPath){
+	public void viewEffectMirror(final String vidPath){
 		
 		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
 
 			@Override
 			protected Integer doInBackground() throws Exception {
-				String cmd = "crop=iw/2:ih:0:0,split[tmp],pad=2*iw[left]; [tmp]hflip[right]; [left][right] overlay=W/2";
+				
 				//command to play the video through avplay.
 				String cmd3 = "avplay -i "+vidPath+" -vf \"crop=iw/2:ih:0:0,split[tmp],pad=2*iw[left]; [tmp]hflip[right]; [left][right] overlay=W/2\"";
 				ProcessBuilder Builder3 = new ProcessBuilder("/bin/bash","-c",cmd3);
@@ -260,4 +260,48 @@ public class Previewer {
 		worker.execute();
 	} 
 	
+	public void viewEffectBounce(final String vidPath){
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play the video through avplay.
+				//String cmd3 = "avplay -i "+vidPath+" -vf \"crop=in_w/2:in_h/2:(in_w-out_w)/2+((in_w-out_w)/2)*sin(n/10):(in_h-out_h)/2 +((in_h-out_h)/2)*sin(n/7)\"";
+				String cmd3 = "avplay -i "+vidPath+" -vf \"crop=in_w/1.5:in_h/1.5:(in_w-out_w)/1.5+((in_w-out_w)/1.5)*sin(n/10):(in_h-out_h)/1.5 +((in_h-out_h)/1.5)*sin(n/7)\"";
+				ProcessBuilder Builder3 = new ProcessBuilder("/bin/bash","-c",cmd3);
+				Process process3 = Builder3.start();
+				
+				InputStream stdoutC = process3.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+					//if cancel button has been pressed
+					
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error playing preview.");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+	}
 }
