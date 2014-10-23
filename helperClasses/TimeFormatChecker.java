@@ -115,7 +115,7 @@ public class TimeFormatChecker {
 			}
 			//if start time is equal or longer than end time
 			if (_startTime >= _endTime){
-				JOptionPane.showMessageDialog(null, "Start time must be less than end time");
+				JOptionPane.showMessageDialog(null, "Start time(s) must be less than end time(s)");
 				_everythingElseCorrect = false;
 			}
 			

@@ -206,6 +206,173 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
+	public void insertEffectFadeIn(final String vidPath, final String outputNamePath, final String inStartFrame, final String inFinishFrame){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=type=in:start_frame="+inStartFrame+":nb_frames="+inFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+					//if cancel button has been pressed
+					if (_isCancelled){
+						//destroy process and return exit value
+						process.destroy();
+						int exitValue = process.waitFor();
+						return exitValue;
+					}
+					
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() == 0) {
+						JOptionPane.showMessageDialog(null, "Done");
+					} else if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+		
+	}
+	
+	public void insertEffectFadeOut(final String vidPath, final String outputNamePath, final String outStartFrame, final String outFinishFrame){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=type=out:start_frame="+outStartFrame+":nb_frames="+outFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+					//if cancel button has been pressed
+					if (_isCancelled){
+						//destroy process and return exit value
+						process.destroy();
+						int exitValue = process.waitFor();
+						return exitValue;
+					}
+					
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() == 0) {
+						JOptionPane.showMessageDialog(null, "Done");
+					} else if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+		
+	}
+
+	public void insertEffectFadeIO(final String vidPath, final String outputNamePath, final String inStartFrame, final String inFinishFrame, 
+			final String outStartFrame, final String outFinishFrame){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+	
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=type=in:start_frame="+inStartFrame+":nb_frames="+inFinishFrame+", "
+						+ "fade=type=out:start_frame="+outStartFrame+":nb_frames="+outFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+					//if cancel button has been pressed
+					if (_isCancelled){
+						//destroy process and return exit value
+						process.destroy();
+						int exitValue = process.waitFor();
+						return exitValue;
+					}
+					
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() == 0) {
+						JOptionPane.showMessageDialog(null, "Done");
+					} else if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+		
+	}
+	
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

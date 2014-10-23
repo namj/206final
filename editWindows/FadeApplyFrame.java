@@ -134,87 +134,110 @@ public class FadeApplyFrame extends JFrame implements ActionListener{
 		if (e.getSource() == previewBtn || e.getSource() == generateBtn) {
 			
 			//if either preview or generate button was pressed, first check whether the time formats given are valid.
+			//declare 2 timeFormat checkers which could be used.
+			TimeFormatChecker inChecker = null, outChecker = null;
 			
+			boolean fadeInFormat = false;
 			//if inCheckbox is ticked, check whether its start time is greater or equal to 00:00:00, and is less than video length.
 			if (inCheckBox.isSelected()){
 				//first, instantiate a time format checker.
-				TimeFormatChecker checker = new TimeFormatChecker(inStartField, inFinishField, _currentVideo);
-				checker.checkTimeFormat();
+				inChecker = new TimeFormatChecker(inStartField, inFinishField, _currentVideo);
+				fadeInFormat = inChecker.checkTimeFormat();
 			}
 			
+			boolean fadeOutFormat = false;
 			//if outCheckbox is ticked, check whether its start time is greater or equal to 00:00:00, and is less than video length.
 			if (outCheckBox.isSelected()){
 				//first, instantiate a time format checker.
-				TimeFormatChecker checker = new TimeFormatChecker(inStartField, inFinishField, _currentVideo);
-				checker.checkTimeFormat();
+				outChecker = new TimeFormatChecker(outStartField, outFinishField, _currentVideo);
+				fadeOutFormat = outChecker.checkTimeFormat();
 			}
 			
-			//make sure inFinishTime and outStartTime do not overlap.
+			//if neither checkboxes are ticked, complain to user.
+			if (!inCheckBox.isSelected() && !outCheckBox.isSelected()){
+				JOptionPane.showMessageDialog(null, "You must have atleast one of fade in or fade out ticked!");
+			}
 			
-
-			if(e.getSource() == previewBtn){
-					
-				Previewer p = new Previewer();
-				if (effectComboBox.getSelectedIndex() == 0) {
-					p.viewEffectRotate(_mediaPath, "1");
-				} else if (effectComboBox.getSelectedIndex() == 1) {
-					p.viewEffectRotate(_mediaPath, "1, transpose = 1");
-				} else if (effectComboBox.getSelectedIndex() == 2) {
-					p.viewEffectRotate(_mediaPath, "2");
+			//If both fade in and out were ticked and have correct formats, make sure inFinishTime and outStartTime do not overlap.
+			if (fadeInFormat == true && fadeOutFormat == true){
+				if (inChecker.getEndTime() >= outChecker.getStartTime()){
+					//entering here means they overlapped. Alert user of this error and set the 2 booleans back to false so that process doenst go on
+					JOptionPane.showMessageDialog(null, "Finish time of fade in and start time of fade out mustn't overlap!");
+					fadeInFormat = false;
+					fadeOutFormat = false;
 				}
-
-			} else if (e.getSource() == generateBtn){
-				
-					
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setDialogTitle("Select directory to save video to");
-				int result = fileChooser.showSaveDialog(this);
-				if (result == JFileChooser.APPROVE_OPTION){	
-					//store path of directory to save it to
-					String outputPathName = fileChooser.getSelectedFile().toString();
+			}
+			
+			//Now, further process should only continue if: 1)inCheckbox is ticked, and inTimeFormat is correct. 2)other way around 3)both ticked both correct.
+			//if formats and restraints on fade in/out times are correct.
+			
+			//this int represents one of the 3 situations described above. default value is -1.
+			int situation = -1;
+			
+			if (inCheckBox.isSelected() && fadeInFormat == true && !outCheckBox.isSelected()){
+				situation = 1;
+			} else if (outCheckBox.isSelected() && fadeOutFormat == true && !inCheckBox.isSelected()) {
+				situation = 2;
+			} else if (inCheckBox.isSelected() && fadeInFormat == true && outCheckBox.isSelected() && fadeOutFormat == true) {
+				situation = 3;
+			}
+			
+			if (situation != -1){
+				if(e.getSource() == previewBtn){
+						
+					System.out.println("DOING PREVIEW");
 	
-					File out = new File(outputPathName);
-					boolean cancelled = false;
-					//if output name specified exists loop until user selects to overwrite or exits filechooser
-					while (out.exists()){
-						int result2 = JOptionPane.showConfirmDialog(null, "file already exists. Would you like to overwrite?", "", 0);
-						if (result2 == JOptionPane.YES_OPTION){
-							break;
-						} else {
-							int result3 = fileChooser.showSaveDialog(this);
-							if (result3 == JFileChooser.APPROVE_OPTION){	
-								//store path of directory to save it to
-								outputPathName = fileChooser.getSelectedFile().toString();								
-								out = new File(outputPathName);
-							} else if (result3 == JFileChooser.CANCEL_OPTION){
-								cancelled = true;
+				} else if (e.getSource() == generateBtn){
+					
+						
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setDialogTitle("Select directory to save video to");
+					int result = fileChooser.showSaveDialog(this);
+					if (result == JFileChooser.APPROVE_OPTION){	
+						//store path of directory to save it to
+						String outputPathName = fileChooser.getSelectedFile().toString();
+		
+						File out = new File(outputPathName);
+						boolean cancelled = false;
+						//if output name specified exists loop until user selects to overwrite or exits filechooser
+						while (out.exists()){
+							int result2 = JOptionPane.showConfirmDialog(null, "file already exists. Would you like to overwrite?", "", 0);
+							if (result2 == JOptionPane.YES_OPTION){
 								break;
+							} else {
+								int result3 = fileChooser.showSaveDialog(this);
+								if (result3 == JFileChooser.APPROVE_OPTION){	
+									//store path of directory to save it to
+									outputPathName = fileChooser.getSelectedFile().toString();								
+									out = new File(outputPathName);
+								} else if (result3 == JFileChooser.CANCEL_OPTION){
+									cancelled = true;
+									break;
+								}
 							}
 						}
-					}
-				
-					//only initialise and execute swingworker is filechooser has exited without being deliberately exited/cancelled
-					if (cancelled == false){
+					
+						//only initialise and execute swingworker is filechooser has exited without being deliberately exited/cancelled
+						if (cancelled == false){
 						
-						//instantiate and effectInserter object
-						EffectInserter inserter = new EffectInserter();
-						
-						//use effectInserters method according which item has been selected in comboBox.
-						if (effectComboBox.getSelectedIndex() == 0) {
-							inserter.insertEffectRotate(_mediaPath, outputPathName, "1");
-						} else if (effectComboBox.getSelectedIndex() == 1) {
-							inserter.insertEffectRotate(_mediaPath, outputPathName, "1, transpose=1");
-						} else if (effectComboBox.getSelectedIndex() == 2) {
-							inserter.insertEffectRotate(_mediaPath, outputPathName, "2");
+							System.out.println("DOING GENERATE");
+							
 						}
-						
 					}
+					
 				}
-				
 			}
-
 		}
 		
+	}
+	
+	private int getNumberOfFrames(JTextField field) { 
+		//get the current input video's fps
+		int frameRate = (int)_currentVideo.getFps();
+		String[] parts = field.getText().split(":");
+		int seconds = Integer.parseInt(parts[0])*3600 + Integer.parseInt(parts[1])*60 + Integer.parseInt(parts[2]);
+		int frameNumber = seconds * frameRate;
+		return frameNumber;
 	}
 
 }
