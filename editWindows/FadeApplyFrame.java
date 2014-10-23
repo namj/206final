@@ -185,7 +185,19 @@ public class FadeApplyFrame extends JFrame implements ActionListener{
 			if (situation != -1){
 				if(e.getSource() == previewBtn){
 						
-					System.out.println("DOING PREVIEW");
+					if (situation == 1){
+						//preview fade in
+						Previewer p = new Previewer();
+						p.viewEffectFadeIn(_mediaPath, getNumberOfFrames(inStartField), getNumberOfFrames(inFinishField));
+					} else if (situation == 2){
+						//preview fade out
+						Previewer p = new Previewer();
+						p.viewEffectFadeOut(_mediaPath, getNumberOfFrames(outStartField), getNumberOfFrames(outFinishField));
+					} else if (situation == 3){
+						//preview fade in AND out
+						Previewer p = new Previewer();
+						p.viewEffectFadeIO(_mediaPath, getNumberOfFrames(inStartField), getNumberOfFrames(inFinishField), getNumberOfFrames(outStartField), getNumberOfFrames(outFinishField));
+					}
 	
 				} else if (e.getSource() == generateBtn){
 					

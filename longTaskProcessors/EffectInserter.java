@@ -214,7 +214,7 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"fade=type=in:start_frame="+inStartFrame+":nb_frames="+inFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+inStartFrame+":"+inFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -268,7 +268,7 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"fade=type=out:start_frame="+outStartFrame+":nb_frames="+outFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=out:"+outStartFrame+":"+outFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -324,8 +324,8 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"fade=type=in:start_frame="+inStartFrame+":nb_frames="+inFinishFrame+", "
-						+ "fade=type=out:start_frame="+outStartFrame+":nb_frames="+outFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+inStartFrame+":"+inFinishFrame+", "
+						+ "fade=out:"+outStartFrame+":"+outFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();

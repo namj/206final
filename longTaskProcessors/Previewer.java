@@ -305,4 +305,139 @@ public class Previewer {
 		
 		worker.execute();
 	}
+	
+	public void viewEffectFadeIn(final String vidPath, final int i, final int j){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avplay -i "+vidPath+" -vf \"fade=in:"+i+":"+j+"\"";
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+		
+	}
+	
+	public void viewEffectFadeOut(final String vidPath, final int i, final int j){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avplay -i "+vidPath+" -vf \"fade=out:"+i+":"+j+"\"";
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+		
+	}
+
+	public void viewEffectFadeIO(final String vidPath, final int i, final int j, final int k, final int l){
+		
+		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+	
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avplay -i "+vidPath+" -vf \"fade=in:"+i+":"+j+", "
+						+ "fade=out:"+k+":"+l+"\"";
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+					System.out.println(line);
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() != 0){
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+		};
+		
+		worker.execute();
+		
+	}
 }
