@@ -119,6 +119,8 @@ public class TimeFormatChecker {
 				_everythingElseCorrect = false;
 			}
 			
+		} else {
+			return false;
 		}
 		
 		return _everythingElseCorrect;

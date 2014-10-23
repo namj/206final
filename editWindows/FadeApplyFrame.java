@@ -1,6 +1,8 @@
 package editWindows;
 
 
+import helperClasses.TimeFormatChecker;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -39,16 +41,16 @@ public class FadeApplyFrame extends JFrame implements ActionListener{
 	private static final int _screenHeight = (int)d.getHeight();
 	private static final int _screenWidth = (int)d.getWidth();
 	private JLabel lblNewLabel;
-	private JCheckBox chckbxNewCheckBox;
-	private JCheckBox chckbxNewCheckBox_1;
+	private JCheckBox inCheckBox;
+	private JCheckBox outCheckBox;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField inStartField;
+	private JTextField outStartField;
+	private JTextField inFinishField;
+	private JTextField outFinishField;
 
 	/**
 	 * Create the frame.
@@ -85,42 +87,42 @@ public class FadeApplyFrame extends JFrame implements ActionListener{
 		lblNewLabel_1 = new JLabel("Start time");
 		contentPane.add(lblNewLabel_1, "cell 0 2,alignx trailing,aligny bottom");
 		
-		textField = new JTextField();
-		textField.setText("00:00:00");
-		contentPane.add(textField, "cell 1 2,alignx left,aligny bottom");
-		textField.setColumns(6);
+		inStartField = new JTextField();
+		inStartField.setText("00:00:00");
+		contentPane.add(inStartField, "cell 1 2,alignx left,aligny bottom");
+		inStartField.setColumns(6);
 		
 		lblNewLabel_3 = new JLabel("Start time");
 		contentPane.add(lblNewLabel_3, "cell 2 2,alignx trailing,aligny bottom");
 		
-		textField_1 = new JTextField();
-		textField_1.setText("00:00:00");
-		contentPane.add(textField_1, "cell 3 2,alignx left,aligny bottom");
-		textField_1.setColumns(6);
+		outStartField = new JTextField();
+		outStartField.setText("00:00:00");
+		contentPane.add(outStartField, "cell 3 2,alignx left,aligny bottom");
+		outStartField.setColumns(6);
 		
 		lblNewLabel_2 = new JLabel("Finish time");
 		contentPane.add(lblNewLabel_2, "cell 0 3,alignx trailing,aligny top");
 		
-		textField_2 = new JTextField();
-		textField_2.setText("00:00:00");
-		contentPane.add(textField_2, "cell 1 3,alignx left,aligny top");
-		textField_2.setColumns(6);
+		inFinishField = new JTextField();
+		inFinishField.setText("00:00:00");
+		contentPane.add(inFinishField, "cell 1 3,alignx left,aligny top");
+		inFinishField.setColumns(6);
 		
 		lblNewLabel_4 = new JLabel("Finish time");
 		contentPane.add(lblNewLabel_4, "cell 2 3,alignx trailing,aligny top");
 		
-		textField_3 = new JTextField();
-		textField_3.setText("00:00:00");
-		contentPane.add(textField_3, "cell 3 3,alignx left,aligny top");
-		textField_3.setColumns(6);
+		outFinishField = new JTextField();
+		outFinishField.setText("00:00:00");
+		contentPane.add(outFinishField, "cell 3 3,alignx left,aligny top");
+		outFinishField.setColumns(6);
 		contentPane.add(generateBtn, "cell 0 4 4 1,alignx center,growy");
 		
 		//add checkboxes to indicate whether to perform fade in/out or both
-		chckbxNewCheckBox = new JCheckBox("");
-		contentPane.add(chckbxNewCheckBox, "cell 1 1,alignx left,aligny bottom");
+		inCheckBox = new JCheckBox("");
+		contentPane.add(inCheckBox, "cell 1 1,alignx left,aligny bottom");
 		
-		chckbxNewCheckBox_1 = new JCheckBox("");
-		contentPane.add(chckbxNewCheckBox_1, "cell 3 1,alignx left,aligny bottom");
+		outCheckBox = new JCheckBox("");
+		contentPane.add(outCheckBox, "cell 3 1,alignx left,aligny bottom");
 		
 		setVisible(true);
 	}
@@ -130,6 +132,25 @@ public class FadeApplyFrame extends JFrame implements ActionListener{
 		
 		
 		if (e.getSource() == previewBtn || e.getSource() == generateBtn) {
+			
+			//if either preview or generate button was pressed, first check whether the time formats given are valid.
+			
+			//if inCheckbox is ticked, check whether its start time is greater or equal to 00:00:00, and is less than video length.
+			if (inCheckBox.isSelected()){
+				//first, instantiate a time format checker.
+				TimeFormatChecker checker = new TimeFormatChecker(inStartField, inFinishField, _currentVideo);
+				checker.checkTimeFormat();
+			}
+			
+			//if outCheckbox is ticked, check whether its start time is greater or equal to 00:00:00, and is less than video length.
+			if (outCheckBox.isSelected()){
+				//first, instantiate a time format checker.
+				TimeFormatChecker checker = new TimeFormatChecker(inStartField, inFinishField, _currentVideo);
+				checker.checkTimeFormat();
+			}
+			
+			//make sure inFinishTime and outStartTime do not overlap.
+			
 
 			if(e.getSource() == previewBtn){
 					
