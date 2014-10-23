@@ -53,7 +53,7 @@ public class EffectApplyFrame extends JFrame implements ActionListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[33%][34%][33%]", "[][20%][20%][20%][20%]"));
 		
-		String [] effects = { "Mirror effect", "Bouncing screen" };
+		String [] effects = { "Mirror effect", "Negate", "Bouncing screen" };
 		
 		_mediaPath = mediaPath;
 		_currentVideo = currentVideo;
@@ -86,7 +86,9 @@ public class EffectApplyFrame extends JFrame implements ActionListener{
 				Previewer p = new Previewer();
 				if (effectComboBox.getSelectedIndex() == 0){
 					p.viewEffectMirror(_mediaPath);
-				} else if (effectComboBox.getSelectedIndex() == 1) {
+				} else if (effectComboBox.getSelectedIndex() == 1){
+					p.viewEffectNegate(_mediaPath);
+				} else if (effectComboBox.getSelectedIndex() == 2) {
 					p.viewEffectBounce(_mediaPath);
 				}
 
@@ -130,6 +132,8 @@ public class EffectApplyFrame extends JFrame implements ActionListener{
 						if (effectComboBox.getSelectedIndex() == 0){
 							inserter.insertEffectMirror(_mediaPath, outputPathName);
 						} else if (effectComboBox.getSelectedIndex() == 1) {
+							inserter.insertEffectNegate(_mediaPath, outputPathName);
+						} else if (effectComboBox.getSelectedIndex() == 2) {
 							inserter.insertEffectBounce(_mediaPath, outputPathName);
 						}
 						
