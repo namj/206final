@@ -113,7 +113,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private MainFrame() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds((_screenWidth-1450)/2,(_screenHeight-900)/2,1450, 900);
+		setBounds((_screenWidth-1400)/2,(_screenHeight-800)/2,1400, 800);
 		setTitle("npar35_VAMIX");
 		
 		//Make sure mediaplaycomp does paint over jmenu
@@ -612,6 +612,12 @@ public class MainFrame extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(null, warning);
 			}
 		}
+	}
+	
+	public EmbeddedMediaPlayerComponent getMediaPlayerComp(){
+		
+		return ourMediaPlayer;
+		
 	}
 
 }

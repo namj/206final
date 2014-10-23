@@ -159,7 +159,7 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		}
 		
 		//terminal command to add 10sec and music to the 10sec video
-		cmd = "avconv -i "+ _savePath +"/videoFromImage.mp4 -i "+ _musicPath +" -c:a copy -t 10 -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30\" -y "+ _savePath +"/titleCreditPage.mp4";
+		cmd = "avconv -i "+ _savePath +"/videoFromImage.mp4 -i "+ _musicPath +" -c:a copy -t 10 -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2\" -y "+ _savePath +"/titleCreditPage.mp4";
 		ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
 		Builder2.redirectErrorStream(true);
 		Process process2 = Builder2.start();

@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import project.MainFrame;
+
 /**
  * This class allows user to preview their title/credit pages
  * before they actually merge it with their main video.
@@ -67,7 +69,7 @@ public class Previewer {
 				publish("Please wait...(2/3)");
 				
 				//command to apply text and music
-				String cmd2 = "avconv -i videoFromImage.mp4 -i "+ _musicPath +" -c:a copy -t 10 -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30\" -y preview.mp4";
+				String cmd2 = "avconv -i videoFromImage.mp4 -i "+ _musicPath +" -c:a copy -t 10 -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2\" -y preview.mp4";
 				ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd2);
 				Process process2 = Builder2.start();
 				if (process2.waitFor() != 0){
@@ -130,9 +132,9 @@ public class Previewer {
 
 			@Override
 			protected Integer doInBackground() throws Exception {
-
+				
 				//command to play the video through avplay.
-				String cmd3 = "avplay -i "+vidPath+" -ss "+ss+" -t "+t+" -vf \"drawtext=fontcolor="+colour+":fontsize="+size+":fontfile=./fonts/"+font+":text='"+text+"':x=30:y=h-text_h-30\"";
+				String cmd3 = "avplay -i "+vidPath+" -ss "+ss+" -t "+t+" -vf \"drawtext=fontcolor="+colour+":fontsize="+size+":fontfile=./fonts/"+font+":text='"+text+"':x=(main_w-text_w)/2:y=(main_h-text_h)/2\"";
 				ProcessBuilder Builder3 = new ProcessBuilder("/bin/bash","-c",cmd3);
 				Process process3 = Builder3.start();
 				
