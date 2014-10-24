@@ -66,6 +66,13 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		String[] sizes = { "10" , "20", "30", "40", "50", "60"};
 		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "pink", "orange" };
 		
+		_fontBox = new JComboBox<String>(fonts);
+		_fontBox.addActionListener(this);
+		_colourBox = new JComboBox<String>(colours);
+		_colourBox.addActionListener(this);
+		_sizeBox = new JComboBox<String>(sizes);
+		_sizeBox.addActionListener(this);
+		
 		JLabel lblNewLabel = new JLabel("New label");
 		contentPane.add(lblNewLabel, "cell 0 0");
 		
@@ -81,9 +88,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		
 		JLabel lblNewLabel_1 = new JLabel("Font    ");
 		contentPane.add(lblNewLabel_1, "flowx,cell 0 2,alignx left");
-		
-		_fontBox = new JComboBox<String>(fonts);
-		_fontBox.addActionListener(this);
+	
 		contentPane.add(_fontBox, "cell 1 2,growx");
 		
 		JLabel lblNewLabel_4 = new JLabel("Start time  ");
@@ -96,8 +101,6 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		JLabel lblNewLabel_2 = new JLabel("Colour\t");
 		contentPane.add(lblNewLabel_2, "flowx,cell 0 3,alignx left");
 		
-		_colourBox = new JComboBox<String>(colours);
-		_colourBox.addActionListener(this);
 		contentPane.add(_colourBox, "cell 1 3,growx");
 		
 		JLabel lblNewLabel_5 = new JLabel("Finish time ");
@@ -110,8 +113,6 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		JLabel lblNewLabel_3 = new JLabel("Size    ");
 		contentPane.add(lblNewLabel_3, "flowx,cell 0 4,alignx left");
 		
-		_sizeBox = new JComboBox<String>(sizes);
-		_sizeBox.addActionListener(this);
 		contentPane.add(_sizeBox, "cell 1 4,growx");
 		
 		_generateBtn = new JButton("Generate");
