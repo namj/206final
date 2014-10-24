@@ -193,7 +193,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		} else {
 			
 			String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":"
-					+ "fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='gte(t,"+_startTime+")*lte(t,"+_finishTime+")'\" -f mp4 -y "+ _outputPathName;
+					+ "fontfile=./fonts/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='gte(t,"+_startTime+")*lte(t,"+_finishTime+")'\" -f mp4 -y "+ _outputPathName;
 			ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
 			Builder2.redirectErrorStream(true);
 			Process process2 = Builder2.start();
@@ -241,24 +241,28 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		}
 		
 		//if user decides to save session
-		if (_whichOne == 1){
-			int result = JOptionPane.showConfirmDialog(null, "would you like to save your last(this) session?", "" , 1);
-			if (result == JOptionPane.OK_OPTION){
-				try {
+		
+		int result = JOptionPane.showConfirmDialog(null, "would you like to save your last(this) session?", "" , 1);
+		if (result == JOptionPane.OK_OPTION){
+			try {
+				if (_whichOne == 1){
 					Logger.getInstance().updateForText(_text, _timeIndex, _fontIndex, _sizeIndex, _colourIndex, _text2, _timeIndex2, _fontIndex2, _sizeIndex2, _colourIndex2);
 					JOptionPane.showMessageDialog(null,"Saved");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} else if (_whichOne == 2){
+					Logger.getInstance().updateForText2(_text, _fontIndex, _sizeIndex, _colourIndex, Integer.toString(_startTime), Integer.toString(_finishTime));
+					JOptionPane.showMessageDialog(null,"Saved");
 				}
-			} else if (result == JOptionPane.NO_OPTION){
-				//if user denied to save session delete the edit log file so that next time user creates title/credit page nothing is continued
-				try {
-					Logger.getInstance().deleteLogForInsert();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (result == JOptionPane.NO_OPTION){
+			//if user denied to save session delete the edit log file so that next time user creates title/credit page nothing is continued
+			try {
+				Logger.getInstance().deleteLogForInsert();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		

@@ -94,6 +94,26 @@ public class Logger {
 		
 	}
 	
+	public void updateForText2(String text1, int fontCombo1, int sizeCombo1, int colourCombo1, String startTime, String finishTime) throws IOException {
+		
+		//update 
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLog.txt", false)));
+		out.println(fontCombo1);
+		out.println(colourCombo1);
+		out.println(sizeCombo1);
+		out.println(startTime);
+		out.println(finishTime);
+		out.close();
+		
+		//update textlog
+		PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLog2.txt", false)));
+		out2.println(text1);
+		out2.close();	
+		
+	}
+	
+
+	
 	//this method should return the text, ie first line of editlog file
 	public void pullTextForPage(JTextArea text){
 		
@@ -326,7 +346,7 @@ public class Logger {
 		return 0;
 	}
 	
-public void pullTextForInsertBot(JTextArea text){
+	public void pullTextForInsertBot(JTextArea text){
 		
 		//if textlog exists, write its contents to the textArea.
 		if (new File(_vamixFolder + "/insertLogBot2.txt").exists()){
@@ -429,6 +449,131 @@ public void pullTextForInsertBot(JTextArea text){
 		return 0;
 	}
 	
+	public void pullTextForInsert(JTextArea text){
+		
+		//if textlog exists, write its contents to the textArea.
+		if (new File(_vamixFolder + "/insertLog2.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLog2.txt"));
+				text.setText("");
+				String line = in.readLine();
+				while(line != null){
+				  text.append(line + "\n");
+				  line = in.readLine();
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	
+	}
+
+	public int pullfontIndexForInsert(){
+	
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLog.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLog.txt"));
+				//should be in 1st line
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+
+	public int pullColourIndexForInsert(){
+	
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLog.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLog.txt"));
+				//should be in 2nd line
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+	
+	public int pullSizeIndexForInsert(){
+		
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLog.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLog.txt"));
+				//should be in 3rd line
+				in.readLine();
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return Integer.parseInt(line);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return 0;
+	}
+	
+	public String pullStartTimeForInsert(){
+		
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLog.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLog.txt"));
+				//should be in 4th line
+				in.readLine();
+				in.readLine();
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return line;
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return "00:00:00";
+	}
+	
+	public String pullFinishTimeForInsert(){
+		
+		//check if log file exists
+		if (new File(_vamixFolder + "/insertLog.txt").exists()){
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(_vamixFolder + "/insertLog.txt"));
+				//should be in 5th line
+				in.readLine();
+				in.readLine();
+				in.readLine();
+				in.readLine();
+				String line = in.readLine();
+				in.close();
+				return line;
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		return "00:00:00";
+	}
 	
 	
 	//method that deletes editlog and  textlog if they exist.

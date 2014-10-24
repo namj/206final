@@ -1,5 +1,6 @@
 package editWindows;
 
+import helperClasses.Logger;
 import helperClasses.TextManager;
 import helperClasses.TimeFormatChecker;
 
@@ -31,6 +32,7 @@ import javax.swing.JComboBox;
 import longTaskProcessors.Previewer;
 import longTaskProcessors.TextInserter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
+import javax.swing.JScrollPane;
 
 public class TextInsertFrame2 extends JFrame implements ActionListener {
 
@@ -46,6 +48,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 	private static final int _screenHeight = (int)d.getHeight();
 	private static final int _screenWidth = (int)d.getWidth();
+	private JScrollPane scrollPane;
 	
 	/**
 	 * Create the frame.
@@ -80,39 +83,46 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		_previewBtn.addActionListener(this);
 		contentPane.add(_previewBtn, "cell 3 0,alignx right");
 		
+		scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, "cell 0 1 4 1,grow");
+		
 		_textField = new JTextArea();
+		scrollPane.setViewportView(_textField);
 		_textField.setDocument(new TextManager(220));
 		_textField.setLineWrap(true);
 		_textField.setWrapStyleWord(true);
-		contentPane.add(_textField, "cell 0 1 4 1,grow");
+		Logger.getInstance().pullTextForInsert(_textField);
 		
 		JLabel lblNewLabel_1 = new JLabel("Font    ");
 		contentPane.add(lblNewLabel_1, "flowx,cell 0 2,alignx left");
 	
+		_fontBox.setSelectedIndex(Logger.getInstance().pullfontIndexForInsert());
 		contentPane.add(_fontBox, "cell 1 2,growx");
 		
 		JLabel lblNewLabel_4 = new JLabel("Start time  ");
 		contentPane.add(lblNewLabel_4, "flowx,cell 2 2,alignx right");
 		
-		_startField = new JTextField("00:00:00");
+		_startField = new JTextField(Logger.getInstance().pullStartTimeForInsert());
 		contentPane.add(_startField, "cell 3 2");
 		_startField.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Colour\t");
 		contentPane.add(lblNewLabel_2, "flowx,cell 0 3,alignx left");
 		
+		_colourBox.setSelectedIndex(Logger.getInstance().pullColourIndexForInsert());
 		contentPane.add(_colourBox, "cell 1 3,growx");
 		
 		JLabel lblNewLabel_5 = new JLabel("Finish time ");
 		contentPane.add(lblNewLabel_5, "flowx,cell 2 3,alignx right");
 		
-		_endField = new JTextField("00:00:00");
+		_endField = new JTextField(Logger.getInstance().pullFinishTimeForInsert());
 		contentPane.add(_endField, "cell 3 3");
 		_endField.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel("Size    ");
 		contentPane.add(lblNewLabel_3, "flowx,cell 0 4,alignx left");
 		
+		_sizeBox.setSelectedIndex(Logger.getInstance().pullSizeIndexForInsert());
 		contentPane.add(_sizeBox, "cell 1 4,growx");
 		
 		_generateBtn = new JButton("Generate");
