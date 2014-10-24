@@ -183,12 +183,10 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		
 		if (e.getSource() == _font || e.getSource() == _textSize){
 			
-			//_textArea.setFont(new Font ("./fonts/"+_font.getSelectedItem().toString(), Font.PLAIN, Integer.parseInt(_textSize.getSelectedItem().toString())));
 			try {
 				_textArea.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+_font.getSelectedItem().toString())));
 				_textArea.setFont(_textArea.getFont().deriveFont(Font.PLAIN, Integer.parseInt(_textSize.getSelectedItem().toString())));
 			} catch (FontFormatException | IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} 
 			

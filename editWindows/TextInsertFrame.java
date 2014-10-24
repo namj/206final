@@ -4,8 +4,10 @@ import helperClasses.Logger;
 import helperClasses.TextManager;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FontFormatException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +33,7 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 import java.awt.Font;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JScrollPane;
 
@@ -66,8 +69,27 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		
 		String[] fonts = {"FreeMono.ttf", "Kinnari.ttf", "Purisa-Oblique.ttf", "TakaoPGothic.ttf", "TlwgTypist-Bold.ttf", "Ubuntu-M.ttf"};
 		String[] sizes = { "10" , "20", "30", "40", "50", "60"};
-		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "purple", "orange" };
+		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "pink", "orange" };
 		String[] times = { "5" , "10" , "15" , "20" , "25" , "30" };
+		
+		timeBox1 = new JComboBox<String>(times);
+		timeBox1.setSelectedIndex(Logger.getInstance().pullTimeIndexForInsertTop());
+		fontBox1 = new JComboBox<String>(fonts);
+		fontBox1.addActionListener(this);
+		sizeBox1 = new JComboBox<String>(sizes);
+		sizeBox1.addActionListener(this);
+		colourBox1 = new JComboBox<String>(colours);
+		colourBox1.addActionListener(this);
+		
+		
+		timeBox2 = new JComboBox<String>(times);
+		timeBox2.setSelectedIndex(Logger.getInstance().pullTimeIndexForInsertBot());
+		fontBox2 = new JComboBox<String>(fonts);
+		fontBox2.addActionListener(this);
+		sizeBox2 = new JComboBox<String>(sizes);
+		sizeBox2.addActionListener(this);
+		colourBox2 = new JComboBox<String>(colours);
+		colourBox2.addActionListener(this);
 
 		_selectedVid = mediaPath;
 		_currentVideo = currentVideo;
@@ -78,8 +100,6 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		timeLabel1 = new JLabel("Time(sec)");
 		contentPane.add(timeLabel1, "flowx,cell 1 0,alignx right");
 		
-		timeBox1 = new JComboBox<String>(times);
-		timeBox1.setSelectedIndex(Logger.getInstance().pullTimeIndexForInsertTop());
 		contentPane.add(timeBox1, "cell 1 0,alignx right");
 		
 		previewBtn1 = new JButton("Preview");
@@ -104,21 +124,18 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		fontLabel1 = new JLabel("font");
 		contentPane.add(fontLabel1, "flowx,cell 0 2,aligny top");
 		
-		fontBox1 = new JComboBox<String>(fonts);
 		fontBox1.setSelectedIndex(Logger.getInstance().pullfontIndexForInsertTop());
 		contentPane.add(fontBox1, "cell 0 2,growx");
 		
 		colourLabel1 = new JLabel("colour");
 		contentPane.add(colourLabel1, "flowx,cell 1 2");
 		
-		colourBox1 = new JComboBox<String>(colours);
 		colourBox1.setSelectedIndex(Logger.getInstance().pullColourIndexForInsertTop());
 		contentPane.add(colourBox1, "cell 1 2,growx");
 		
 		sizeLabel1 = new JLabel("size");
 		contentPane.add(sizeLabel1, "flowx,cell 2 2");
 		
-		sizeBox1 = new JComboBox<String>(sizes);
 		sizeBox1.setSelectedIndex(Logger.getInstance().pullSizeIndexForInsertTop());
 		contentPane.add(sizeBox1, "cell 2 2,growx");
 		
@@ -128,8 +145,6 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		timeLabel2 = new JLabel("Time(sec)");
 		contentPane.add(timeLabel2, "flowx,cell 1 3,alignx right");
 		
-		timeBox2 = new JComboBox<String>(times);
-		timeBox2.setSelectedIndex(Logger.getInstance().pullTimeIndexForInsertBot());
 		contentPane.add(timeBox2, "cell 1 3,alignx right");
 		
 		previewBtn2 = new JButton("Preview");
@@ -153,22 +168,19 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		
 		fontLabel2 = new JLabel("font");
 		contentPane.add(fontLabel2, "flowx,cell 0 5");
-		
-		fontBox2 = new JComboBox<String>(fonts);
+	
 		fontBox2.setSelectedIndex(Logger.getInstance().pullfontIndexForInsertBot());
 		contentPane.add(fontBox2, "cell 0 5,growx");
 		
 		colourLabel2 = new JLabel("colour");
 		contentPane.add(colourLabel2, "flowx,cell 1 5");
 		
-		colourBox2 = new JComboBox<String>(colours);
 		colourBox2.setSelectedIndex(Logger.getInstance().pullColourIndexForInsertBot());
 		contentPane.add(colourBox2, "cell 1 5,growx");
 		
 		sizeLabel2 = new JLabel("size");
 		contentPane.add(sizeLabel2, "flowx,cell 2 5");
 		
-		sizeBox2 = new JComboBox<String>(sizes);
 		sizeBox2.setSelectedIndex(Logger.getInstance().pullSizeIndexForInsertBot());
 		contentPane.add(sizeBox2, "cell 2 5,growx");
 		
@@ -183,7 +195,68 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == checkBtn1){
+		
+		if (e.getSource() == fontBox1 || e.getSource() == sizeBox1){
+			
+			try {
+				textArea1.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+fontBox1.getSelectedItem().toString())));
+				textArea1.setFont(textArea1.getFont().deriveFont(Font.PLAIN, Integer.parseInt(sizeBox1.getSelectedItem().toString())));
+			} catch (FontFormatException | IOException e1) {
+				e1.printStackTrace();
+			} 
+			
+		} else if (e.getSource() == colourBox1) {
+			
+			if (colourBox1.getSelectedIndex() == 0){
+				textArea1.setForeground(Color.black);
+			} else if (colourBox1.getSelectedIndex() == 1){
+				textArea1.setForeground(Color.white);
+			} else if (colourBox1.getSelectedIndex() == 2){
+				textArea1.setForeground(Color.red);
+			} else if (colourBox1.getSelectedIndex() == 3){
+				textArea1.setForeground(Color.blue);
+			} else if (colourBox1.getSelectedIndex() == 4){
+				textArea1.setForeground(Color.yellow);
+			} else if (colourBox1.getSelectedIndex() == 5){
+				textArea1.setForeground(Color.green);
+			} else if (colourBox1.getSelectedIndex() == 6){
+				textArea1.setForeground(Color.pink);
+			} else if (colourBox1.getSelectedIndex() == 7){
+				textArea1.setForeground(Color.orange);
+			} 
+			
+			
+		} else if (e.getSource() == fontBox2 || e.getSource() == sizeBox2){
+			
+			try {
+				textArea2.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+fontBox2.getSelectedItem().toString())));
+				textArea2.setFont(textArea2.getFont().deriveFont(Font.PLAIN, Integer.parseInt(sizeBox2.getSelectedItem().toString())));
+			} catch (FontFormatException | IOException e1) {
+				e1.printStackTrace();
+			} 
+			
+		} else if (e.getSource() == colourBox2) {
+			
+			if (colourBox2.getSelectedIndex() == 0){
+				textArea2.setForeground(Color.black);
+			} else if (colourBox2.getSelectedIndex() == 1){
+				textArea2.setForeground(Color.white);
+			} else if (colourBox2.getSelectedIndex() == 2){
+				textArea2.setForeground(Color.red);
+			} else if (colourBox2.getSelectedIndex() == 3){
+				textArea2.setForeground(Color.blue);
+			} else if (colourBox2.getSelectedIndex() == 4){
+				textArea2.setForeground(Color.yellow);
+			} else if (colourBox2.getSelectedIndex() == 5){
+				textArea2.setForeground(Color.green);
+			} else if (colourBox2.getSelectedIndex() == 6){
+				textArea2.setForeground(Color.pink);
+			} else if (colourBox2.getSelectedIndex() == 7){
+				textArea2.setForeground(Color.orange);
+			} 
+			
+		} else if (e.getSource() == checkBtn1){
+			
 			if (!checkBtn1.isSelected()){
 				//disable all components at top half
 				previewBtn1.setEnabled(false);

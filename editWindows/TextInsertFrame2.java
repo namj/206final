@@ -3,12 +3,16 @@ package editWindows;
 import helperClasses.TextManager;
 import helperClasses.TimeFormatChecker;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -60,7 +64,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		
 		String[] fonts = {"FreeMono.ttf", "Kinnari.ttf", "Purisa-Oblique.ttf", "TakaoPGothic.ttf", "TlwgTypist-Bold.ttf", "Ubuntu-M.ttf"};
 		String[] sizes = { "10" , "20", "30", "40", "50", "60"};
-		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "purple", "orange" };
+		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "pink", "orange" };
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		contentPane.add(lblNewLabel, "cell 0 0");
@@ -79,6 +83,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		contentPane.add(lblNewLabel_1, "flowx,cell 0 2,alignx left");
 		
 		_fontBox = new JComboBox<String>(fonts);
+		_fontBox.addActionListener(this);
 		contentPane.add(_fontBox, "cell 1 2,growx");
 		
 		JLabel lblNewLabel_4 = new JLabel("Start time  ");
@@ -92,6 +97,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		contentPane.add(lblNewLabel_2, "flowx,cell 0 3,alignx left");
 		
 		_colourBox = new JComboBox<String>(colours);
+		_colourBox.addActionListener(this);
 		contentPane.add(_colourBox, "cell 1 3,growx");
 		
 		JLabel lblNewLabel_5 = new JLabel("Finish time ");
@@ -105,6 +111,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		contentPane.add(lblNewLabel_3, "flowx,cell 0 4,alignx left");
 		
 		_sizeBox = new JComboBox<String>(sizes);
+		_sizeBox.addActionListener(this);
 		contentPane.add(_sizeBox, "cell 1 4,growx");
 		
 		_generateBtn = new JButton("Generate");
@@ -117,8 +124,38 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) { 
-		//when generate button has been pushed
-		if (e.getSource() == _generateBtn || e.getSource() == _previewBtn){
+		
+		if (e.getSource() == _fontBox || e.getSource() == _sizeBox){
+			
+			try {
+				_textField.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+_fontBox.getSelectedItem().toString())));
+				_textField.setFont(_textField.getFont().deriveFont(Font.PLAIN, Integer.parseInt(_sizeBox.getSelectedItem().toString())));
+			} catch (FontFormatException | IOException e1) {
+				e1.printStackTrace();
+			} 
+			
+		} else if (e.getSource() == _colourBox) {
+			
+			if (_colourBox.getSelectedIndex() == 0){
+				_textField.setForeground(Color.black);
+			} else if (_colourBox.getSelectedIndex() == 1){
+				_textField.setForeground(Color.white);
+			} else if (_colourBox.getSelectedIndex() == 2){
+				_textField.setForeground(Color.red);
+			} else if (_colourBox.getSelectedIndex() == 3){
+				_textField.setForeground(Color.blue);
+			} else if (_colourBox.getSelectedIndex() == 4){
+				_textField.setForeground(Color.yellow);
+			} else if (_colourBox.getSelectedIndex() == 5){
+				_textField.setForeground(Color.green);
+			} else if (_colourBox.getSelectedIndex() == 6){
+				_textField.setForeground(Color.pink);
+			} else if (_colourBox.getSelectedIndex() == 7){
+				_textField.setForeground(Color.orange);
+			} 
+			
+		//when generate button has been pushed	
+		} else if (e.getSource() == _generateBtn || e.getSource() == _previewBtn){
 			
 			//Make sure user entered time formats correctly.
 			Boolean _formatCorrect = true;
