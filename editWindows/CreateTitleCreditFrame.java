@@ -5,6 +5,8 @@ import helperClasses.TextManager;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -83,11 +85,14 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		//setup JComboBox(s)
 		String[] fonts = {"FreeMono.ttf", "Kinnari.ttf", "Purisa-Oblique.ttf", "TakaoPGothic.ttf", "TlwgTypist-Bold.ttf", "Ubuntu-M.ttf"};
 		String[] sizes = { "10" , "20", "30", "40", "50", "60"};
-		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "purple", "orange" };
+		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "pink", "orange" };
 
 		_font = new JComboBox<String>(fonts);
+		_font.addActionListener(this);
 		_textSize = new JComboBox<String>(sizes);
+		_textSize.addActionListener(this);
 		_colour = new JComboBox<String>(colours);
+		_colour.addActionListener(this);	
 		
 		setBackground(Color.LIGHT_GRAY);
 		setSize(600,380);
@@ -175,7 +180,40 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == _browseButton1){
+		
+		if (e.getSource() == _font || e.getSource() == _textSize){
+			
+			//_textArea.setFont(new Font ("./fonts/"+_font.getSelectedItem().toString(), Font.PLAIN, Integer.parseInt(_textSize.getSelectedItem().toString())));
+			try {
+				_textArea.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+_font.getSelectedItem().toString())));
+				_textArea.setFont(_textArea.getFont().deriveFont(Font.PLAIN, Integer.parseInt(_textSize.getSelectedItem().toString())));
+			} catch (FontFormatException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
+			
+		} else if (e.getSource() == _colour) {
+			
+			if (_colour.getSelectedIndex() == 0){
+				_textArea.setForeground(Color.black);
+			} else if (_colour.getSelectedIndex() == 1){
+				_textArea.setForeground(Color.white);
+			} else if (_colour.getSelectedIndex() == 2){
+				_textArea.setForeground(Color.red);
+			} else if (_colour.getSelectedIndex() == 3){
+				_textArea.setForeground(Color.blue);
+			} else if (_colour.getSelectedIndex() == 4){
+				_textArea.setForeground(Color.yellow);
+			} else if (_colour.getSelectedIndex() == 5){
+				_textArea.setForeground(Color.green);
+			} else if (_colour.getSelectedIndex() == 6){
+				_textArea.setForeground(Color.pink);
+			} else if (_colour.getSelectedIndex() == 7){
+				_textArea.setForeground(Color.orange);
+			} 
+			
+			
+		} else if (e.getSource() == _browseButton1){
 			//open Jfilechooser if browse button clicked
 			JFileChooser fileChooser = new JFileChooser("./open_source_music");
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);

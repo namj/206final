@@ -113,7 +113,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private MainFrame() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds((_screenWidth-1400)/2,(_screenHeight-800)/2,1400, 800);
+		setBounds((_screenWidth-1350)/2,(_screenHeight-800)/2,1350, 800);
 		setTitle("npar35_VAMIX");
 		
 		//Make sure mediaplaycomp does paint over jmenu
