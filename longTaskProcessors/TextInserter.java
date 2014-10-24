@@ -164,7 +164,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 			int endLength = (int) (_videoLength/1000 - Integer.parseInt(_time2));
 			
 			String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='lt(t,"+_time+")', "
-					+ "drawtext=fontcolor="+_colour2+":fontsize="+_textSize2+":fontfile=./fonts/"+_font2+":text='"+ _text2 +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='gt(t,"+ endLength +")'\" -y "+ _outputPathName +".mp4";
+					+ "drawtext=fontcolor="+_colour2+":fontsize="+_textSize2+":fontfile=./fonts/"+_font2+":text='"+ _text2 +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='gt(t,"+ endLength +")'\" -f mp4 -y "+ _outputPathName;
 			ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
 			Builder2.redirectErrorStream(true);
 			Process process2 = Builder2.start();
@@ -193,7 +193,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		} else {
 			
 			String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":"
-					+ "fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='gte(t,"+_startTime+")*lte(t,"+_finishTime+")'\" -y "+ _outputPathName +".mp4";
+					+ "fontfile=./fonts/"+_font+":text='"+ _text +"':x=30:y=h-text_h-30:draw='gte(t,"+_startTime+")*lte(t,"+_finishTime+")'\" -f mp4 -y "+ _outputPathName;
 			ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
 			Builder2.redirectErrorStream(true);
 			Process process2 = Builder2.start();

@@ -313,7 +313,7 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 			}
 			
 			//terminal command to concat the 2 .ts files and turn into mp4.
-			cmd = "avconv -i concat:"+ _savePath +"/file2.ts\\|"+ _savePath +"/file3.ts -c copy -bsf:a aac_adtstoasc -y "+ _outputPathName +".mp4";
+			cmd = "avconv -i concat:"+ _savePath +"/file2.ts\\|"+ _savePath +"/file3.ts -c copy -bsf:a aac_adtstoasc -f mp4 -y "+ _outputPathName;
 			ProcessBuilder Builder5 = new ProcessBuilder("/bin/bash","-c",cmd);
 			Builder5.redirectErrorStream(true);
 			Process process5 = Builder5.start();

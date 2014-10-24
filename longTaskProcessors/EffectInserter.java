@@ -49,7 +49,7 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add mirror effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"crop=iw/2:ih:0:0,split[tmp],pad=2*iw[left]; [tmp]hflip[right]; [left][right] overlay=W/2\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"crop=iw/2:ih:0:0,split[tmp],pad=2*iw[left]; [tmp]hflip[right]; [left][right] overlay=W/2\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -105,7 +105,7 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"crop=in_w/1.5:in_h/1.5:(in_w-out_w)/1.5+((in_w-out_w)/1.5)*sin(n/10):(in_h-out_h)/1.5 +((in_h-out_h)/1.5)*sin(n/7)\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"crop=in_w/1.5:in_h/1.5:(in_w-out_w)/1.5+((in_w-out_w)/1.5)*sin(n/10):(in_h-out_h)/1.5 +((in_h-out_h)/1.5)*sin(n/7)\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -159,7 +159,7 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"negate=1\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"negate=1\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -213,7 +213,7 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"transpose="+ transposeInput +"\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"transpose="+ transposeInput +"\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -268,7 +268,7 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+inStartFrame+":"+inFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+inStartFrame+":"+inFinishFrame+"\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -322,7 +322,7 @@ public class EffectInserter implements ActionListener {
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"fade=out:"+outStartFrame+":"+outFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=out:"+outStartFrame+":"+outFinishFrame+"\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -379,7 +379,7 @@ public class EffectInserter implements ActionListener {
 				
 				//command to play add bounce effect to video
 				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+inStartFrame+":"+inFinishFrame+", "
-						+ "fade=out:"+outStartFrame+":"+outFinishFrame+"\" -c:a copy -y "+ outputNamePath +".mp4";
+						+ "fade=out:"+outStartFrame+":"+outFinishFrame+"\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
