@@ -619,5 +619,11 @@ public class MainFrame extends JFrame implements ActionListener{
 		return ourMediaPlayer;
 		
 	}
+	
+	public EmbeddedMediaPlayer getMediaPlayer(){
+		
+		return currentVideo;
+		
+	}
 
 }

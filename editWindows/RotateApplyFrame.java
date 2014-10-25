@@ -65,7 +65,7 @@ public class RotateApplyFrame extends JFrame implements ActionListener{
 		JLabel lblSelectFilter = new JLabel("Please select a rotation angle");
 		contentPane.add(lblSelectFilter, "cell 0 1 3 1,alignx center,aligny bottom");
 		
-		effectComboBox = new JComboBox<String>();
+		effectComboBox = new JComboBox<String>(angles);
 		contentPane.add(effectComboBox, "flowx,cell 1 2,alignx center,aligny center");
 		
 		generateBtn = new JButton("Generate");

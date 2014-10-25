@@ -7,26 +7,39 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
+
+import project.MainFrame;
 
 public class EffectInserter implements ActionListener {
 	
 	private JFrame _frame;
-	private JLabel _label, _progressText;
+	private JProgressBar _progressBar;
+	private JLabel _progressText;
 	private JButton _cancelButton;
 	private boolean _isCancelled = false;
+	private int totalFrameNumber;
 	
 	
 	public EffectInserter(){
 		
 		_frame = new JFrame();
+		
 		_progressText = new JLabel("encoding...");
+		_progressBar = new JProgressBar();
+		totalFrameNumber = (int) (MainFrame.getInstance().getMediaPlayer().getFps() * MainFrame.getInstance().getMediaPlayer().getLength()/1000);
+		_progressBar.setMaximum(totalFrameNumber);
+	
 		_cancelButton = new JButton("Cancel");
 		_cancelButton.addActionListener(this);
 		
@@ -35,6 +48,7 @@ public class EffectInserter implements ActionListener {
 		_frame.setLocation(600,400);
 		_frame.setSize(300,150);
 		_frame.add(_progressText,BorderLayout.NORTH);
+		_frame.add(_progressBar,BorderLayout.CENTER);
 		_frame.add(_cancelButton,BorderLayout.SOUTH);
 		
 		_frame.setVisible(true);
@@ -43,7 +57,7 @@ public class EffectInserter implements ActionListener {
 	
 	public void insertEffectMirror(final String vidPath, final String outputNamePath){
 		
-		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
 
 			@Override
 			protected Integer doInBackground() throws Exception {
@@ -60,13 +74,18 @@ public class EffectInserter implements ActionListener {
 				//print output from terminal to console
 				while ((line = stdoutD.readLine()) != null) {
 					System.out.println(line);
-					//if cancel button has been pressed
+					
+					Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+					if(matcher.find()) {
+						publish((int)(Integer.parseInt(matcher.group(1))));
+					}
+					
 					//if cancel button has been pressed
 					if (_isCancelled){
 						//destroy process and return exit value
 						process.destroy();
-						int exitValue = process.waitFor();
-						return exitValue;
+						process.waitFor();
+						return -100;
 					}
 					
 				}
@@ -81,7 +100,9 @@ public class EffectInserter implements ActionListener {
 				try {
 					if (this.get() == 0) {
 						JOptionPane.showMessageDialog(null, "Done");
-					} else if (this.get() != 0){
+					} else if (this.get() == -100){
+						JOptionPane.showMessageDialog(null, "Process Cancelled.");
+					} else {
 						JOptionPane.showMessageDialog(null, "Error applying effect");
 					}
 				} catch (InterruptedException | ExecutionException e) {
@@ -91,6 +112,14 @@ public class EffectInserter implements ActionListener {
 				
 				_frame.dispose();
 			}
+			
+			@Override
+			protected void process(List<Integer> chunks) {
+				for (int i: chunks){
+					_progressBar.setValue(i);
+				}
+			}
+			
 		};
 
 		worker.execute();
@@ -99,7 +128,7 @@ public class EffectInserter implements ActionListener {
 	
 	public void insertEffectBounce(final String vidPath, final String outputNamePath){
 		
-		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
 
 			@Override
 			protected Integer doInBackground() throws Exception {
@@ -116,12 +145,16 @@ public class EffectInserter implements ActionListener {
 				//print output from terminal to console
 				while ((line = stdoutD.readLine()) != null) {
 					System.out.println(line);
+					Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+					if(matcher.find()) {
+						publish((int)(Integer.parseInt(matcher.group(1))));
+					}
 					//if cancel button has been pressed
 					if (_isCancelled){
 						//destroy process and return exit value
 						process.destroy();
-						int exitValue = process.waitFor();
-						return exitValue;
+						process.waitFor();
+						return -100;
 					}
 					
 				}
@@ -136,7 +169,9 @@ public class EffectInserter implements ActionListener {
 				try {
 					if (this.get() ==0) {
 						JOptionPane.showMessageDialog(null, "Done");
-					} else if (this.get() != 0){
+					} else if (this.get() == -100){
+						JOptionPane.showMessageDialog(null, "Process Cancelled.");
+					} else {
 						JOptionPane.showMessageDialog(null, "Error applying effect");
 					}
 				} catch (InterruptedException | ExecutionException e) {
@@ -144,6 +179,13 @@ public class EffectInserter implements ActionListener {
 				}
 				
 				_frame.dispose();
+			}
+			
+			@Override
+			protected void process(List<Integer> chunks) {
+				for (int i: chunks){
+					_progressBar.setValue(i);
+				}
 			}
 		};
 		
@@ -153,7 +195,7 @@ public class EffectInserter implements ActionListener {
 	
 	public void insertEffectNegate(final String vidPath, final String outputNamePath){
 		
-		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
 
 			@Override
 			protected Integer doInBackground() throws Exception {
@@ -170,12 +212,16 @@ public class EffectInserter implements ActionListener {
 				//print output from terminal to console
 				while ((line = stdoutD.readLine()) != null) {
 					System.out.println(line);
+					Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+					if(matcher.find()) {
+						publish((int)(Integer.parseInt(matcher.group(1))));
+					}
 					//if cancel button has been pressed
 					if (_isCancelled){
 						//destroy process and return exit value
 						process.destroy();
-						int exitValue = process.waitFor();
-						return exitValue;
+						process.waitFor();
+						return -100;
 					}
 					
 				}
@@ -190,7 +236,9 @@ public class EffectInserter implements ActionListener {
 				try {
 					if (this.get() ==0) {
 						JOptionPane.showMessageDialog(null, "Done");
-					} else if (this.get() != 0){
+					} else if (this.get() == -100){
+						JOptionPane.showMessageDialog(null, "Process Cancelled.");
+					} else {
 						JOptionPane.showMessageDialog(null, "Error applying effect");
 					}
 				} catch (InterruptedException | ExecutionException e) {
@@ -198,6 +246,13 @@ public class EffectInserter implements ActionListener {
 				}
 				
 				_frame.dispose();
+			}
+			
+			@Override
+			protected void process(List<Integer> chunks) {
+				for (int i: chunks){
+					_progressBar.setValue(i);
+				}
 			}
 		};
 		
@@ -207,7 +262,7 @@ public class EffectInserter implements ActionListener {
 	
 	public void insertEffectRotate(final String vidPath, final String outputNamePath, final String transposeInput){
 		
-		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
 
 			@Override
 			protected Integer doInBackground() throws Exception {
@@ -223,13 +278,18 @@ public class EffectInserter implements ActionListener {
 				String line = null;
 				//print output from terminal to console
 				while ((line = stdoutD.readLine()) != null) {
+
 					System.out.println(line);
+					Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+					if(matcher.find()) {
+						publish((int)(Integer.parseInt(matcher.group(1))));
+					}
 					//if cancel button has been pressed
 					if (_isCancelled){
 						//destroy process and return exit value
 						process.destroy();
-						int exitValue = process.waitFor();
-						return exitValue;
+						process.waitFor();
+						return -100;
 					}
 					
 				}
@@ -244,7 +304,9 @@ public class EffectInserter implements ActionListener {
 				try {
 					if (this.get() == 0) {
 						JOptionPane.showMessageDialog(null, "Done");
-					} else if (this.get() != 0){
+					} else if (this.get() == -100){
+						JOptionPane.showMessageDialog(null, "Process Cancelled.");
+					} else {
 						JOptionPane.showMessageDialog(null, "Error applying effect");
 					}
 				} catch (InterruptedException | ExecutionException e) {
@@ -254,21 +316,96 @@ public class EffectInserter implements ActionListener {
 				
 				_frame.dispose();
 			}
+			
+			@Override
+			protected void process(List<Integer> chunks) {
+				for (int i: chunks){
+					_progressBar.setValue(i);
+				}
+			}
 		};
 		
 		worker.execute();
 		
 	}
 	
-	public void insertEffectFadeIn(final String vidPath, final String outputNamePath, final String inStartFrame, final String inFinishFrame){
+	public void insertEffectFadeIn(final String vidPath, final String outputNamePath, final int i, final int j){
 		
-		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
 
 			@Override
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+inStartFrame+":"+inFinishFrame+"\" -f mp4 -c:a copy -y "+ outputNamePath;
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+i+":"+j+"\" -f mp4 -c:a copy -y "+ outputNamePath;
+				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
+				Builder.redirectErrorStream(true);
+				Process process = Builder.start();
+				
+				InputStream stdoutC = process.getInputStream();
+				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
+				String line = null;
+				//print output from terminal to console
+				while ((line = stdoutD.readLine()) != null) {
+		
+					System.out.println(line);
+					Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+					if(matcher.find()) {
+						publish((int)(Integer.parseInt(matcher.group(1))));
+					}
+					//if cancel button has been pressed
+					if (_isCancelled){
+						//destroy process and return exit value
+						process.destroy();
+						process.waitFor();
+						return -100;
+					}
+					
+				}
+				
+				return 0;
+			}
+			
+			@Override
+			protected void done() {
+				
+				//display error message if processes didnt finish happliy
+				try {
+					if (this.get() == 0) {
+						JOptionPane.showMessageDialog(null, "Done");
+					} else if (this.get() == -100){
+						JOptionPane.showMessageDialog(null, "Process Cancelled.");
+					} else {
+						JOptionPane.showMessageDialog(null, "Error applying effect");
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+				
+				_frame.dispose();
+			}
+			
+			@Override
+			protected void process(List<Integer> chunks) {
+				for (int i: chunks){
+					_progressBar.setValue(i);
+				}
+			}
+		};
+		
+		worker.execute();
+		
+	}
+	
+	public void insertEffectFadeOut(final String vidPath, final String outputNamePath, final int i, final int j){
+		
+		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
+
+			@Override
+			protected Integer doInBackground() throws Exception {
+				
+				//command to play add bounce effect to video
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=out:"+i+":"+j+"\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -279,12 +416,16 @@ public class EffectInserter implements ActionListener {
 				//print output from terminal to console
 				while ((line = stdoutD.readLine()) != null) {
 					System.out.println(line);
+					Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+					if(matcher.find()) {
+						publish((int)(Integer.parseInt(matcher.group(1))));
+					}
 					//if cancel button has been pressed
 					if (_isCancelled){
 						//destroy process and return exit value
 						process.destroy();
-						int exitValue = process.waitFor();
-						return exitValue;
+						process.waitFor();
+						return -100;
 					}
 					
 				}
@@ -299,61 +440,9 @@ public class EffectInserter implements ActionListener {
 				try {
 					if (this.get() == 0) {
 						JOptionPane.showMessageDialog(null, "Done");
-					} else if (this.get() != 0){
-						JOptionPane.showMessageDialog(null, "Error applying effect");
-					}
-				} catch (InterruptedException | ExecutionException e) {
-					e.printStackTrace();
-				}
-				
-				_frame.dispose();
-			}
-		};
-		
-		worker.execute();
-		
-	}
-	
-	public void insertEffectFadeOut(final String vidPath, final String outputNamePath, final String outStartFrame, final String outFinishFrame){
-		
-		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
-
-			@Override
-			protected Integer doInBackground() throws Exception {
-				
-				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"fade=out:"+outStartFrame+":"+outFinishFrame+"\" -f mp4 -c:a copy -y "+ outputNamePath;
-				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
-				Builder.redirectErrorStream(true);
-				Process process = Builder.start();
-				
-				InputStream stdoutC = process.getInputStream();
-				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
-				String line = null;
-				//print output from terminal to console
-				while ((line = stdoutD.readLine()) != null) {
-					System.out.println(line);
-					//if cancel button has been pressed
-					if (_isCancelled){
-						//destroy process and return exit value
-						process.destroy();
-						int exitValue = process.waitFor();
-						return exitValue;
-					}
-					
-				}
-				
-				return 0;
-			}
-			
-			@Override
-			protected void done() {
-				
-				//display error message if processes didnt finish happliy
-				try {
-					if (this.get() == 0) {
-						JOptionPane.showMessageDialog(null, "Done");
-					} else if (this.get() != 0){
+					} else if (this.get() == -100){
+						JOptionPane.showMessageDialog(null, "Process Cancelled.");
+					} else {
 						JOptionPane.showMessageDialog(null, "Error applying effect");
 					}
 				} catch (InterruptedException | ExecutionException e) {
@@ -363,23 +452,30 @@ public class EffectInserter implements ActionListener {
 				
 				_frame.dispose();
 			}
+			
+			@Override
+			protected void process(List<Integer> chunks) {
+				for (int i: chunks){
+					_progressBar.setValue(i);
+				}
+			}
 		};
 		
 		worker.execute();
 		
 	}
 
-	public void insertEffectFadeIO(final String vidPath, final String outputNamePath, final String inStartFrame, final String inFinishFrame, 
-			final String outStartFrame, final String outFinishFrame){
+	public void insertEffectFadeIO(final String vidPath, final String outputNamePath, final int i, final int j, 
+			final int k, final int l){
 		
-		SwingWorker<Integer, String> worker = new SwingWorker<Integer, String>(){
+		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
 	
 			@Override
 			protected Integer doInBackground() throws Exception {
 				
 				//command to play add bounce effect to video
-				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+inStartFrame+":"+inFinishFrame+", "
-						+ "fade=out:"+outStartFrame+":"+outFinishFrame+"\" -f mp4 -c:a copy -y "+ outputNamePath;
+				String cmd = "avconv -i "+vidPath+" -vf \"fade=in:"+i+":"+j+", "
+						+ "fade=out:"+k+":"+l+"\" -f mp4 -c:a copy -y "+ outputNamePath;
 				ProcessBuilder Builder = new ProcessBuilder("/bin/bash","-c",cmd);
 				Builder.redirectErrorStream(true);
 				Process process = Builder.start();
@@ -387,15 +483,20 @@ public class EffectInserter implements ActionListener {
 				InputStream stdoutC = process.getInputStream();
 				BufferedReader stdoutD = new BufferedReader(new InputStreamReader(stdoutC));
 				String line = null;
+				
 				//print output from terminal to console
 				while ((line = stdoutD.readLine()) != null) {
 					System.out.println(line);
+					Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+					if(matcher.find()) {
+						publish((int)(Integer.parseInt(matcher.group(1))));
+					}
 					//if cancel button has been pressed
 					if (_isCancelled){
 						//destroy process and return exit value
 						process.destroy();
-						int exitValue = process.waitFor();
-						return exitValue;
+						process.waitFor();
+						return -100;
 					}
 					
 				}
@@ -410,7 +511,9 @@ public class EffectInserter implements ActionListener {
 				try {
 					if (this.get() == 0) {
 						JOptionPane.showMessageDialog(null, "Done");
-					} else if (this.get() != 0){
+					} else if (this.get() == -100){
+						JOptionPane.showMessageDialog(null, "Process Cancelled.");
+					} else {
 						JOptionPane.showMessageDialog(null, "Error applying effect");
 					}
 				} catch (InterruptedException | ExecutionException e) {
@@ -419,6 +522,13 @@ public class EffectInserter implements ActionListener {
 				}
 				
 				_frame.dispose();
+			}
+			
+			@Override
+			protected void process(List<Integer> chunks) {
+				for (int i: chunks){
+					_progressBar.setValue(i);
+				}
 			}
 		};
 		

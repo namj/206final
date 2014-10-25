@@ -188,15 +188,16 @@ public class FadeApplyFrame extends JFrame implements ActionListener{
 					if (situation == 1){
 						//preview fade in
 						Previewer p = new Previewer();
-						p.viewEffectFadeIn(_mediaPath, getNumberOfFrames(inStartField), getNumberOfFrames(inFinishField));
+						p.viewEffectFadeIn(_mediaPath, getNumberOfFrames(inStartField), getNumberOfFrames(inFinishField) - getNumberOfFrames(inStartField));
 					} else if (situation == 2){
 						//preview fade out
 						Previewer p = new Previewer();
-						p.viewEffectFadeOut(_mediaPath, getNumberOfFrames(outStartField), getNumberOfFrames(outFinishField));
+						p.viewEffectFadeOut(_mediaPath, getNumberOfFrames(outStartField), getNumberOfFrames(outFinishField) - getNumberOfFrames(outStartField));
 					} else if (situation == 3){
 						//preview fade in AND out
 						Previewer p = new Previewer();
-						p.viewEffectFadeIO(_mediaPath, getNumberOfFrames(inStartField), getNumberOfFrames(inFinishField), getNumberOfFrames(outStartField), getNumberOfFrames(outFinishField));
+						p.viewEffectFadeIO(_mediaPath, getNumberOfFrames(inStartField), getNumberOfFrames(inFinishField) - getNumberOfFrames(inStartField), 
+								getNumberOfFrames(outStartField), getNumberOfFrames(outFinishField) - getNumberOfFrames(outStartField));
 					}
 	
 				} else if (e.getSource() == generateBtn){
@@ -231,8 +232,17 @@ public class FadeApplyFrame extends JFrame implements ActionListener{
 					
 						//only initialise and execute swingworker is filechooser has exited without being deliberately exited/cancelled
 						if (cancelled == false){
-						
-							System.out.println("DOING GENERATE");
+							
+							EffectInserter e1 = new EffectInserter();
+							
+							if (situation == 1){
+								e1.insertEffectFadeIn(_mediaPath, outputPathName, getNumberOfFrames(inStartField), getNumberOfFrames(inFinishField) - getNumberOfFrames(inStartField));
+							} else if (situation == 2){
+								e1.insertEffectFadeOut(_mediaPath, outputPathName, getNumberOfFrames(outStartField), getNumberOfFrames(outFinishField) - getNumberOfFrames(outStartField));
+							} else if (situation == 3){
+								e1.insertEffectFadeIO(_mediaPath, outputPathName, getNumberOfFrames(inStartField), getNumberOfFrames(inFinishField) - getNumberOfFrames(inStartField), 
+										getNumberOfFrames(outStartField), getNumberOfFrames(outFinishField) - getNumberOfFrames(outStartField));
+							}
 							
 						}
 					}
