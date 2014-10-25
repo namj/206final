@@ -1,6 +1,7 @@
 package longTaskProcessors;
 
 import helperClasses.Logger;
+import helperClasses.TimeFormatChecker;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,6 +22,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 /**
@@ -36,6 +38,8 @@ import javax.swing.SwingWorker;
 public class TextInserter extends SwingWorker<Integer, String> implements ActionListener {
 	
 	private int _whichOne; //int to indicate whether to put text and start/end or at specified interval. 1 means start/end 2 means specified
+	
+	private JTextField _startField, _finishField;
 	
 	private int _startTime, _finishTime;
 	
@@ -121,7 +125,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 	}
 	
 	public TextInserter(int sel, String path, String savePath, String outputPathName, String text, JComboBox<String> font, JComboBox<String> size, 
-			JComboBox<String> colour, int startTime, int finishTime){
+			JComboBox<String> colour, JTextField startField, JTextField finishField){
 		
 		_whichOne = sel;
 		
@@ -137,8 +141,13 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		_colour = colour.getSelectedItem().toString();
 		_colourIndex = colour.getSelectedIndex();
 		
-		_startTime = startTime;
-		_finishTime = finishTime;
+		TimeFormatChecker checker = new TimeFormatChecker(startField, finishField);
+		
+		_startTime = checker.getStartTime();
+		_finishTime = checker.getEndTime();
+		
+		_startField = startField;
+		_finishField = finishField;
 		
 		_frame = new JFrame();
 		_progressText = new JLabel("encoding...");
@@ -249,7 +258,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 					Logger.getInstance().updateForText(_text, _timeIndex, _fontIndex, _sizeIndex, _colourIndex, _text2, _timeIndex2, _fontIndex2, _sizeIndex2, _colourIndex2);
 					JOptionPane.showMessageDialog(null,"Saved");
 				} else if (_whichOne == 2){
-					Logger.getInstance().updateForText2(_text, _fontIndex, _sizeIndex, _colourIndex, Integer.toString(_startTime), Integer.toString(_finishTime));
+					Logger.getInstance().updateForText2(_text, _fontIndex, _sizeIndex, _colourIndex, _startField.getText(), _finishField.getText());
 					JOptionPane.showMessageDialog(null,"Saved");
 				}
 			} catch (IOException e) {

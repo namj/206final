@@ -35,6 +35,13 @@ public class TimeFormatChecker {
 		_finish = endField.getText();
 	}
 	
+	public TimeFormatChecker(JTextField startField, JTextField endField){
+		
+		_start = startField.getText();
+		_finish = endField.getText();
+	}
+	
+	
 	
 	public boolean checkTimeFormat(){
 		

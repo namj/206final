@@ -211,7 +211,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 						if (cancelled == false){
 							
 							TextInserter inserter = new TextInserter(2, _mediaPath, savePath, outputPathName, _textField.getText(), 
-									_fontBox, _sizeBox, _colourBox, _startTime, _endTime);
+									_fontBox, _sizeBox, _colourBox, _startField, _endField);
 							inserter.execute();
 							
 						}
