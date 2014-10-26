@@ -10,6 +10,7 @@ import editWindows.EditFrame;
 import playback.PlaybackPanel;
 import playback.VolumePanel;
 import project.MainFrame;
+import project.MainFrameHelper;
 
 /**
  * This is a cutom keyEventDispatcher. Intended purpose is to
@@ -42,7 +43,7 @@ public class MyKeyListener implements KeyEventDispatcher {
 				}
 			//when ctrl + h is pressed
 			} else if (72 == code){
-				MainFrame.openHelpFrame();
+				MainFrameHelper.openHelpFrame();
 			//when ctrl + space is pressed
 			} else if (32 == code) {
 				PlaybackPanel.getInstance().playBtnPressed();
@@ -63,7 +64,7 @@ public class MyKeyListener implements KeyEventDispatcher {
 				EditFrame frame = new EditFrame(MainFrame.getInstance());
 			//ctrl + D
 			} else if (68 == code) {
-				MainFrame.getInstance().downloadFromUrl();
+				MainFrameHelper.downloadFromUrl(MainFrame.getInstance().getMediaFile(), MainFrame.getInstance().getSavePath());
 			}
 		}  
 		// pass on this key event  

@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import playback.FastBackwarder;
 import playback.FastForwarder;
+import project.MainFrameHelper;
 
 public class PlaybackPanel extends JPanel implements MouseListener {
 	
@@ -62,14 +63,14 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 		setLayout(new MigLayout("", "[grow][grow][grow]", "[grow]"));
 		setBackground(Color.GRAY);
 		
-		fbButton = setImageButton(iconFB);
+		fbButton = MainFrameHelper.setImageButton(iconFB);
 		//add(fbButton, "cell 0 0,growx");
 		add(fbButton, "cell 0 0,alignx right");
 		
-		playButton = setImageButton(iconPlay);
+		playButton = MainFrameHelper.setImageButton(iconPlay);
 		add(playButton, "cell 1 0,growx");
 		
-		ffButton = setImageButton(iconFF);
+		ffButton = MainFrameHelper.setImageButton(iconFF);
 		add(ffButton, "cell 2 0,alignx left");
 		
 		//===================CONSTRUCTOR-SETS UP THE PLAYBACK PANEL==============//
@@ -230,17 +231,6 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 			ff.execute();
 			isFastForwarding = true;
 		}
-	}
-	
-	//set up and return a button using only an image icon
-	//set up and return a button using only an image icon
-	private JButton setImageButton(ImageIcon img) {
-		JButton imgButton = new JButton(img);
-		imgButton.setOpaque(false);
-		imgButton.setContentAreaFilled(false);
-		imgButton.setBorderPainted(false);
-		imgButton.setFocusPainted(false);
-		return imgButton;
 	}
 	
 	//just changes cursors back and forth when entering and exiting component

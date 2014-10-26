@@ -107,8 +107,8 @@ public class MainFrame extends JFrame implements ActionListener{
 				frame.setVisible(true);
 				int r = JOptionPane.showConfirmDialog(null, "New to this? Would you like to open a helper?", "Welcome" , 2);
 				if (r == JOptionPane.YES_OPTION) {
-					openHelpFrame();
-					openHotKeyFrame();
+					MainFrameHelper.openHelpFrame();
+					MainFrameHelper.openHotKeyFrame();
 				} else {
 					//nothing happens
 				}
@@ -174,7 +174,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		editButton.addActionListener(this);
 		
 		//openButton = new JButton("O");
-		openButton = setImageButton(new ImageIcon("./icons/open_button.gif"));
+		openButton = MainFrameHelper.setImageButton(new ImageIcon("./icons/open_button.gif"));
 		contentPane.add(openButton, "cell 2 0,alignx right,growy");
 		openButton.setActionCommand("Open File");
 		openButton.addActionListener(this);
@@ -308,7 +308,6 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 		});
 		
-		
 		options.add(subMenu);
 		options.add(new JMenuItem("hel"));
 		
@@ -333,48 +332,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		return menuBar;
 	}
 	
-	
-	private int checkAudioSignal() {
-		if (_mediaFile != null) {
-			boolean isVideo = false;
-			boolean isAudio = false;
-			//bash command to 'grep' to verify file as media
-			String audCmd = "avconv -i " + _mediaFile.getAbsolutePath() + " 2>&1 | grep Audio:";
-			String vidCmd = "avconv -i " + _mediaFile.getAbsolutePath() + " 2>&1 | grep Video:";
-			
-			ProcessBuilder audCheckBuilder = new ProcessBuilder("/bin/bash","-c",audCmd);
-			ProcessBuilder vidCheckBuilder = new ProcessBuilder("/bin/bash","-c",vidCmd);
-			try {
-				//process run
-				Process audCheck = audCheckBuilder.start();
-				int audTerm = audCheck.waitFor();
-				Process vidCheck = vidCheckBuilder.start();
-				int vidTerm = vidCheck.waitFor();
-				//a correct termination indicates it is a media file
-				if (audTerm == 0) {
-					isAudio = true;
-				} 
-				if (vidTerm == 0){
-					isVideo = true;
-				}
-				//only video files with audio signals are checked correct (0 for success)
-				if (isAudio && !isVideo) {
-					JOptionPane.showMessageDialog(null, "Opened file must be of video type");
-					return 3;
-				} else if (isAudio && isVideo) {
-					return 0;
-				}
-			} catch (Exception ex) {
-				//if exception occurs nothing extra happens
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Open a file before attempting any audio operation.");
-			return 1;
-		}
-		return 2;
-	}
-	
-	//method to start playing a video given a file
+	/**
+	 * method to start playing a video given a file
+	 * @param mediaF
+	 */
 	public void startPlayVideo(File mediaF) {
 		_mediaFile = mediaF;
 		_mediaPath = _mediaFile.getAbsolutePath();
@@ -428,100 +389,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 	}
 	
-	//method to extract (method used as it is used more than once)
-	//input string to know if 'ex' or 'rm&ex'
-	public void extractAudio(String eORr) {
-		//file chooser to direct save file name
-		JFileChooser dirChooser = new JFileChooser(_mediaFile);
-		int response = dirChooser.showSaveDialog(null);
-		//when save is clicked
-		if (response == JFileChooser.APPROVE_OPTION) {
-			//file retrieved and its path
-			File file = dirChooser.getSelectedFile();
-			String saveDir = file.getAbsolutePath();
-			AudioProcessor aP;
-			if (eORr.equals("ex")) {
-				//processor with 'ex' input for just extracting
-				aP = new AudioProcessor("ex",_mediaFile);
-			} else {
-				//processor with 'rm&ex' input for extract -> removal
-				aP = new AudioProcessor("rm&ex",_mediaFile);
-			}
-			//set the save directory and execute worker
-			aP.setSaveDir(saveDir);
-			aP.execute();
-		} else {
-			//nothing happens when cancelled
-		}
-	}
-	
-	public int setUpSaveFile() {
-		JFileChooser saveChooser = new JFileChooser(_mediaFile);
-		saveChooser.setDialogTitle("Select directory, enter file name to save as...");
-		int response = saveChooser.showSaveDialog(null);
-		if (response == JFileChooser.APPROVE_OPTION) {
-			savePath = saveChooser.getSelectedFile().getAbsolutePath();
-		}
-		return response;
-	}
-	
-	public static void openHelpFrame() {
-		HelpFrame help = new HelpFrame();
-	}
-	
-	public static void openHotKeyFrame(){
-		HotKeyFrame hot = new HotKeyFrame();
-	}
-	
-	private JButton setImageButton(ImageIcon img) {
-		JButton imgButton = new JButton(img);
-		imgButton.setOpaque(false);
-		imgButton.setContentAreaFilled(false);
-		imgButton.setBorderPainted(false);
-		imgButton.setFocusPainted(false);
-		return imgButton;
-	}
-
-	public void downloadFromUrl() {
-		String dlURL;
-		//option pane that will take in the URL of download
-		dlURL = JOptionPane.showInputDialog(this, "Please Enter URL:", "Download", 
-				JOptionPane.DEFAULT_OPTION);
-		//if cancelled do nothing
-		if (dlURL == null) {
-			//download cancelled before beginning
-		} else {
-			String msg = "Is this an open source file?";
-			int reply = JOptionPane.showConfirmDialog(null, msg);
-			//Whether its open source is confirmed, if yes
-			if (reply == JOptionPane.YES_OPTION) {
-				int rep = setUpSaveFile();
-				if (rep == JFileChooser.APPROVE_OPTION) {
-					//download frame opened and download commences
-					DownloadFrame downloadFrame = new DownloadFrame(dlURL);
-					downloadFrame.setSaveDir(savePath);
-					downloadFrame.startDownload();
-				}
-			} else if (reply == JOptionPane.NO_OPTION){
-				String warning = "Please only download from open source files\n"
-						+ "Downloading non-open source files are illegal!";
-				JOptionPane.showMessageDialog(null, warning);
-			}
-		}
-	}
-	
-	public EmbeddedMediaPlayerComponent getMediaPlayerComp(){
-		
-		return ourMediaPlayer;
-		
-	}
-	
-	public EmbeddedMediaPlayer getMediaPlayer(){
-		
-		return currentVideo;
-		
-	}
-	
 	//mouse adaptor added hooked image pane to detect double click for download
 	private final MouseAdapter _clickFileNameField = new MouseAdapter() {
 	    public void mousePressed(MouseEvent e){
@@ -539,6 +406,9 @@ public class MainFrame extends JFrame implements ActionListener{
 	    }
 	};
 	
+	/**
+	 * actionPerformed overriden to perform functionalities for given actioncommands from components
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -557,7 +427,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			}
 			
 		} else if (e.getActionCommand().equals("Download File")){
-			downloadFromUrl();
+			MainFrameHelper.downloadFromUrl(_mediaFile, savePath);
 			
 		} else if (e.getActionCommand().equals("Edit")) {
 			//pop up edit frame when edit button or item is selected
@@ -569,7 +439,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("rmAudio")) {
 			//attain return value from checking audio signal
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//if signal is successful....
 			if (audioCheck == 0) {
 				//ask if audio getting removed should be saved (extracted)
@@ -577,9 +447,9 @@ public class MainFrame extends JFrame implements ActionListener{
 				int response = JOptionPane.showConfirmDialog(null, msg);
 				if (response == JOptionPane.YES_OPTION) {
 					//perform extraction based on 'rm&ex' when yes 
-					extractAudio("rm&ex");
+					MainFrameHelper.extractAudio("rm&ex", _mediaFile);
 				} else if (response == JOptionPane.NO_OPTION) {
-					int rep = setUpSaveFile();
+					int rep = MainFrameHelper.setUpSaveFile(_mediaFile, savePath);
 					if (rep == JFileChooser.APPROVE_OPTION) {
 						//if no, begin audio process for removal (rm)
 						AudioProcessor aP = new AudioProcessor("rm",_mediaFile);
@@ -596,10 +466,10 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("exAudio")) {
 			//same as above
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			if (audioCheck == 0) {
 				//perform extraction based on 'ex'
-				extractAudio("ex");
+				MainFrameHelper.extractAudio("ex", _mediaFile);
 			} else if (audioCheck == 2) {
 				String msg = "The media contains no audio signal!\n" +
 						"There is no audio to be extracted.";
@@ -608,9 +478,9 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("ovAudio")) {
 			//same as above
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			if (audioCheck == 0) {
-				int rep = setUpSaveFile();
+				int rep = MainFrameHelper.setUpSaveFile(_mediaFile, savePath);
 				if (rep == JFileChooser.APPROVE_OPTION) {
 					//overlay frame pops up after audio is checked
 					OverlayFrame ovFrame = new OverlayFrame(currentVideo,_mediaFile, savePath);
@@ -623,10 +493,10 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("rpAudio")) {
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
-				int rep = setUpSaveFile();
+				int rep = MainFrameHelper.setUpSaveFile(_mediaFile, savePath);
 				if (rep == JFileChooser.APPROVE_OPTION) {
 					ReplaceFrame rpFrame = new ReplaceFrame(currentVideo,_mediaFile, savePath);
 				}
@@ -634,13 +504,13 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("Hot keys")){
 			//open guide for hotkeys
-			openHotKeyFrame();
+			MainFrameHelper.openHotKeyFrame();
 			
 		//for command create title/credit page, open appropriate frame
 		} else if (e.getActionCommand().equals("Create title")) {
 			
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
 				CreateTitleCreditFrame titleFrame = new CreateTitleCreditFrame(_mediaPath, "Create Title page(s)");
@@ -648,7 +518,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("Create credit")) {
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
 				CreateTitleCreditFrame creditFrame = new CreateTitleCreditFrame(_mediaPath, "Create Credit page(s)");
@@ -656,11 +526,11 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		//when help item is pressed, open the readme file in a scrollpane
 		} else if (e.getActionCommand().equals("Open readme")) {
-			openHelpFrame();
+			MainFrameHelper.openHelpFrame();
 			
 		} else if (e.getActionCommand().equals("addTextStartEnd")) {
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
 				TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
@@ -668,7 +538,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("addTextSpecified")) {
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
 				TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
@@ -676,7 +546,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("addEffect")) {
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
 				EffectApplyFrame frame = new EffectApplyFrame(_mediaPath, currentVideo);
@@ -684,7 +554,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("addRotate")) {
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
 				RotateApplyFrame frame = new RotateApplyFrame(_mediaPath, currentVideo);
@@ -692,7 +562,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("addFade")) {
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
 				FadeApplyFrame frame = new FadeApplyFrame(_mediaPath, currentVideo);
@@ -700,12 +570,44 @@ public class MainFrame extends JFrame implements ActionListener{
 			
 		} else if (e.getActionCommand().equals("mergeSub")){
 			//gets checked audio int
-			int audioCheck = checkAudioSignal();
+			int audioCheck = MainFrameHelper.checkAudioSignal(_mediaFile);
 			//doesn't matter whether there is an audio signal or not
 			if (audioCheck == 0 || audioCheck == 2) {
 				AddSubtitlesFrame frame = new AddSubtitlesFrame(_mediaPath, currentVideo);
 			}
 		}
+	}
+	
+	/**
+	 * returns the current embeddedMediaPlayerComponent set for this frame
+	 * @return
+	 */
+	public EmbeddedMediaPlayerComponent getMediaPlayerComp(){
+		return ourMediaPlayer;
+	}
+	
+	/**
+	 * returns the current embeddedmediaplayer set for this frame
+	 * @return
+	 */
+	public EmbeddedMediaPlayer getMediaPlayer(){
+		return currentVideo;
+	}
+	
+	/**
+	 * returns the mediafile set for this frame
+	 * @return
+	 */
+	public File getMediaFile(){
+		return _mediaFile;
+	}
+	
+	/**
+	 * returns the current savePath(for output files) specified for this frame
+	 * @return
+	 */
+	public String getSavePath(){
+		return savePath;
 	}
 
 }
