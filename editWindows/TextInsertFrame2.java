@@ -34,6 +34,12 @@ import longTaskProcessors.TextInserter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import javax.swing.JScrollPane;
 
+/**
+ * This frame allows user to insert text anywhere on the video for
+ * specified inteval
+ * @author namjun
+ *
+ */
 public class TextInsertFrame2 extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
@@ -65,10 +71,13 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		_mediaPath = mediaPath;
 		_currentVideo = currentVideo;
 		
+		
+		//create string arrays to be used for comboBoxes.
 		String[] fonts = {"FreeMono.ttf", "Kinnari.ttf", "Purisa-Oblique.ttf", "TakaoPGothic.ttf", "TlwgTypist-Bold.ttf", "Ubuntu-M.ttf"};
 		String[] sizes = { "10" , "20", "30", "40", "50", "60"};
 		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "pink", "orange" };
 		
+		//instantiate and setup comboBoxes
 		_fontBox = new JComboBox<String>(fonts);
 		_fontBox.addActionListener(this);
 		_colourBox = new JComboBox<String>(colours);
@@ -76,6 +85,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		_sizeBox = new JComboBox<String>(sizes);
 		_sizeBox.addActionListener(this);
 		
+		//add relevant components to the frame.
 		JLabel lblNewLabel = new JLabel("New label");
 		contentPane.add(lblNewLabel, "cell 0 0");
 		
@@ -136,6 +146,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) { 
 		
+		//if comboBoxes for font,size,colour has been used, update the font/text on the textArea.
 		if (e.getSource() == _fontBox || e.getSource() == _sizeBox){
 			
 			try {
@@ -171,6 +182,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 			//Make sure user entered time formats correctly.
 			Boolean _formatCorrect = true;
 			
+			//use TimeFormateChecker to check formats of times are correct.
 			TimeFormatChecker checker = new TimeFormatChecker(_startField, _endField, _textField, _currentVideo);
 			_formatCorrect = checker.checkTimeFormat();
 			System.out.println(_formatCorrect);
@@ -218,7 +230,7 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 					}
 				}
 			} else if (e.getSource() == _previewBtn){
-				//if(_formatCorrect == true && _everythingElseCorrect == true && _textField.getText().length() > 0){
+				//for preview to occur, timeformats given must be correct and textArea (_textField) must not be empty
 				if(_formatCorrect == true && _textField.getText().length() > 0){
 					
 					int _startTime = checker.getStartTime();

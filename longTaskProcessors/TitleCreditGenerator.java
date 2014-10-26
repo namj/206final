@@ -15,13 +15,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
+
+import project.MainFrame;
 
 /**
  * This class extends swingworker. This class processes all the avconv commands that take 
@@ -49,6 +54,7 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 	
 	private JFrame _frame;
 	private JLabel _progressText;
+	private JProgressBar _progressBar;
 	private JButton _cancelButton;
 	private boolean _isCancelled = false;
 	
@@ -78,6 +84,7 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		
 		_frame = new JFrame();
 		_progressText = new JLabel("encoding...");
+		_progressBar = new JProgressBar();
 		_cancelButton = new JButton("Cancel");
 		_cancelButton.addActionListener(this);
 		
@@ -86,6 +93,8 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		_frame.setLocation(600,400);
 		_frame.setSize(300,150);
 		_frame.add(_progressText,BorderLayout.NORTH);
+		_frame.add(_progressBar, BorderLayout.CENTER);
+		_progressBar.setMaximum((int) (MainFrame.getInstance().getMediaPlayer().getFps() * MainFrame.getInstance().getMediaPlayer().getLength()/1000));
 		_frame.add(_cancelButton,BorderLayout.SOUTH);
 		_frame.setVisible(true);
 		
@@ -221,15 +230,22 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 			//print output from terminal to console
 			while ((line = stdoutH.readLine()) != null) {
 				System.out.println(line);
-				publish("<html>encoding main video...<br>This process may take a few minutes</html>");
+				Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+				if(matcher.find()) {
+					publish("<html>encoding main video...<br>This process may take a few minutes</html>:"+matcher.group(1));
+				}
 				//if cancel button has been pressed
 				if (_isCancelled){
 					//destroy process and return exit value
 					process4.destroy();
 					int exitValue = process4.waitFor();
+					
 					return exitValue;
 				}
 			}
+			
+			publish(":0");
+			
 			//if process hasn't finished happily, return exit value which will be non zero
 			if (process4.waitFor() != 0){
 				return process4.waitFor();
@@ -297,8 +313,12 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 			line = null;
 			//print output from terminal to console
 			while ((line = stdoutH.readLine()) != null) {
+			
 				System.out.println(line);
-				publish("encoding main video... This process may take a few minutes");
+				Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+				if(matcher.find()) {
+					publish("<html>encoding main video...<br>This process may take a few minutes</html>:"+matcher.group(1));
+				}
 				//if cancel button has been pressed
 				if (_isCancelled){
 					//destroy process and return exit value
@@ -307,6 +327,9 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 					return exitValue;
 				}
 			}
+			
+			publish(":0");
+			
 			//if process hasn't finished happily, return exit value which will be non zero
 			if (process4.waitFor() != 0){
 				return process4.waitFor();
@@ -397,8 +420,13 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 	@Override
 	protected void process(List<String> chunks) {
 		//update progress frame/text
-		for (int i = 0 ; i < chunks.size() ; i ++ )
-		_progressText.setText(chunks.get(i));
+		for (String s : chunks){
+			String[] parts = s.split(":");
+			_progressText.setText(parts[0]);
+			if (parts.length > 1){
+				_progressBar.setValue(Integer.parseInt(parts[1]));
+			}
+		}
 		
 	}
 

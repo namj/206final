@@ -11,6 +11,15 @@ import playback.PlaybackPanel;
 import playback.VolumePanel;
 import project.MainFrame;
 
+/**
+ * This is a cutom keyEventDispatcher. Intended purpose is to
+ * listen to hotkeys through the program and execute
+ * the commands
+ * 
+ * @author namjun
+ *
+ */
+
 public class MyKeyListener implements KeyEventDispatcher {
 	
 	@Override

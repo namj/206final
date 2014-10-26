@@ -27,6 +27,13 @@ import longTaskProcessors.EffectInserter;
 import longTaskProcessors.Previewer;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
+/**
+ * This class extends JFrame. Allows users to specify the times they would
+ * like the fade effect to apply for
+ * 
+ * @author namjun
+ *
+ */
 public class FadeApplyFrame extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
@@ -253,6 +260,12 @@ public class FadeApplyFrame extends JFrame implements ActionListener{
 		
 	}
 	
+	/**
+	 * converts the text(in format 00:00:00) inside the textfield given as parameter into seconds 
+	 * and returns it
+	 * @param field
+	 * @return
+	 */
 	private int getNumberOfFrames(JTextField field) { 
 		//get the current input video's fps
 		int frameRate = (int)_currentVideo.getFps();

@@ -110,21 +110,38 @@ public class DownloadFrame extends JFrame{
 		setVisible(true);
 	}
 	
-	//method for other classes to retrieve URL
+	/**
+	 * method that returns the URL passed into this download frame
+	 * @return
+	 */
 	public String getURL() {
 		return dlURL;
 	}
 	
+	/**
+	 * returns instance of this download frame
+	 * @return
+	 */
 	private DownloadFrame getItself() {
 		return this;
 	}
 	
-	//method to set download file size
+	
+	/**
+	 * sets the text of filesize label
+	 * @param fs
+	 */
 	public void setFileSize(String fs) {
 		fileSize.setText("File Size:   " + fs);
 	}
 	
-	//method for information updating of download progress
+	/**
+	 * Method that updates the status of download. Sets text and values for:
+	 * frame title, 2labels, progressbar
+	 * @param p
+	 * @param s
+	 * @param t
+	 */
 	public void updateDlInfo(String p,String s,String t) {
 		this.setTitle("Downloading... " + p + "%");
 		dlProgress.setValue(Integer.parseInt(p));
@@ -132,17 +149,26 @@ public class DownloadFrame extends JFrame{
 		time.setText("Time left:   " + t);
 	}
 	
-	//the execute method for this class, starts the download swing worker
+	/**
+	 * Commences download of media file
+	 */
 	public void startDownload() {
 		downloader = new Downloader(this);
 		downloader.setSave(saveDir);
 		downloader.execute();
 	}
 	
-	//method to dispose of frame after finished
+	/**
+	 * disposes this frame after download finishes
+	 */
 	public void exit() {
 		this.dispose();
 	}
+	
+	/**
+	 *sets the path of outputfile
+	 * @param savePath
+	 */
 	public void setSaveDir(String savePath) {
 		saveDir = savePath;
 	}

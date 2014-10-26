@@ -28,7 +28,6 @@ public class EffectInserter implements ActionListener {
 	private JLabel _progressText;
 	private JButton _cancelButton;
 	private boolean _isCancelled = false;
-	private int totalFrameNumber;
 	
 	
 	public EffectInserter(){
@@ -37,8 +36,7 @@ public class EffectInserter implements ActionListener {
 		
 		_progressText = new JLabel("encoding...");
 		_progressBar = new JProgressBar();
-		totalFrameNumber = (int) (MainFrame.getInstance().getMediaPlayer().getFps() * MainFrame.getInstance().getMediaPlayer().getLength()/1000);
-		_progressBar.setMaximum(totalFrameNumber);
+		_progressBar.setMaximum((int) (MainFrame.getInstance().getMediaPlayer().getFps() * MainFrame.getInstance().getMediaPlayer().getLength()/1000));
 	
 		_cancelButton = new JButton("Cancel");
 		_cancelButton.addActionListener(this);
@@ -88,6 +86,11 @@ public class EffectInserter implements ActionListener {
 						return -100;
 					}
 					
+				}
+				
+				//if process hasn't finished happily, return exit value which will be non zero
+				if (process.waitFor() != 0){
+					return process.waitFor();
 				}
 				
 				return 0;
@@ -159,6 +162,11 @@ public class EffectInserter implements ActionListener {
 					
 				}
 				
+				//if process hasn't finished happily, return exit value which will be non zero
+				if (process.waitFor() != 0){
+					return process.waitFor();
+				}
+				
 				return 0;
 			}
 			
@@ -224,6 +232,11 @@ public class EffectInserter implements ActionListener {
 						return -100;
 					}
 					
+				}
+				
+				//if process hasn't finished happily, return exit value which will be non zero
+				if (process.waitFor() != 0){
+					return process.waitFor();
 				}
 				
 				return 0;
@@ -292,6 +305,11 @@ public class EffectInserter implements ActionListener {
 						return -100;
 					}
 					
+				}
+				
+				//if process hasn't finished happily, return exit value which will be non zero
+				if (process.waitFor() != 0){
+					return process.waitFor();
 				}
 				
 				return 0;
@@ -363,6 +381,11 @@ public class EffectInserter implements ActionListener {
 					
 				}
 				
+				//if process hasn't finished happily, return exit value which will be non zero
+				if (process.waitFor() != 0){
+					return process.waitFor();
+				}
+				
 				return 0;
 			}
 			
@@ -428,6 +451,11 @@ public class EffectInserter implements ActionListener {
 						return -100;
 					}
 					
+				}
+				
+				//if process hasn't finished happily, return exit value which will be non zero
+				if (process.waitFor() != 0){
+					return process.waitFor();
 				}
 				
 				return 0;
@@ -499,6 +527,11 @@ public class EffectInserter implements ActionListener {
 						return -100;
 					}
 					
+				}
+				
+				//if process hasn't finished happily, return exit value which will be non zero
+				if (process.waitFor() != 0){
+					return process.waitFor();
 				}
 				
 				return 0;

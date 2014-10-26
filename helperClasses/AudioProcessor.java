@@ -14,6 +14,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 
+/**
+ * This class helps determine the type of a media file by
+ * checking its streams. 
+ * @author namjun
+ *
+ */
+
 public class AudioProcessor extends SwingWorker<Integer,Void>{
 	private enum fileTypes {
 		mpg, avi, mp4, rv, divx, wmv, mov

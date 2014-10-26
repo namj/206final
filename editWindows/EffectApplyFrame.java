@@ -27,6 +27,13 @@ import longTaskProcessors.EffectInserter;
 import longTaskProcessors.Previewer;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
+/**
+ * This class extends JFrame. Allows user to specify which effect they would
+ * like to be applied onto their video
+ * @author namjun
+ *
+ */
+
 public class EffectApplyFrame extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
@@ -94,7 +101,7 @@ public class EffectApplyFrame extends JFrame implements ActionListener{
 
 			} else if (e.getSource() == generateBtn){
 				
-					
+				//display JFilechooser to specify output 
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select directory to save video to");
 				int result = fileChooser.showSaveDialog(this);

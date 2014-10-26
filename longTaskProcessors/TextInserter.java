@@ -16,14 +16,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+
+import project.MainFrame;
 
 /**
  * This class extends swingworker. This class processes all the avconv commands that take 
@@ -35,7 +40,7 @@ import javax.swing.SwingWorker;
  *
  */
 
-public class TextInserter extends SwingWorker<Integer, String> implements ActionListener {
+public class TextInserter extends SwingWorker<Integer, Integer> implements ActionListener {
 	
 	private int _whichOne; //int to indicate whether to put text and start/end or at specified interval. 1 means start/end 2 means specified
 	
@@ -52,6 +57,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 	
 	private JFrame _frame;
 	private JLabel _progressText;
+	private JProgressBar _progressBar;
 	private JButton _cancelButton;
 	private boolean _isCancelled = false;
 	
@@ -111,6 +117,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		
 		_frame = new JFrame();
 		_progressText = new JLabel("encoding...");
+		_progressBar = new JProgressBar();
 		_cancelButton = new JButton("Cancel");
 		_cancelButton.addActionListener(this);
 		
@@ -119,6 +126,8 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		_frame.setLocation(600,400);
 		_frame.setSize(300,150);
 		_frame.add(_progressText,BorderLayout.NORTH);
+		_frame.add(_progressBar, BorderLayout.CENTER);
+		_progressBar.setMaximum((int) (MainFrame.getInstance().getMediaPlayer().getFps() * MainFrame.getInstance().getMediaPlayer().getLength()/1000));
 		_frame.add(_cancelButton,BorderLayout.SOUTH);
 		_frame.setVisible(true);
 		
@@ -151,6 +160,7 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		
 		_frame = new JFrame();
 		_progressText = new JLabel("encoding...");
+		_progressBar = new JProgressBar();
 		_cancelButton = new JButton("Cancel");
 		_cancelButton.addActionListener(this);
 		
@@ -159,6 +169,8 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		_frame.setLocation(600,400);
 		_frame.setSize(300,150);
 		_frame.add(_progressText,BorderLayout.NORTH);
+		_frame.add(_progressBar, BorderLayout.CENTER);
+		_progressBar.setMaximum((int) (MainFrame.getInstance().getMediaPlayer().getFps() * MainFrame.getInstance().getMediaPlayer().getLength()/1000));
 		_frame.add(_cancelButton,BorderLayout.SOUTH);
 		_frame.setVisible(true);
 		
@@ -182,14 +194,18 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 			String line = null;
 			//print output from terminal to console
 			while ((line = stdoutD.readLine()) != null) {
+				
 				System.out.println(line);
-		
+				Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+				if(matcher.find()) {
+					publish((int)(Integer.parseInt(matcher.group(1))));
+				}
 				//if cancel button has been pressed
 				if (_isCancelled){
 					//destroy process and return exit value
 					process2.destroy();
-					int exitValue = process2.waitFor();
-					return exitValue;
+					process2.waitFor();
+					return -100;
 				}
 			}
 			//if process hasn't finished happily, return exit value which will be non zero
@@ -211,14 +227,18 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 			String line = null;
 			//print output from terminal to console
 			while ((line = stdoutD.readLine()) != null) {
+				
 				System.out.println(line);
-		
+				Matcher matcher = Pattern.compile("frame=\\s*(\\d+)").matcher(line);
+				if(matcher.find()) {
+					publish((int)(Integer.parseInt(matcher.group(1))));
+				}
 				//if cancel button has been pressed
 				if (_isCancelled){
 					//destroy process and return exit value
 					process2.destroy();
-					int exitValue = process2.waitFor();
-					return exitValue;
+					process2.waitFor();
+					return -100;
 				}
 			}
 			//if process hasn't finished happily, return exit value which will be non zero
@@ -278,6 +298,13 @@ public class TextInserter extends SwingWorker<Integer, String> implements Action
 		//close progress frame;
 		_frame.dispose();
 		
+	}
+	
+	@Override
+	protected void process(List<Integer> chunks) {
+		for (int i: chunks){
+			_progressBar.setValue(i);
+		}
 	}
 	
 

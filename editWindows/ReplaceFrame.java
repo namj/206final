@@ -12,6 +12,7 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 /**
  * 
+ * Frame which appears when user selects replace from the EditFrame
  * @author Namjun Park npar350 Andy Choi mcho588
  *
  */

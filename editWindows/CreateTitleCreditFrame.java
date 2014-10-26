@@ -29,7 +29,7 @@ import longTaskProcessors.TitleCreditGenerator;
 
 
 /**
- * This is a class which extend JFrame. It contains text-fields, 
+ * This is a class which extends JFrame. It contains text-fields, 
  * buttons that leads user to file navigator, ComboBoxes,
  * everything that user needs to create a title or credit page 
  * which will be joined to a main video.
@@ -178,6 +178,9 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		
 	}
 
+	/**
+	 * actionPerformed method overridden to react to button presses
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -324,12 +327,14 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 				}
 			}
 		} else if (e.getSource() == _previewButton){
-			if (_textField1.getText().length() != 0 && _textField2.getText().length() != 0){
+			if (_textField1.getText().length() == 0 || _textField2.getText().length() == 0){
+				JOptionPane.showMessageDialog(this, "There are blank fields! Make sure text, music file, image file are specifed");
+			} else {
 				Previewer viewer = new Previewer();
 				try {
 					viewer.view(_textArea.getText(), _textField1.getText(),_textField2.getText(), "1024x768", _font.getSelectedItem().toString(), _textSize.getSelectedItem().toString(), _colour.getSelectedItem().toString());
 				} catch (IOException | InterruptedException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
 			}

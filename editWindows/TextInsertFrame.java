@@ -40,6 +40,12 @@ import javax.swing.JScrollPane;
 import longTaskProcessors.Previewer;
 import longTaskProcessors.TextInserter;
 
+/**
+ * This frame allows user to specify text, time, font options to be 
+ * inserted on their video
+ * @author Namjun Park npar350
+ *
+ */
 public class TextInsertFrame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
@@ -58,6 +64,11 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 	private static final int _screenHeight = (int)d.getHeight();
 	private static final int _screenWidth = (int)d.getWidth();
 	
+	/**
+	 * create the frame
+	 * @param mediaPath
+	 * @param currentVideo
+	 */
 	public TextInsertFrame(String mediaPath, EmbeddedMediaPlayer currentVideo) {
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -67,11 +78,13 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[grow][grow][grow][]", "[][grow][][][grow][][]"));
 		
+		//set up relevant string arrays for the comobBoxes
 		String[] fonts = {"FreeMono.ttf", "Kinnari.ttf", "Purisa-Oblique.ttf", "TakaoPGothic.ttf", "TlwgTypist-Bold.ttf", "Ubuntu-M.ttf"};
 		String[] sizes = { "10" , "20", "30", "40", "50", "60"};
 		String[] colours = { "black", "white", "red", "blue", "yellow", "green", "pink", "orange" };
 		String[] times = { "5" , "10" , "15" , "20" , "25" , "30" };
 		
+		//instantiate/setup comboBoxes
 		timeBox1 = new JComboBox<String>(times);
 		timeBox1.setSelectedIndex(Logger.getInstance().pullTimeIndexForInsertTop());
 		fontBox1 = new JComboBox<String>(fonts);
@@ -81,7 +94,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		colourBox1 = new JComboBox<String>(colours);
 		colourBox1.addActionListener(this);
 		
-		
+		//instantiate/setup comboBoxes
 		timeBox2 = new JComboBox<String>(times);
 		timeBox2.setSelectedIndex(Logger.getInstance().pullTimeIndexForInsertBot());
 		fontBox2 = new JComboBox<String>(fonts);
@@ -94,6 +107,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		_selectedVid = mediaPath;
 		_currentVideo = currentVideo;
 		
+		//instantiate labels,buttons etc for this frame and add components to this frame/layout
 		lblNewLabel = new JLabel("Beginning");
 		contentPane.add(lblNewLabel, "flowx,cell 0 0,alignx left");
 		
@@ -196,6 +210,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		//if combobox for font,colour,size has been used, update font shown on textarea
 		if (e.getSource() == fontBox1 || e.getSource() == sizeBox1){
 			
 			try {
@@ -225,7 +240,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 				textArea1.setForeground(Color.orange);
 			} 
 			
-			
+		//if combobox for font,colour,size has been used, update font shown on textarea	
 		} else if (e.getSource() == fontBox2 || e.getSource() == sizeBox2){
 			
 			try {
@@ -294,6 +309,8 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 				sizeBox2.setEnabled(true);
 			}
 		} else if (e.getSource() == generateBtn){
+			
+			//show JFIlechooser for outputfile path
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setDialogTitle("Select directory to save video to");
 			int result = fileChooser.showSaveDialog(this);
@@ -331,6 +348,7 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 				}
 			}
 			
+		//if preview buttons have been clicked, show preview
 		} else if (e.getSource() == previewBtn1){
 			Previewer p = new Previewer();
 			p.viewTextOverlay(_selectedVid, textArea1.getText(), fontBox1.getSelectedItem().toString(), sizeBox1.getSelectedItem().toString(), colourBox1.getSelectedItem().toString(), 

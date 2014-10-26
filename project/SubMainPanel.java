@@ -67,7 +67,7 @@ public class SubMainPanel extends JPanel {
 			public void componentResized(ComponentEvent e) {
 				// TODO Auto-generated method stub
 				JPanel panel = (JPanel) e.getSource();
-				panel.getComponent(0).setSize(panel.getWidth() - 5 , panel.getHeight() - 5);
+				panel.getComponent(0).setSize(panel.getWidth(), panel.getHeight());
 			}
 			
 		});

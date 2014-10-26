@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -28,7 +30,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -44,6 +50,7 @@ import project.HelpFrame;
 
 import com.sun.jna.Native;
 
+import editWindows.AddSubtitlesFrame;
 import editWindows.CreateTitleCreditFrame;
 import editWindows.DownloadFrame;
 import editWindows.EditFrame;
@@ -73,7 +80,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JButton openButton;
 	private JButton dlButton;
 	private JButton editButton;
-	
+	private subtitleJMenu subMenu;
 	
 	private JPanel contentPane;
 	private JTextField mediaNameField;
@@ -92,7 +99,9 @@ public class MainFrame extends JFrame implements ActionListener{
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				frame.setVisible(true);
@@ -171,6 +180,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		openButton.addActionListener(this);
 		
 		mediaNameField = new JTextField("Please open a media file...");
+		mediaNameField.addMouseListener(_clickFileNameField);
 		mediaNameField.setEditable(false);
 		contentPane.add(mediaNameField, "cell 3 0,grow");
 		mediaNameField.setColumns(10);
@@ -182,11 +192,15 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 	}
 	
+	/**
+	 * This method sets up EVERYTHING for the JMenubar including JMenu, JMenuitems.
+	 * @return
+	 */
 	private JMenuBar setUpMenuBar() {
 		//create object for all menu bar, menus and items
-		JMenu file, edit, help, _space, _space2;
+		JMenu file, edit, help, options,_space, _space2, _space3, _subTracks;
 
-		JMenuItem _open, _exit, _dl, _title, _credit,_rmAudio,_exAudio,_ovAudio, _rpAudio, _read, _addText1, _addText2, _hKeys, _addEffect;
+		JMenuItem _open, _exit, _dl, _title, _credit,_rmAudio,_exAudio,_ovAudio, _rpAudio, _read, _addText1, _addText2, _hKeys, _addEffect, _subs;
 		JMenuBar menuBar = new JMenuBar();
 		
 		//set the graphics (color) for the Menu bar
@@ -198,6 +212,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		_space.setEnabled(false);
 		_space2 = new JMenu();
 		_space2.setEnabled(false);
+		_space3 = new JMenu();
+		_space3.setEnabled(false);
 		
 		//setup of menu 'file' 
 		file = new JMenu("File");
@@ -264,11 +280,40 @@ public class MainFrame extends JFrame implements ActionListener{
 		edit.add(_addText2);
 		edit.addSeparator();
 		edit.add(_addEffect);
-		
-		
-
+	
 		menuBar.add(edit);
 		menuBar.add(_space2);
+		
+		//set up of menu 'options'
+		options = new JMenu("Options");
+		options.setForeground(Color.LIGHT_GRAY);
+		//setup items belonging to 'Options' menu
+
+		subMenu = new subtitleJMenu();
+		subMenu.addMenuListener(new MenuListener(){
+
+			@Override
+			public void menuSelected(MenuEvent e) {
+				if (currentVideo != null){
+					subMenu.setupItems(currentVideo);
+				}
+			}
+			@Override
+			public void menuDeselected(MenuEvent e) {
+				//do nothing
+			}
+			@Override
+			public void menuCanceled(MenuEvent e) {
+				//do nothing
+			}
+		});
+		
+		
+		options.add(subMenu);
+		options.add(new JMenuItem("hel"));
+		
+		menuBar.add(options);
+		menuBar.add(_space3);
 		
 		//setup of menu 'help'
 		help = new JMenu("Help");
@@ -283,7 +328,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		help.addSeparator();
 		help.add(_hKeys);
 		menuBar.add(help);
-		//menuBar.requestFocusInWindow();
 		
 		//final menu bar is returned at the end of the setup 
 		return menuBar;
@@ -294,7 +338,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		if (_mediaFile != null) {
 			boolean isVideo = false;
 			boolean isAudio = false;
-		
 			//bash command to 'grep' to verify file as media
 			String audCmd = "avconv -i " + _mediaFile.getAbsolutePath() + " 2>&1 | grep Audio:";
 			String vidCmd = "avconv -i " + _mediaFile.getAbsolutePath() + " 2>&1 | grep Video:";
@@ -439,153 +482,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		return imgButton;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		if (e.getActionCommand().equals("Open File")) {
-			//when item is selected, a File chooser opens to select a file
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			int result = fileChooser.showOpenDialog(this);
-			//for when cancel/exit is pressed in the file chooser
-			if (result == JFileChooser.CANCEL_OPTION) {
-				//nothing is to be done
-			//for when a file is selected
-			} else if (result == JFileChooser.APPROVE_OPTION) {
-				startPlayVideo(fileChooser.getSelectedFile());
-			}
-		} else if (e.getActionCommand().equals("Download File")){
-			downloadFromUrl();
-		} else if (e.getActionCommand().equals("Edit")) {
-			//pop up edit frame when edit button or item is selected
-			EditFrame editFrame = new EditFrame(this);
-		} else if (e.getActionCommand().equals("Exit")) {
-			//exit when exit item is pressed
-			System.exit(0);
-		} else if (e.getActionCommand().equals("rmAudio")) {
-			//attain return value from checking audio signal
-			int audioCheck = checkAudioSignal();
-			//if signal is successful....
-			if (audioCheck == 0) {
-				//ask if audio getting removed should be saved (extracted)
-				String msg = "Would you like to save the audio into another file?";
-				int response = JOptionPane.showConfirmDialog(null, msg);
-				if (response == JOptionPane.YES_OPTION) {
-					//perform extraction based on 'rm&ex' when yes 
-					extractAudio("rm&ex");
-				} else if (response == JOptionPane.NO_OPTION) {
-					int rep = setUpSaveFile();
-					if (rep == JFileChooser.APPROVE_OPTION) {
-						//if no, begin audio process for removal (rm)
-						AudioProcessor aP = new AudioProcessor("rm",_mediaFile);
-						aP.setSaveDir(savePath);
-						aP.execute();
-					}
-				}
-			//if check returns a 2, no audio signal
-			} else if (audioCheck == 2) {
-				String msg = "The media contains no audio signal!\n" +
-						"There is no audio to be removed.";
-				JOptionPane.showMessageDialog(null,msg);
-			}
-		} else if (e.getActionCommand().equals("exAudio")) {
-			//same as above
-			int audioCheck = checkAudioSignal();
-			if (audioCheck == 0) {
-				//perform extraction based on 'ex'
-				extractAudio("ex");
-			} else if (audioCheck == 2) {
-				String msg = "The media contains no audio signal!\n" +
-						"There is no audio to be extracted.";
-				JOptionPane.showMessageDialog(null,msg);
-			}
-		} else if (e.getActionCommand().equals("ovAudio")) {
-			//same as above
-			int audioCheck = checkAudioSignal();
-			if (audioCheck == 0) {
-				int rep = setUpSaveFile();
-				if (rep == JFileChooser.APPROVE_OPTION) {
-					//overlay frame pops up after audio is checked
-					OverlayFrame ovFrame = new OverlayFrame(currentVideo,_mediaFile, savePath);
-				}
-			} else if (audioCheck == 2) {
-				String msg = "The media contains no audio signal!\n" +
-						"There is no audio to be overlayed.";
-				JOptionPane.showMessageDialog(null,msg);
-			}
-		} else if (e.getActionCommand().equals("rpAudio")) {
-			//gets checked audio int
-			int audioCheck = checkAudioSignal();
-			//doesn't matter whether there is an audio signal or not
-			if (audioCheck == 0 || audioCheck == 2) {
-				int rep = setUpSaveFile();
-				if (rep == JFileChooser.APPROVE_OPTION) {
-					ReplaceFrame rpFrame = new ReplaceFrame(currentVideo,_mediaFile, savePath);
-				}
-			}
-		} else if (e.getActionCommand().equals("Hot keys")){
-			//open guide for hotkeys
-			openHotKeyFrame();
-			
-		//for command create title/credit page, open appropriate frame
-		} else if (e.getActionCommand().equals("Create title")) {
-			
-			//gets checked audio int
-			int audioCheck = checkAudioSignal();
-			//doesn't matter whether there is an audio signal or not
-			if (audioCheck == 0 || audioCheck == 2) {
-				CreateTitleCreditFrame titleFrame = new CreateTitleCreditFrame(_mediaPath, "Create Title page(s)");
-			}
-		} else if (e.getActionCommand().equals("Create credit")) {
-			//gets checked audio int
-			int audioCheck = checkAudioSignal();
-			//doesn't matter whether there is an audio signal or not
-			if (audioCheck == 0 || audioCheck == 2) {
-				CreateTitleCreditFrame creditFrame = new CreateTitleCreditFrame(_mediaPath, "Create Credit page(s)");
-			}
-			
-		//when help item is pressed, open the readme file in a scrollpane
-		} else if (e.getActionCommand().equals("Open readme")) {
-			openHelpFrame();
-		} else if (e.getActionCommand().equals("addTextStartEnd")) {
-			//gets checked audio int
-			int audioCheck = checkAudioSignal();
-			//doesn't matter whether there is an audio signal or not
-			if (audioCheck == 0 || audioCheck == 2) {
-				TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
-			}
-		} else if (e.getActionCommand().equals("addTextSpecified")) {
-			//gets checked audio int
-			int audioCheck = checkAudioSignal();
-			//doesn't matter whether there is an audio signal or not
-			if (audioCheck == 0 || audioCheck == 2) {
-				TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
-			}
-			
-		} else if (e.getActionCommand().equals("addEffect")) {
-			//gets checked audio int
-			int audioCheck = checkAudioSignal();
-			//doesn't matter whether there is an audio signal or not
-			if (audioCheck == 0 || audioCheck == 2) {
-				EffectApplyFrame frame = new EffectApplyFrame(_mediaPath, currentVideo);
-			}
-		} else if (e.getActionCommand().equals("addRotate")) {
-			//gets checked audio int
-			int audioCheck = checkAudioSignal();
-			//doesn't matter whether there is an audio signal or not
-			if (audioCheck == 0 || audioCheck == 2) {
-				RotateApplyFrame frame = new RotateApplyFrame(_mediaPath, currentVideo);
-			}
-		} else if (e.getActionCommand().equals("addFade")) {
-			//gets checked audio int
-			int audioCheck = checkAudioSignal();
-			//doesn't matter whether there is an audio signal or not
-			if (audioCheck == 0 || audioCheck == 2) {
-				FadeApplyFrame frame = new FadeApplyFrame(_mediaPath, currentVideo);
-			}
-		}
-	}
-	
 	public void downloadFromUrl() {
 		String dlURL;
 		//option pane that will take in the URL of download
@@ -624,6 +520,192 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		return currentVideo;
 		
+	}
+	
+	//mouse adaptor added hooked image pane to detect double click for download
+	private final MouseAdapter _clickFileNameField = new MouseAdapter() {
+	    public void mousePressed(MouseEvent e){
+	    	//when item is selected, a File chooser opens to select a file
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int result = fileChooser.showOpenDialog(null);
+			//for when cancel/exit is pressed in the file chooser
+			if (result == JFileChooser.CANCEL_OPTION) {
+				//nothing is to be done
+			//for when a file is selected
+			} else if (result == JFileChooser.APPROVE_OPTION) {
+				startPlayVideo(fileChooser.getSelectedFile());
+			}
+	    }
+	};
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getActionCommand().equals("Open File")) {
+			//when item is selected, a File chooser opens to select a file
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int result = fileChooser.showOpenDialog(this);
+			//for when cancel/exit is pressed in the file chooser
+			if (result == JFileChooser.CANCEL_OPTION) {
+				//nothing is to be done
+			//for when a file is selected
+			} else if (result == JFileChooser.APPROVE_OPTION) {
+				startPlayVideo(fileChooser.getSelectedFile());
+				subMenu.setupItems(currentVideo);
+			}
+			
+		} else if (e.getActionCommand().equals("Download File")){
+			downloadFromUrl();
+			
+		} else if (e.getActionCommand().equals("Edit")) {
+			//pop up edit frame when edit button or item is selected
+			EditFrame editFrame = new EditFrame(this);
+			
+		} else if (e.getActionCommand().equals("Exit")) {
+			//exit when exit item is pressed
+			System.exit(0);
+			
+		} else if (e.getActionCommand().equals("rmAudio")) {
+			//attain return value from checking audio signal
+			int audioCheck = checkAudioSignal();
+			//if signal is successful....
+			if (audioCheck == 0) {
+				//ask if audio getting removed should be saved (extracted)
+				String msg = "Would you like to save the audio into another file?";
+				int response = JOptionPane.showConfirmDialog(null, msg);
+				if (response == JOptionPane.YES_OPTION) {
+					//perform extraction based on 'rm&ex' when yes 
+					extractAudio("rm&ex");
+				} else if (response == JOptionPane.NO_OPTION) {
+					int rep = setUpSaveFile();
+					if (rep == JFileChooser.APPROVE_OPTION) {
+						//if no, begin audio process for removal (rm)
+						AudioProcessor aP = new AudioProcessor("rm",_mediaFile);
+						aP.setSaveDir(savePath);
+						aP.execute();
+					}
+				}
+			//if check returns a 2, no audio signal
+			} else if (audioCheck == 2) {
+				String msg = "The media contains no audio signal!\n" +
+						"There is no audio to be removed.";
+				JOptionPane.showMessageDialog(null,msg);
+			}
+			
+		} else if (e.getActionCommand().equals("exAudio")) {
+			//same as above
+			int audioCheck = checkAudioSignal();
+			if (audioCheck == 0) {
+				//perform extraction based on 'ex'
+				extractAudio("ex");
+			} else if (audioCheck == 2) {
+				String msg = "The media contains no audio signal!\n" +
+						"There is no audio to be extracted.";
+				JOptionPane.showMessageDialog(null,msg);
+			}
+			
+		} else if (e.getActionCommand().equals("ovAudio")) {
+			//same as above
+			int audioCheck = checkAudioSignal();
+			if (audioCheck == 0) {
+				int rep = setUpSaveFile();
+				if (rep == JFileChooser.APPROVE_OPTION) {
+					//overlay frame pops up after audio is checked
+					OverlayFrame ovFrame = new OverlayFrame(currentVideo,_mediaFile, savePath);
+				}
+			} else if (audioCheck == 2) {
+				String msg = "The media contains no audio signal!\n" +
+						"There is no audio to be overlayed.";
+				JOptionPane.showMessageDialog(null,msg);
+			}
+			
+		} else if (e.getActionCommand().equals("rpAudio")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				int rep = setUpSaveFile();
+				if (rep == JFileChooser.APPROVE_OPTION) {
+					ReplaceFrame rpFrame = new ReplaceFrame(currentVideo,_mediaFile, savePath);
+				}
+			}
+			
+		} else if (e.getActionCommand().equals("Hot keys")){
+			//open guide for hotkeys
+			openHotKeyFrame();
+			
+		//for command create title/credit page, open appropriate frame
+		} else if (e.getActionCommand().equals("Create title")) {
+			
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				CreateTitleCreditFrame titleFrame = new CreateTitleCreditFrame(_mediaPath, "Create Title page(s)");
+			}
+			
+		} else if (e.getActionCommand().equals("Create credit")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				CreateTitleCreditFrame creditFrame = new CreateTitleCreditFrame(_mediaPath, "Create Credit page(s)");
+			}
+			
+		//when help item is pressed, open the readme file in a scrollpane
+		} else if (e.getActionCommand().equals("Open readme")) {
+			openHelpFrame();
+			
+		} else if (e.getActionCommand().equals("addTextStartEnd")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				TextInsertFrame frame = new TextInsertFrame(_mediaPath, currentVideo);
+			}
+			
+		} else if (e.getActionCommand().equals("addTextSpecified")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				TextInsertFrame2 frame = new TextInsertFrame2(_mediaPath, currentVideo);
+			}
+			
+		} else if (e.getActionCommand().equals("addEffect")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				EffectApplyFrame frame = new EffectApplyFrame(_mediaPath, currentVideo);
+			}
+			
+		} else if (e.getActionCommand().equals("addRotate")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				RotateApplyFrame frame = new RotateApplyFrame(_mediaPath, currentVideo);
+			}
+			
+		} else if (e.getActionCommand().equals("addFade")) {
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				FadeApplyFrame frame = new FadeApplyFrame(_mediaPath, currentVideo);
+			}
+			
+		} else if (e.getActionCommand().equals("mergeSub")){
+			//gets checked audio int
+			int audioCheck = checkAudioSignal();
+			//doesn't matter whether there is an audio signal or not
+			if (audioCheck == 0 || audioCheck == 2) {
+				AddSubtitlesFrame frame = new AddSubtitlesFrame(_mediaPath, currentVideo);
+			}
+		}
 	}
 
 }

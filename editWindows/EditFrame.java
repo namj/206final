@@ -19,8 +19,8 @@ import java.awt.Font;
  */
 
 public class EditFrame extends JFrame{
-	private JButton tP,cP,rm,ex,ov,rp,exit,textS,textD, effectA, effectB, effectC;
-	private JLabel page, audio, text, effect;
+	private JButton tP,cP,rm,ex,ov,rp,exit,textS,textD, effectA, effectB, effectC, subMerge;
+	private JLabel page, audio, text, effect, subLabel;
 	
 	//computer screen dimensions
 	private static final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -29,8 +29,8 @@ public class EditFrame extends JFrame{
 	
 	public EditFrame(ActionListener parent) {
 		//frame set up
-		setSize(430,525);
-		setLocation((_screenWidth-430)/2,(_screenHeight-500)/2);
+		setSize(430,605);
+		setLocation((_screenWidth-430)/2,(_screenHeight-605)/2);
 		setTitle("Edit video");
 		getContentPane().setLayout(null);
 		setResizable(false);
@@ -77,6 +77,7 @@ public class EditFrame extends JFrame{
 		rp.addActionListener(parent);
 		getContentPane().add(rp);
 		
+		//set up relevant labels and buttons to inserting text 
 		text = new JLabel("Insert Text");
 		text.setBounds(175, 215, 80, 30);
 		getContentPane().add(text);
@@ -92,6 +93,7 @@ public class EditFrame extends JFrame{
 		textD.addActionListener(parent);
 		getContentPane().add(textD);
 		
+		//set up relevant labels and buttons to inserting effects
 		effect = new JLabel("Apply Effects");
 		effect.setBounds(165, 300, 100, 30);
 		getContentPane().add(effect);
@@ -111,12 +113,20 @@ public class EditFrame extends JFrame{
 		effectC.addActionListener(parent);
 		getContentPane().add(effectC);
 		
-		
+		//setup relevant labels and button for subtitles
+		subLabel = new JLabel("Subtitles");
+		subLabel.setBounds(180, 430, 100, 30);
+		getContentPane().add(subLabel);
+		subMerge = new JButton("+ Add subtitle stream ");
+		subMerge.setBounds(10, 460, 200,40);
+		subMerge.setActionCommand("mergeSub");
+		subMerge.addActionListener(parent);
+		getContentPane().add(subMerge);
 		
 		//set up of exit button, which closes the frame when pressed
 		exit = new JButton("Exit");
 		exit.setFont(new Font("Dialog", Font.BOLD, 30));
-		exit.setBounds(140, 440, 150, 50);
+		exit.setBounds(140, 520, 150, 50);
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

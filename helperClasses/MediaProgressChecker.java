@@ -9,6 +9,8 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 /**
  * 
+ * This class checks the progress of the media file playing. It is a 
+ * subclass of swingworker and works as background while video it playing
  * @author Namjun Park npar350 Andy Choi mcho588
  *
  */

@@ -27,6 +27,13 @@ import longTaskProcessors.EffectInserter;
 import longTaskProcessors.Previewer;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
+/**
+ * Frame which appears when user selects Rotate from EditFrame.
+ * allows user to specify which angle they would like their
+ * video to be rotated.
+ * @author Namjun Park npar350
+ *
+ */
 public class RotateApplyFrame extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
@@ -81,8 +88,10 @@ public class RotateApplyFrame extends JFrame implements ActionListener{
 		
 		if (e.getSource() == previewBtn || e.getSource() == generateBtn) {
 
+			//if user has selected preview button
 			if(e.getSource() == previewBtn){
-					
+				
+				//start preview according which angle the user specified
 				Previewer p = new Previewer();
 				if (effectComboBox.getSelectedIndex() == 0) {
 					p.viewEffectRotate(_mediaPath, "1");
@@ -92,9 +101,10 @@ public class RotateApplyFrame extends JFrame implements ActionListener{
 					p.viewEffectRotate(_mediaPath, "2");
 				}
 
+			//if user has clicked generate button
 			} else if (e.getSource() == generateBtn){
 				
-					
+				//display JFIlechooser for user to speicfy output path
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select directory to save video to");
 				int result = fileChooser.showSaveDialog(this);

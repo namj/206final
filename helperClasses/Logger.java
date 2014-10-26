@@ -57,7 +57,7 @@ public class Logger {
 		
 		//update textlog
 		PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/textlog.txt", false)));
-		out2.println(text);
+		out2.print(text);
 		out2.close();
 		
 	}
@@ -75,7 +75,7 @@ public class Logger {
 		
 		//update textlog
 		PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLogTop2.txt", false)));
-		out2.println(text1);
+		out2.print(text1);
 		out2.close();
 		
 		//update
@@ -88,7 +88,7 @@ public class Logger {
 		
 		//update textlog
 		PrintWriter out4 = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLogBot2.txt", false)));
-		out4.println(text2);
+		out4.print(text2);
 		out4.close();
 		
 		
@@ -107,7 +107,7 @@ public class Logger {
 		
 		//update textlog
 		PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter(_vamixFolder + "/insertLog2.txt", false)));
-		out2.println(text1);
+		out2.print(text1);
 		out2.close();	
 		
 	}

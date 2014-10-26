@@ -9,6 +9,13 @@ import javax.swing.JTextField;
 
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
+/**
+ * This class checks if time formats are given correctly like : (00:00:00)
+ * And also converts those formats into seconds as well.
+ * @author namjun
+ *
+ */
+
 public class TimeFormatChecker {
 		
 	String _start, _finish;
@@ -41,7 +48,11 @@ public class TimeFormatChecker {
 		_finish = endField.getText();
 	}
 	
-	
+	/**
+	 * Check if time formats (00:00:00) are given correctly
+	 * 
+	 * @return
+	 */
 	
 	public boolean checkTimeFormat(){
 		
@@ -134,6 +145,10 @@ public class TimeFormatChecker {
 		
 	}
 	
+	/**
+	 * This method converts 00:00:00 format into seconds
+	 * @return
+	 */
 	public int getStartTime(){
 		int hoursToSecs = Integer.parseInt(_start.substring(0,2)) * 3600;
 		int minsToSecs = Integer.parseInt(_start.substring(3, 5)) * 60;
@@ -145,6 +160,10 @@ public class TimeFormatChecker {
 		
 	}
 	
+	/**
+	 * This method converts 00:00:00 format into seconds
+	 * @return
+	 */
 	public int getEndTime(){
 		int hoursToSecs2 = Integer.parseInt(_finish.substring(0,2)) * 3600;
 		int minsToSecs2 = Integer.parseInt(_finish.substring(3, 5)) * 60;
