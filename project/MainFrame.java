@@ -201,6 +201,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		JMenu file, edit, help, options,_space, _space2, _space3, _subTracks;
 
 		JMenuItem _open, _exit, _dl, _title, _credit,_rmAudio,_exAudio,_ovAudio, _rpAudio, _read, _addText1, _addText2, _hKeys, _addEffect, _subs;
+		JMenuItem _addRotate, _addFade, _addSubStream;
 		JMenuBar menuBar = new JMenuBar();
 		
 		//set the graphics (color) for the Menu bar
@@ -266,7 +267,15 @@ public class MainFrame extends JFrame implements ActionListener{
 		_addEffect = new JMenuItem("Apply effect");
 		_addEffect.setActionCommand("addEffect");
 		_addEffect.addActionListener(this);
-		
+		_addRotate = new JMenuItem("Apply rotate");
+		_addRotate.setActionCommand("addRotate");
+		_addRotate.addActionListener(this);
+		_addFade = new JMenuItem("Apply fade");
+		_addFade.setActionCommand("addFade");
+		_addFade.addActionListener(this);
+		_addSubStream = new JMenuItem("Add subtitle stream");
+		_addSubStream.setActionCommand("mergeSub");
+		_addSubStream.addActionListener(this);
 		
 		edit.add(_title);
 		edit.add(_credit);
@@ -280,7 +289,11 @@ public class MainFrame extends JFrame implements ActionListener{
 		edit.add(_addText2);
 		edit.addSeparator();
 		edit.add(_addEffect);
-	
+		edit.add(_addRotate);
+		edit.add(_addFade);
+		edit.addSeparator();
+		edit.add(_addSubStream);
+		
 		menuBar.add(edit);
 		menuBar.add(_space2);
 		
@@ -309,7 +322,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		});
 		
 		options.add(subMenu);
-		options.add(new JMenuItem("hel"));
 		
 		menuBar.add(options);
 		menuBar.add(_space3);
