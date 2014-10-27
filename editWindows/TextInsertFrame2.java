@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -32,6 +33,7 @@ import javax.swing.JComboBox;
 import longTaskProcessors.Previewer;
 import longTaskProcessors.TextInserter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
+
 import javax.swing.JScrollPane;
 
 /**
@@ -142,7 +144,9 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-
+	/**
+	 * actionPerformed method overridden to react to button presses
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) { 
 		
@@ -150,7 +154,8 @@ public class TextInsertFrame2 extends JFrame implements ActionListener {
 		if (e.getSource() == _fontBox || e.getSource() == _sizeBox){
 			
 			try {
-				_textField.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+_fontBox.getSelectedItem().toString())));
+				InputStream is = this.getClass().getResourceAsStream("resources/"+_fontBox.getSelectedItem().toString());
+				_textField.setFont(Font.createFont(Font.TRUETYPE_FONT, is));
 				_textField.setFont(_textField.getFont().deriveFont(Font.PLAIN, Integer.parseInt(_sizeBox.getSelectedItem().toString())));
 			} catch (FontFormatException | IOException e1) {
 				e1.printStackTrace();

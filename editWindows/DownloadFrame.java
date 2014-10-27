@@ -24,7 +24,6 @@ import longTaskProcessors.Downloader;
 
 public class DownloadFrame extends JFrame{
 	private String dlURL;
-	private String saveDir;
 	//Components in the download frame
 	private JProgressBar dlProgress;
 	private JButton cancelButton, pauseButton;
@@ -154,7 +153,6 @@ public class DownloadFrame extends JFrame{
 	 */
 	public void startDownload() {
 		downloader = new Downloader(this);
-		downloader.setSave(saveDir);
 		downloader.execute();
 	}
 	
@@ -165,13 +163,6 @@ public class DownloadFrame extends JFrame{
 		this.dispose();
 	}
 	
-	/**
-	 *sets the path of outputfile
-	 * @param savePath
-	 */
-	public void setSaveDir(String savePath) {
-		saveDir = savePath;
-	}
 
 	
 }

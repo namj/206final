@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -65,7 +66,7 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		_frameTitle = frameTitle;
 		
 		//create image icon for browse file button
-		ImageIcon openFile = new ImageIcon(iconPath + "/open_button.gif");
+		ImageIcon openFile = new ImageIcon(this.getClass().getResource("resources/open_button.gif"));
 		//settings for browse button1 - music
 		_browseButton1 = new JButton();
 		_browseButton1.setIcon(openFile);
@@ -187,7 +188,8 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 		if (e.getSource() == _font || e.getSource() == _textSize){
 			
 			try {
-				_textArea.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+_font.getSelectedItem().toString())));
+				InputStream is = this.getClass().getResourceAsStream("resources/"+_font.getSelectedItem().toString());
+				_textArea.setFont(Font.createFont(Font.TRUETYPE_FONT, is));
 				_textArea.setFont(_textArea.getFont().deriveFont(Font.PLAIN, Integer.parseInt(_textSize.getSelectedItem().toString())));
 			} catch (FontFormatException | IOException e1) {
 				e1.printStackTrace();
@@ -320,7 +322,7 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 							generator.execute();
 						} else if (_frameTitle.equals("Create Credit page(s)")){
 							//pass on false in the constructor to indicate credit page generation
-							TitleCreditGenerator generator = new TitleCreditGenerator(true, _textArea.getText(), _textField1.getText(), _textField2.getText(), _selectedVidPath, savePath, outputPathName, _font, _textSize, _colour);
+							TitleCreditGenerator generator = new TitleCreditGenerator(false, _textArea.getText(), _textField1.getText(), _textField2.getText(), _selectedVidPath, savePath, outputPathName, _font, _textSize, _colour);
 							generator.execute();
 						}
 					}
@@ -332,7 +334,7 @@ public class CreateTitleCreditFrame extends JFrame implements ActionListener {
 			} else {
 				Previewer viewer = new Previewer();
 				try {
-					viewer.view(_textArea.getText(), _textField1.getText(),_textField2.getText(), "1024x768", _font.getSelectedItem().toString(), _textSize.getSelectedItem().toString(), _colour.getSelectedItem().toString());
+					viewer.viewTitleCredit(_textArea.getText(), _textField1.getText(),_textField2.getText(), "1024x768", _font.getSelectedItem().toString(), _textSize.getSelectedItem().toString(), _colour.getSelectedItem().toString());
 				} catch (IOException | InterruptedException e1) {
 					
 					e1.printStackTrace();

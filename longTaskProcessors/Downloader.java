@@ -19,7 +19,6 @@ import editWindows.DownloadFrame;
  * @author Namjun Park npar350 Andy Choi mcho588
  *
  */
-
 public class Downloader extends SwingWorker<Integer,String[]> {
 	//download frame the downloading swing worker is working with
 	private DownloadFrame currentDlFrame;
@@ -29,21 +28,25 @@ public class Downloader extends SwingWorker<Integer,String[]> {
 	private boolean isPaused;
 	//boolean to know whether downloading or not
 	private boolean isRun;
-	//save directory + file name
-	private String savePath;
 	
 	public Downloader(DownloadFrame d) {
+		
 		currentDlFrame = d;
+		
 		isCancelled = false;
 		isPaused = false;
 		isRun = true;
 	}
 	
-	
+	/**
+	 * downloads a media file in the background thread
+	 */
 	@Override
 	protected Integer doInBackground() throws Exception {
+		
 		//process builder and bash command to download a file from a URL, and its process
-		String cmd = "wget -c --progress=dot " + currentDlFrame.getURL() + " -O " + savePath + ".mp3";
+		String cmd = "wget -c --progress=dot " + currentDlFrame.getURL() + " -P ~/Downloads";
+		
 		ProcessBuilder downloadBuilder = new ProcessBuilder("/bin/bash","-c",cmd);
 		downloadBuilder.redirectErrorStream(true);
 		Process download = downloadBuilder.start();
@@ -53,6 +56,7 @@ public class Downloader extends SwingWorker<Integer,String[]> {
 		String line = null;
 		//read through each line of the redirected error stream
 		while ((line = stdoutB.readLine()) != null) {
+			System.out.println(line);
 			//an error code for non media files
 			if (line.contains("wget: unable to resolve host address")) {
 				return 666;
@@ -110,12 +114,14 @@ public class Downloader extends SwingWorker<Integer,String[]> {
 		return exitValue;
 	}
 	
+	/**
+	 * displays appropriate pop up for different exit statuses
+	 */
 	@Override
 	protected void done() {
-		//appropriate pop up for different exit statuses
 		try {
 			if (this.get() == 0){
-				JOptionPane.showMessageDialog(null,"Download Successful!");
+				JOptionPane.showMessageDialog(null,"Download Successful! File saved to \"~/Downloads\" folder.");
 			}else if (this.get() == 1){
 				JOptionPane.showMessageDialog(null,"Error Encountered\n(error: generic error code)");
 			}else if (this.get() == 2){
@@ -154,8 +160,10 @@ public class Downloader extends SwingWorker<Integer,String[]> {
 		}
 		isRun = false;
 	}
-
-	//update of download progress to the download frame
+	
+	/**
+	 * update of download progress to the download frame
+	 */
 	@Override
 	protected void process(List<String[]> list) {
 		String[] info = list.get(list.size()-1);
@@ -165,23 +173,27 @@ public class Downloader extends SwingWorker<Integer,String[]> {
 		currentDlFrame.updateDlInfo(number, speed, time);
 	}
 	
-	//method to set the save directory/file name 
-	public void setSave(String save) {
-		savePath = save;
-	}
-	
-	//method to pause* operation
+	/**
+	 * method to pause operation
+	 */
 	public void pause() {
 		isPaused = true;
 	}
 	
-	//method to stop operation
+	/**
+	 * method to stop operation
+	 */
 	public void stop() {
 		isCancelled = true;
 	}
 	
-	//method to check if downloader is still running
+	/**
+	 * method to check is downloader is still running
+	 * @return
+	 */
 	public boolean isRunning() {
 		return isRun;
 	}
+	
+	
 }

@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import mainPackage.MainFrameHelper;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.JButton;
@@ -22,7 +23,6 @@ import javax.swing.JButton;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import playback.FastBackwarder;
 import playback.FastForwarder;
-import project.MainFrameHelper;
 
 public class PlaybackPanel extends JPanel implements MouseListener {
 	
@@ -36,16 +36,15 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 	private FastForwarder ff;
 	private FastBackwarder fb;
 	//all button icons normally
-	private String iconPath = "./icons";
-	private ImageIcon iconPlay = new ImageIcon(iconPath + "/PlayButtonN.png");
-	private ImageIcon iconPause = new ImageIcon(iconPath + "/PauseButtonN.png");
-	private ImageIcon iconFF = new ImageIcon(iconPath + "/FFButtonN.png");
-	private ImageIcon iconFB = new ImageIcon(iconPath + "/FBButtonN.png");
+	private ImageIcon iconPlay = new ImageIcon(this.getClass().getResource("icons/PlayButtonN.png"));
+	private ImageIcon iconPause = new ImageIcon(this.getClass().getResource("icons/PauseButtonN.png"));
+	private ImageIcon iconFF = new ImageIcon(this.getClass().getResource("icons/FFButtonN.png"));
+	private ImageIcon iconFB = new ImageIcon(this.getClass().getResource("icons/FBButtonN.png"));
 	//all button icons when highlighted
-	private ImageIcon iconPlayH = new ImageIcon(iconPath + "/PlayButtonH.png");
-	private ImageIcon iconPauseH = new ImageIcon(iconPath + "/PauseButtonH.png");
-	private ImageIcon iconFFH = new ImageIcon(iconPath + "/FFButtonH.png");
-	private ImageIcon iconFBH = new ImageIcon(iconPath + "/FBButtonH.png");
+	private ImageIcon iconPlayH = new ImageIcon(this.getClass().getResource("icons/PlayButtonH.png"));
+	private ImageIcon iconPauseH = new ImageIcon(this.getClass().getResource("icons/PauseButtonH.png"));
+	private ImageIcon iconFFH = new ImageIcon(this.getClass().getResource("icons/FFButtonH.png"));
+	private ImageIcon iconFBH = new ImageIcon(this.getClass().getResource("icons/FBButtonH.png"));
 	//all booleans for current play back status
 	private boolean isPaused = true;
 	private boolean isFastForwarding = false;
@@ -114,42 +113,63 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 	
 	//==================METHODS USED BY CLASSES, INCLUDING THIS ONE======//
 	
-	//sets the current video the play back buttons are operating for
+	/**
+	 * sets the current video the play back buttons are operating for
+	 * @param m
+	 */
 	public void setCurrentVideo(EmbeddedMediaPlayer m){
 		currentVideo = m;
 		setToPlay(); //paused at first, so set to play
 	}
-	//method to reset all booleans to their default values
+	
+	/**
+	 * method to reset all booleans to their default values
+	 */
 	public void setToDefault() {
 		isPaused = true;
 		isFastForwarding = false;
 		isFastBackwarding = false;
 	}
-	//enables all functions available for audio
+	
+	/**
+	 * enables all functions available for audio
+	 */
 	public void audioOn(){
 		playButton.setEnabled(true);
 		setToPlay();
 		ffButton.setEnabled(false);
 		fbButton.setEnabled(false);
 	}
-	//enables all functions available for media
+
+	/**
+	 * enables all functions available for media
+	 */
 	public void videoOn(){
 		playButton.setEnabled(true);
 		setToPlay();
 		ffButton.setEnabled(true);
 		fbButton.setEnabled(true);
 	}
-	//method to set play button for "Play"
+
+	/**
+	 * method to set play button for "Play"
+	 */
 	public void setToPlay() {
 		playButton.setIcon(iconPlay);
 		isPaused = true;
 	}
-	//method to set play button for "Pause"
+	
+	/**
+	 * method to set play button for "Pause"
+	 */
 	public void setToPause() {
 		playButton.setIcon(iconPause);
 		isPaused = false;
 	}
 	
+	/**
+	 * plays/pauses the video 
+	 */
 	public void playBtnPressed(){
 		//for when there is no video yet
 		if (currentVideo == null ) {
@@ -189,6 +209,9 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 		}
 	}
 	
+	/**
+	 * rewinds the video
+	 */
 	public void rewindBtnPressed(){
 		//if it is rewinding and clicked
 		if (isFastBackwarding) {
@@ -214,6 +237,9 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 		}
 	}
 	
+	/**
+	 * fast fowards the video
+	 */
 	public void forwardBtnPressed(){
 		if (isFastForwarding) {
 			ff.stop();
@@ -233,11 +259,15 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 		}
 	}
 	
-	//just changes cursors back and forth when entering and exiting component
-	//only when enabled, as well as switching the button icons from highlighted one
+
 	@Override
 	public void mouseClicked(MouseEvent m) {
 	}
+	
+	/**
+	 * just changes cursors back and forth when entering and exiting component
+	 * only when enabled, as well as switching the button icons from highlighted one
+	 */
 	@Override
 	public void mouseEntered(MouseEvent m) {
 		JButton s = (JButton)m.getSource();
@@ -258,6 +288,10 @@ public class PlaybackPanel extends JPanel implements MouseListener {
 
 	}
 
+	/**
+	 * just changes cursors back and forth when entering and exiting component
+	 * only when enabled, as well as switching the button icons from highlighted one
+	 */
 	@Override
 	public void mouseExited(MouseEvent m) {	
 		JButton s = (JButton)m.getSource();

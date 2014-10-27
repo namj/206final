@@ -55,10 +55,10 @@ public class AudioProcessor extends SwingWorker<Integer,Void>{
 		//matching the file with different file types to get an appropriate output file type
 		for (fileTypes fT : fileTypes.values()) {
 			if (file.getName().contains("." + fT)) {
-				fileType = "." + fT;
+				fileType = "" + fT;
 				break;
 			} else {
-				fileType = ".mp4";
+				fileType = "mp4";
 			}
 		}
 		//Button setup for the progress frame
@@ -109,18 +109,27 @@ public class AudioProcessor extends SwingWorker<Integer,Void>{
 		processFrame.setVisible(true);
 	}
 	
-	//method to set up the process save file
+	/**
+	 * method to set up the process save file
+	 * @param saveDir
+	 */
 	public void setSaveDir(String saveDir) {
 		this.saveDir = saveDir;
 	}
 	
-	//method to retrieve music file path and media length time for overlay/ replace process
+	/**
+	 * method to retrieve music file path and media length time for overlay/ replace process
+	 * @param musicPath
+	 * @param time
+	 */
 	public void setForOverlay(String musicPath, long time) {
 		audioPath = musicPath;
 		overlayDur = time;
 	}
 	
-	//process of bash command for appropriate processes, with a return of 666 for any error occurrence
+	/**
+	 * process of bash command for appropriate processes, with a return of 666 for any error occurrence
+	 */
 	@Override
 	protected Integer doInBackground() throws Exception {
 		String cmd;
@@ -128,7 +137,7 @@ public class AudioProcessor extends SwingWorker<Integer,Void>{
 		//format and save to the appropriate directory/file
 		if (process.equals("ex") || process.equals("rm&ex")) {
 			cmd = "avconv -i " + mediaFile.getAbsolutePath() + " -vn -c:a libmp3lame"
-					+ " -q:a 2 " + saveDir +".mp3";
+					+ " -q:a 2 -f mp3 -y " + saveDir;
 			audioProcessBuilder = new ProcessBuilder("/bin/bash","-c",cmd);
 			audioProcess = audioProcessBuilder.start();
 			int exit = audioProcess.waitFor();
@@ -160,7 +169,7 @@ public class AudioProcessor extends SwingWorker<Integer,Void>{
 					return 667;
 				}
 			}
-			cmd = "avconv -i " + mediaFile.getAbsolutePath() + " -c:v copy -an " + saveDir + fileType;
+			cmd = "avconv -i " + mediaFile.getAbsolutePath() + " -c:v copy -an -f " + fileType + " -y " + saveDir;
 			audioProcessBuilder = new ProcessBuilder("/bin/bash","-c",cmd);
 			audioProcess = audioProcessBuilder.start();
 			int exit = audioProcess.waitFor();
@@ -176,7 +185,7 @@ public class AudioProcessor extends SwingWorker<Integer,Void>{
 		if (process.equals("ov")) {
 			cmd = "avconv -i " + mediaFile.getAbsolutePath() + " -i " + audioPath + 
 					" -filter_complex [0:a][1:a]amix[out] -map \"[out]\" -map 0:v -c:v copy"
-					+ " -t " + overlayDur + " -strict experimental " + saveDir + fileType;
+					+ " -t " + overlayDur + " -strict experimental -f " + fileType + " -y " + saveDir;
 			audioProcessBuilder = new ProcessBuilder("/bin/bash","-c",cmd);
 			audioProcess = audioProcessBuilder.start();
 			int exit = audioProcess.waitFor();
@@ -190,8 +199,7 @@ public class AudioProcessor extends SwingWorker<Integer,Void>{
 		//output the file appropriately for the video's duration
 		if (process.equals("rp")) {
 			cmd = "avconv -i " + mediaFile.getAbsolutePath() + " -i " + audioPath +
-					" -map 1:a -map 0:v -c:v copy -t " + overlayDur + " -strict experimental " +
-					saveDir + fileType;
+					" -map 1:a -map 0:v -c:v copy -t " + overlayDur + " -strict experimental -f " + fileType + " -y " + saveDir;
 			audioProcessBuilder = new ProcessBuilder("/bin/bash","-c",cmd);
 			audioProcess = audioProcessBuilder.start();
 			int exit = audioProcess.waitFor();
@@ -232,6 +240,7 @@ public class AudioProcessor extends SwingWorker<Integer,Void>{
 					if (get() == 0) {
 						progressLabel.setText("Audio Removal Successful!");
 					} else if (get() == 667) {
+						System.out.println("fail?");
 						//cancelled option for rm&ex
 					} else {
 						progressLabel.setText("Removal failed: Unexpected error");
@@ -255,7 +264,9 @@ public class AudioProcessor extends SwingWorker<Integer,Void>{
 		}
 	}
 
-	//mid process for extraction before removal
+	/**
+	 * mid process for extraction before removal
+	 */
 	@Override
 	protected void process(List<Void> chunks) {
 		processFrame.setTitle("Removing audio...");

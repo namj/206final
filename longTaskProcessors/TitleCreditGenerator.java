@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-import project.MainFrame;
+import mainPackage.MainFrame;
 
 /**
  * This class extends swingworker. This class processes all the avconv commands that take 
@@ -41,7 +41,6 @@ import project.MainFrame;
  * @author Namjun Park (npar350) Andy Choi (mcho588)
  *
  */
-
 public class TitleCreditGenerator extends SwingWorker<Integer, String> implements ActionListener {
 	
 	private boolean _titleOrCredit; // true indicates title, false indicates credit
@@ -66,7 +65,19 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 	private int _colourIndex;
 	
 
-	//constructor for this swingworker
+	/**
+	 * constructor for this class
+	 * @param titleOrCredit
+	 * @param text
+	 * @param music
+	 * @param image
+	 * @param path
+	 * @param savePath
+	 * @param outputPathName
+	 * @param font
+	 * @param size
+	 * @param colour
+	 */
 	public TitleCreditGenerator(boolean titleOrCredit, String text, String music, String image, String path, String savePath, String outputPathName, JComboBox font, JComboBox size, JComboBox colour){
 		_titleOrCredit = titleOrCredit;
 		_text = text;
@@ -100,6 +111,9 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		
 	}
 	
+	/**
+	 * generates title/credit scenes and appends onto main video
+	 */
 	@Override
 	protected Integer doInBackground() throws Exception {
 		
@@ -168,7 +182,7 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		}
 		
 		//terminal command to add 10sec and music to the 10sec video
-		cmd = "avconv -i "+ _savePath +"/videoFromImage.mp4 -i "+ _musicPath +" -c:a copy -t 10 -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2\" -y "+ _savePath +"/titleCreditPage.mp4";
+		cmd = "avconv -i "+ _savePath +"/videoFromImage.mp4 -i "+ _musicPath +" -c:a copy -t 10 -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./src/editWindows/resources/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2\" -y "+ _savePath +"/titleCreditPage.mp4";
 		ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
 		Builder2.redirectErrorStream(true);
 		Process process2 = Builder2.start();
@@ -364,6 +378,9 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		return 0;
 	}
 	
+	/**
+	 * Displays approrpriate messages at the end of process. And updates log status
+	 */
 	@Override
 	protected void done() {
 		
@@ -388,7 +405,6 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 				Logger.getInstance().updateForPage(_text, _musicPath, _imagePath, _fontIndex, _sizeIndex, _colourIndex);
 				JOptionPane.showMessageDialog(null,"Saved");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (result == JOptionPane.NO_OPTION){
@@ -430,6 +446,9 @@ public class TitleCreditGenerator extends SwingWorker<Integer, String> implement
 		
 	}
 
+	/**
+	 * cancels process 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == _cancelButton){

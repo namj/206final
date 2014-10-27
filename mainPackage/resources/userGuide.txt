@@ -1,0 +1,213 @@
+How to use npar/mcho's trailer editor:
+
+>>>Getting Started<<<
+Before anything else can be done, a media (video or
+audio) file must be opened.
+This file will be played by the big media screen
+in the middle of the program.
+
+****************OPENING A MEDIA FILE*******************
+
+There are two ways to open a media file:
+  1.  You can click the 'folder' icon next to the text
+      box that says "Please open a media file..."
+  2.  OR you can click the "File" option in the 
+      menu bar located at the top of the program
+      and select the "Open" item
+This will pop up a file chooser where you will need
+to specify a media file to open.
+You can select a media file by either clicking it, then
+clicking the "Open" button, or by simply double clicking
+it. 
+The opened media file will be paused from the start.
+
+NOTE: Directories have the 'folder' icon next to them, 
+       and files have the 'paper' icon. You can only 
+       select to open files, also any non-media files 
+       will NOT open!
+
+IF YOU HAVE NO MEDIA FILE! DON'T WORRY
+If you click the DOWNLOAD button at the top left corner
+You can download an open-source media file by simply
+entering a URL.
+
+**********************************************************
+
+After a valid media file is opened, some or all of the 
+playback and edit features will be enabled.
+
+For VIDEO files: all playback and edit features are 
+	enabled.
+For AUDIO files: some playback features and no edit 
+	features are enabled.
+
+******GETTING FAMILIAR WITH THE PLAYBACK PANEL******
+
+The Playback panel has three buttons.
+These are the buttons at the bottom center 
+
+REWIND, PLAY, FASTFORWARD button (in that order)
+
+To start playing the media file, click the PLAY button.
+This is button right in the middle.
+The video or audio will start playing.
+
+NOTE: Audio files will play with a blank media screen.
+
+If you click the button when the button says "Pause"
+It will pause the video and will toggle to "Play".
+The PLAY button will toggle from "Play" to "Pause"
+depending on whether the media file is playing or not.
+
+The other two buttons beside the PLAY button are the
+rewind and fastforward buttons.
+These two buttons are disabled for audio files, as it
+was thought to be not a necessary feature for audios.
+
+You've probably guessed that these buttons will 
+rewind and fastforward the video.
+To stop video the when it is rewinding or fastforwarding
+You can either click the PLAY button to play the video
+at that moment, or re-click the rewind or fastforward 
+button to pause the video at the moment.
+
+NOTE: If the video is fastforwarding and the REWIND
+      button is clicked. It will begin rewinding and
+      vice versa.
+
+**********************************************************
+
+If you haven't noticed, there is also a volume control
+next to the play back panel.
+
+This allows you, the user, to set the volume to what you
+want or mute the volume. It's very easy to use, but just
+in case you aren't familiar with it...
+
+************HOW TO CONTROL THE VOLUME**************
+
+The volume control has three buttons and a slider.
+The 'mini speaker' icon is the MUTE button.
+Next to it is the VOLUME slider and right below
+there's a MINUS and a PLUS button.
+
+This feature is enabled for any media (both audio and 
+video)
+
+The MUTE button has a toggle on and off, similar to the
+PLAY button. When it is not muted, the icon will show a
+'mini speaker' icon. If you click this, it will mute the
+volume and toggle to a 'no sound' icon. 
+
+The VOLUME slider has a thumb, which can be dragged 
+back and forth to decrease and increase the volume.
+
+The MINUS and PLUS button also decrease and 
+increase the volume. 
+Clicking the MINUS button will decrease the volume, 
+and clicking the PLUS button will increase it.
+
+**********************************************************
+
+The progress bar of the video or audio is shown at the 
+bottom of the media screen. At the left of the progress
+bar, the video's current time is shown in hh:mm:ss 
+(hours:minutes:seconds) format.
+
+============EDIT FUNCTIONS=============
+
+The edit function can be categorised into two 
+things. 
+Page addition & Audio manipulation.
+These edit functions can be accessed by either: 
+ 1. Clicking the EDIT button (second button on top),
+      which will bring up another frame with multiple
+      buttons to click, for each function. 
+ 2. OR you can click the "Edit" option in the 
+      menu bar located at the top of the program
+      and select one of the function you want to use.
+
+********************PAGE ADDITION**********************
+
+There's two page addition functions:
+ - Adding a title page ("+ Title Page" on EDIT button)
+ - Adding a credit page ("+ Credit Page" on EDIT button)
+
+Selecting one of these functions will open up a frame.
+
+You can CHOOSE to input a text in text box. You can
+also set up the font, font size and font colour for the
+text that will be shown in the title/credit page.
+
+You MUST select a background music and background 
+image that will be used to make the title/credit page. 
+This can be done by clicking the 'folder' icon beside 
+each respective text field.
+
+If you are unsure of how the the page will look
+like with all the feature you've selected.
+You can click the 'Preview' button at the top right
+corner. 
+
+After everything is set up, click the GENERATE button
+and it will ask for a save name and directory. Just
+go into the directory you want the output file to be
+in and enter a file name in the text field. Click the
+"Save" button and you're DONE with adding a page.
+
+NOTE: The process may take a while, so enjoy a video
+	or two while you wait :)
+
+**********************************************************
+
+Next up is the audio manipulation functions!
+
+******************AUDIO MANIPULATION******************
+
+There are four audio manipulation functions:
+ - Remove audio from video (extract as well)
+ - Extract audio from video
+ - Overlay audio from video with another audio
+ - Replace audio from video with another audio
+
+------Remove
+When this function is selected, it will ask if you
+would like to save (extract) the audio before 
+removing it.
+If you select 'Yes', you will need to specify the name
+and place you'd like to save the audio to.
+If you select 'No' you will skip that step above.
+You will need to specify a name and place you'd like
+to save the audio removed video. Then after
+it will do everything for you, and remove the
+audio and save the video where you specified.
+
+------Extract
+This is the step from "Remove" when the user selects
+that they want to save the audio. 
+It will ask you to specify the name and place you'd
+like to save the audio file. Then it will begin its
+operation and save the extracted audio file to
+the specified location.
+
+------Overlay
+Again it will ask to specify a name and place to save
+the overlayed file. 
+It will then open up a frame, where you will have to
+select an audio file to overlay the video with. Select
+by clicking the 'folder' icon.
+Click overlay and the process will begin!
+
+------Replace
+Exactly the same as 'Overlay', but it completely
+replaces the video's audio with the selected
+audio.
+
+**********************************************************
+
+THANK YOU FOR USING NPAR/MCHO's 
+   PROTOTYPE TRAILER EDITOR
+
+Any problems or questions feel free to contact:
+Rookie Park    0211084654    npar350@aucklanduni.ac.nz
+Andy Choi    02102201337    mcho588@aucklanduni.ac.nz

@@ -1,0 +1,12 @@
+Ctrl + O : Open media file
+Ctrl + H : Open helper(readme)
+Ctrl + E : Open editing frame
+Ctrl + D : Open download frame
+
+Ctrl + Spacebar : Play/Pause
+Ctrl + Rightarrow : Fastfoward
+Ctrl + Leftarrow : Rewind
+
+Ctrl + Uparrow : Volume up
+Ctrl + Downarrow : Volume down
+

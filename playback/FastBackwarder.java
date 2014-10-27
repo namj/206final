@@ -13,16 +13,22 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
  */
 
 public class FastBackwarder extends SwingWorker<Void,Void>{
+	
 	private EmbeddedMediaPlayer currentVideo;
 	//boolean to command rewinding
 	private boolean fastBackward = true;
 	
-	//constructor to set up video to rewind
+	/**
+	 * constructor to set up video for rewind.
+	 * @param vid
+	 */
 	public FastBackwarder(EmbeddedMediaPlayer vid){
 		currentVideo = vid;
 	}
 	
-	//method to stop/ complete swing worker action of rewinding
+	/**
+	 * stops/ complete swing worker action of rewinding
+	 */
 	public void stop() {
 		fastBackward = false;
 	}

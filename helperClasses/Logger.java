@@ -29,7 +29,9 @@ public class Logger {
 	private File _homedir = new File(System.getProperty("user.home"));
 	private File _vamixFolder = new File(_homedir, "/.vamix");
 	
-	//constructor
+	/**
+	 * constructor for this class
+	 */
 	private Logger() { 
 		//if vamix folder doesnt exist, make one
 		if (!_vamixFolder.exists()){
@@ -37,13 +39,26 @@ public class Logger {
 		}
 		
 	}
+	
 	private static Logger instance = new Logger();
-	//return singleton object of this panel
+	
+	/**
+	 * return singleton object of this panel
+	 */
 	public static Logger getInstance() {
 		return instance;
 	}
 	
-	//function which saves editing session by updating log files.
+	/**
+	 * function which saves editing session by updating log files.
+	 * @param text
+	 * @param musicPath
+	 * @param imagePath
+	 * @param fontCombo
+	 * @param sizeCombo
+	 * @param colourCombo
+	 * @throws IOException
+	 */
 	public void updateForPage(String text, String musicPath, String imagePath, int fontCombo, int sizeCombo, int colourCombo) throws IOException {
 		
 		//update edit log file
@@ -62,6 +77,20 @@ public class Logger {
 		
 	}
 	
+	/**
+	 * function which saves editing session by updating log files.
+	 * @param text1
+	 * @param timeCombo1
+	 * @param fontCombo1
+	 * @param sizeCombo1
+	 * @param colourCombo1
+	 * @param text2
+	 * @param timeCombo2
+	 * @param fontCombo2
+	 * @param sizeCombo2
+	 * @param colourCombo2
+	 * @throws IOException
+	 */
 	public void updateForText(String text1, int timeCombo1, int fontCombo1, int sizeCombo1, int colourCombo1, 
 			String text2, int timeCombo2, int fontCombo2, int sizeCombo2, int colourCombo2) throws IOException {
 		
@@ -94,6 +123,16 @@ public class Logger {
 		
 	}
 	
+	/**
+	 * function which saves editing session by updating log files.
+	 * @param text1
+	 * @param fontCombo1
+	 * @param sizeCombo1
+	 * @param colourCombo1
+	 * @param startTime
+	 * @param finishTime
+	 * @throws IOException
+	 */
 	public void updateForText2(String text1, int fontCombo1, int sizeCombo1, int colourCombo1, String startTime, String finishTime) throws IOException {
 		
 		//update 
@@ -113,8 +152,9 @@ public class Logger {
 	}
 	
 
-	
-	//this method should return the text, ie first line of editlog file
+	/**
+	 * this method should return the text of the log file
+	 */
 	public void pullTextForPage(JTextArea text){
 		
 		//if textlog exists, write its contents to the textArea.
@@ -136,7 +176,9 @@ public class Logger {
 	
 	}
 	
-	//this method should return the path of music file last used. ie second line of edit log file
+	/**
+	 * this method should read the log file and return musicpath
+	 */
 	public String pullMusicPathForPage(){
 		
 		//check if log file exists
@@ -156,7 +198,9 @@ public class Logger {
 		return "";
 	}
 	
-	//this method should return the path of image file last used. ie third line of edit log file
+	/**
+	 * this method should read the log file and return imagePath
+	 */
 	public String pullImagePathForPage(){
 		
 		//check if log file exists
@@ -177,6 +221,9 @@ public class Logger {
 		return "";
 	}
 	
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullFontIndexForPage(){
 		
 		//check if log file exists
@@ -198,6 +245,9 @@ public class Logger {
 		return 0;
 	}
 
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullSizeIndexForPage(){
 	
 		//check if log file exists
@@ -220,6 +270,9 @@ public class Logger {
 		return 0;
 	}
 
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullColourIndexForPage(){
 	
 		//check if log file exists
@@ -243,6 +296,9 @@ public class Logger {
 		return 0;
 	}
 	
+	/**
+	 * this method should return the text of the log file
+	 */
 	public void pullTextForInsertTop(JTextArea text){
 		
 		//if textlog exists, write its contents to the textArea.
@@ -264,6 +320,9 @@ public class Logger {
 	
 	}
 	
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullTimeIndexForInsertTop(){
 		
 		//check if log file exists
@@ -283,6 +342,9 @@ public class Logger {
 		return 0;
 	}
 
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullfontIndexForInsertTop(){
 	
 		//check if log file exists
@@ -303,6 +365,9 @@ public class Logger {
 		return 0;
 	}
 
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullColourIndexForInsertTop(){
 	
 		//check if log file exists
@@ -324,6 +389,9 @@ public class Logger {
 		return 0;
 	}
 	
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullSizeIndexForInsertTop(){
 		
 		//check if log file exists
@@ -346,6 +414,9 @@ public class Logger {
 		return 0;
 	}
 	
+	/**
+	 * this method should return text for the logfile
+	 */
 	public void pullTextForInsertBot(JTextArea text){
 		
 		//if textlog exists, write its contents to the textArea.
@@ -367,6 +438,9 @@ public class Logger {
 	
 	}
 	
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullTimeIndexForInsertBot(){
 		
 		//check if log file exists
@@ -386,6 +460,9 @@ public class Logger {
 		return 0;
 	}
 
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullfontIndexForInsertBot(){
 	
 		//check if log file exists
@@ -406,6 +483,9 @@ public class Logger {
 		return 0;
 	}
 
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullColourIndexForInsertBot(){
 	
 		//check if log file exists
@@ -427,6 +507,9 @@ public class Logger {
 		return 0;
 	}
 	
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullSizeIndexForInsertBot(){
 		
 		//check if log file exists
@@ -449,6 +532,9 @@ public class Logger {
 		return 0;
 	}
 	
+	/**
+	 * this method should read the the text of the log file
+	 */
 	public void pullTextForInsert(JTextArea text){
 		
 		//if textlog exists, write its contents to the textArea.
@@ -470,6 +556,9 @@ public class Logger {
 	
 	}
 
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullfontIndexForInsert(){
 	
 		//check if log file exists
@@ -489,6 +578,9 @@ public class Logger {
 		return 0;
 	}
 
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullColourIndexForInsert(){
 	
 		//check if log file exists
@@ -509,6 +601,9 @@ public class Logger {
 		return 0;
 	}
 	
+	/**
+	 * this method should read the log file and return appropriate index for JCombobox
+	 */
 	public int pullSizeIndexForInsert(){
 		
 		//check if log file exists
@@ -530,6 +625,9 @@ public class Logger {
 		return 0;
 	}
 	
+	/**
+	 * this method should read the log file and return time in xx:xx:xx format
+	 */
 	public String pullStartTimeForInsert(){
 		
 		//check if log file exists
@@ -552,6 +650,9 @@ public class Logger {
 		return "00:00:00";
 	}
 	
+	/**
+	 * this method should read the log file and return time in xx:xx:xx format
+	 */
 	public String pullFinishTimeForInsert(){
 		
 		//check if log file exists
@@ -576,17 +677,33 @@ public class Logger {
 	}
 	
 	
-	//method that deletes editlog and  textlog if they exist.
+	/**
+	 * //method that deletes relative textlogs if they exist.
+	 * @throws IOException
+	 */
 	public void deleteLogForPage() throws IOException{
 		Files.deleteIfExists(Paths.get(_vamixFolder + "/editlog.txt"));
 		Files.deleteIfExists(Paths.get(_vamixFolder + "/textlog.txt"));
 	}
 	
+	/**
+	 * //method that deletes relative textlogs if they exist.
+	 * @throws IOException
+	 */
 	public void deleteLogForInsert() throws IOException{
 		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLogTop"));
 		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLogTop2"));
 		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLogBot"));
 		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLogBot2"));
+	}
+	
+	/**
+	 * //method that deletes relative textlogs if they exist.
+	 * @throws IOException
+	 */
+	public void deleteLogForInsert2() throws IOException{
+		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLog"));
+		Files.deleteIfExists(Paths.get(_vamixFolder + "/insertLog2"));
 	}
 	
 }

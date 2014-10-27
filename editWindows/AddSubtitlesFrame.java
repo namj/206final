@@ -80,8 +80,10 @@ public class AddSubtitlesFrame extends JFrame implements ActionListener {
 		
 		setVisible(true);
 	}
-
-
+	
+	/**
+	 * actionPerformed method overridden to react to button presses
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == fileChooseButton ){

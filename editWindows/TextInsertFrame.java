@@ -34,6 +34,7 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JScrollPane;
 
@@ -206,7 +207,10 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		setVisible(true);
 		
 	}
-
+	
+	/**
+	 * actionPerformed method overridden to react to button presses
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -214,7 +218,8 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		if (e.getSource() == fontBox1 || e.getSource() == sizeBox1){
 			
 			try {
-				textArea1.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+fontBox1.getSelectedItem().toString())));
+				InputStream is = this.getClass().getResourceAsStream("resources/"+fontBox1.getSelectedItem().toString());
+				textArea1.setFont(Font.createFont(Font.TRUETYPE_FONT, is));
 				textArea1.setFont(textArea1.getFont().deriveFont(Font.PLAIN, Integer.parseInt(sizeBox1.getSelectedItem().toString())));
 			} catch (FontFormatException | IOException e1) {
 				e1.printStackTrace();
@@ -244,7 +249,8 @@ public class TextInsertFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == fontBox2 || e.getSource() == sizeBox2){
 			
 			try {
-				textArea2.setFont(Font.createFont(Font.TRUETYPE_FONT, new File ("./fonts/"+fontBox2.getSelectedItem().toString())));
+				InputStream is = this.getClass().getResourceAsStream("resources/"+fontBox2.getSelectedItem().toString());
+				textArea2.setFont(Font.createFont(Font.TRUETYPE_FONT, is));
 				textArea2.setFont(textArea2.getFont().deriveFont(Font.PLAIN, Integer.parseInt(sizeBox2.getSelectedItem().toString())));
 			} catch (FontFormatException | IOException e1) {
 				e1.printStackTrace();

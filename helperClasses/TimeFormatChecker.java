@@ -23,7 +23,13 @@ public class TimeFormatChecker {
 	EmbeddedMediaPlayer _currentVideo;
 	
 	
-	
+	/**
+	 * constructor for this class
+	 * @param startField
+	 * @param endField
+	 * @param textArea
+	 * @param currentVideo
+	 */
 	public TimeFormatChecker(JTextField startField, JTextField endField, JTextArea textArea, EmbeddedMediaPlayer currentVideo){
 	
 		_currentVideo = currentVideo;
@@ -34,6 +40,13 @@ public class TimeFormatChecker {
 		_finish = endField.getText();
 	}
 	
+	/**
+	 * constructor for this class
+	 * @param startField
+	 * @param endField
+	 * @param textArea
+	 * @param currentVideo
+	 */
 	public TimeFormatChecker(JTextField startField, JTextField endField, EmbeddedMediaPlayer currentVideo){
 		
 		_currentVideo = currentVideo;
@@ -42,6 +55,13 @@ public class TimeFormatChecker {
 		_finish = endField.getText();
 	}
 	
+	/**
+	 * constructor for this class
+	 * @param startField
+	 * @param endField
+	 * @param textArea
+	 * @param currentVideo
+	 */
 	public TimeFormatChecker(JTextField startField, JTextField endField){
 		
 		_start = startField.getText();
@@ -53,7 +73,6 @@ public class TimeFormatChecker {
 	 * 
 	 * @return
 	 */
-	
 	public boolean checkTimeFormat(){
 		
 		//Make sure user entered time formats correctly

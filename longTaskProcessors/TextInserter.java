@@ -28,7 +28,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
-import project.MainFrame;
+import mainPackage.MainFrame;
 
 /**
  * This class extends swingworker. This class processes all the avconv commands that take 
@@ -39,7 +39,6 @@ import project.MainFrame;
  * @author Namjun Park (npar350)
  *
  */
-
 public class TextInserter extends SwingWorker<Integer, Integer> implements ActionListener {
 	
 	private int _whichOne; //int to indicate whether to put text and start/end or at specified interval. 1 means start/end 2 means specified
@@ -82,7 +81,24 @@ public class TextInserter extends SwingWorker<Integer, Integer> implements Actio
 	private long _videoLength;
 	
 
-	//constructor for this swingworker
+	/**
+	 * constructor for this class
+	 * @param sel
+	 * @param path
+	 * @param savePath
+	 * @param outputPathName
+	 * @param text
+	 * @param font
+	 * @param size
+	 * @param colour
+	 * @param time
+	 * @param text2
+	 * @param font2
+	 * @param size2
+	 * @param colour2
+	 * @param time2
+	 * @param videoLength
+	 */
 	public TextInserter(int sel, String path, String savePath, String outputPathName, String text, JComboBox<String> font, JComboBox<String> size, JComboBox<String> colour, 
 			JComboBox<String> time, String text2, JComboBox<String> font2, JComboBox<String> size2, JComboBox<String> colour2, JComboBox<String> time2, 
 			long videoLength){
@@ -133,6 +149,19 @@ public class TextInserter extends SwingWorker<Integer, Integer> implements Actio
 		
 	}
 	
+	/**
+	 * constructor for this class
+	 * @param sel
+	 * @param path
+	 * @param savePath
+	 * @param outputPathName
+	 * @param text
+	 * @param font
+	 * @param size
+	 * @param colour
+	 * @param startField
+	 * @param finishField
+	 */
 	public TextInserter(int sel, String path, String savePath, String outputPathName, String text, JComboBox<String> font, JComboBox<String> size, 
 			JComboBox<String> colour, JTextField startField, JTextField finishField){
 		
@@ -176,7 +205,9 @@ public class TextInserter extends SwingWorker<Integer, Integer> implements Actio
 		
 	}
 	
-
+	/**
+	 * inserts text in the background thread
+	 */
 	@Override
 	protected Integer doInBackground() throws Exception {
 		
@@ -184,8 +215,8 @@ public class TextInserter extends SwingWorker<Integer, Integer> implements Actio
 			
 			int endLength = (int) (_videoLength/1000 - Integer.parseInt(_time2));
 			
-			String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./fonts/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='lt(t,"+_time+")', "
-					+ "drawtext=fontcolor="+_colour2+":fontsize="+_textSize2+":fontfile=./fonts/"+_font2+":text='"+ _text2 +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='gt(t,"+ endLength +")'\" -f mp4 -y "+ _outputPathName;
+			String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":fontfile=./src/editWindows/resources/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='lt(t,"+_time+")', "
+					+ "drawtext=fontcolor="+_colour2+":fontsize="+_textSize2+":fontfile=./src/editWindows/resources/"+_font2+":text='"+ _text2 +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='gt(t,"+ endLength +")'\" -f mp4 -y "+ _outputPathName;
 			ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
 			Builder2.redirectErrorStream(true);
 			Process process2 = Builder2.start();
@@ -218,7 +249,7 @@ public class TextInserter extends SwingWorker<Integer, Integer> implements Actio
 		} else {
 			
 			String cmd = "avconv -i "+ _videoPath +" -c:a copy -vf \"drawtext=fontcolor="+_colour+":fontsize="+_textSize+":"
-					+ "fontfile=./fonts/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='gte(t,"+_startTime+")*lte(t,"+_finishTime+")'\" -f mp4 -y "+ _outputPathName;
+					+ "fontfile=./src/editWindows/resources/"+_font+":text='"+ _text +"':x=(main_w-text_w)/2:y=(main_h-text_h)/2:draw='gte(t,"+_startTime+")*lte(t,"+_finishTime+")'\" -f mp4 -y "+ _outputPathName;
 			ProcessBuilder Builder2 = new ProcessBuilder("/bin/bash","-c",cmd);
 			Builder2.redirectErrorStream(true);
 			Process process2 = Builder2.start();
@@ -252,6 +283,9 @@ public class TextInserter extends SwingWorker<Integer, Integer> implements Actio
 		
 	}
 	
+	/**
+	 * displays appropriate message and the end
+	 */
 	@Override
 	protected void done() {
 		
@@ -282,15 +316,17 @@ public class TextInserter extends SwingWorker<Integer, Integer> implements Actio
 					JOptionPane.showMessageDialog(null,"Saved");
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (result == JOptionPane.NO_OPTION){
 			//if user denied to save session delete the edit log file so that next time user creates title/credit page nothing is continued
 			try {
-				Logger.getInstance().deleteLogForInsert();
+				if (_whichOne == 1){
+					Logger.getInstance().deleteLogForInsert();
+				} else {
+					Logger.getInstance().deleteLogForInsert2();
+				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -308,6 +344,9 @@ public class TextInserter extends SwingWorker<Integer, Integer> implements Actio
 	}
 	
 
+	/**
+	 * cancels process
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == _cancelButton){

@@ -6,11 +6,11 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JFileChooser;
 
+import mainPackage.MainFrame;
+import mainPackage.MainFrameHelper;
 import editWindows.EditFrame;
 import playback.PlaybackPanel;
 import playback.VolumePanel;
-import project.MainFrame;
-import project.MainFrameHelper;
 
 /**
  * This is a cutom keyEventDispatcher. Intended purpose is to
@@ -64,7 +64,7 @@ public class MyKeyListener implements KeyEventDispatcher {
 				EditFrame frame = new EditFrame(MainFrame.getInstance());
 			//ctrl + D
 			} else if (68 == code) {
-				MainFrameHelper.downloadFromUrl(MainFrame.getInstance().getMediaFile(), MainFrame.getInstance().getSavePath());
+				MainFrameHelper.downloadFromUrl();
 			}
 		}  
 		// pass on this key event  

@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-import project.MainFrame;
+import mainPackage.MainFrame;
 
 /**
  * This class is a subclass of swingworker. Its role is to add subtitle stream to
@@ -38,6 +38,12 @@ public class SubtitleAdder extends SwingWorker<Integer, Integer> implements Acti
 	
 	private boolean isCancelled = false;
 	
+	/**
+	 * constructor for this class
+	 * @param vPath
+	 * @param sPath
+	 * @param oPath
+	 */
 	public SubtitleAdder(String vPath, String sPath, String oPath){
 		
 		vidPath = vPath;
@@ -63,7 +69,9 @@ public class SubtitleAdder extends SwingWorker<Integer, Integer> implements Acti
 		frame.setVisible(true);
 	}
 	
-	
+	/**
+	 * adds subtitle stream to video in the worker thread
+	 */
 	@Override
 	protected Integer doInBackground() throws Exception {
 
@@ -102,6 +110,9 @@ public class SubtitleAdder extends SwingWorker<Integer, Integer> implements Acti
 		return 0;
 	}
 	
+	/**
+	 * display appropriate messages
+	 */
 	@Override
 	protected void done() {
 		//display error message if processes didnt finish happliy
@@ -123,7 +134,6 @@ public class SubtitleAdder extends SwingWorker<Integer, Integer> implements Acti
 	
 	@Override
 	protected void process(List<Integer> chunks) {
-		//update jprogressbar
 		for (int i : chunks){
 			pBar.setValue(i);
 		}
@@ -131,6 +141,9 @@ public class SubtitleAdder extends SwingWorker<Integer, Integer> implements Acti
 	}
 
 
+	/**
+	 * sets cancel boolean to true 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == cButton){

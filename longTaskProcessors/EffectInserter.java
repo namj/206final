@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-import project.MainFrame;
+import mainPackage.MainFrame;
 
 public class EffectInserter implements ActionListener {
 	
@@ -29,7 +29,9 @@ public class EffectInserter implements ActionListener {
 	private JButton _cancelButton;
 	private boolean _isCancelled = false;
 	
-	
+	/**
+	 * constructor for this class
+	 */
 	public EffectInserter(){
 		
 		_frame = new JFrame();
@@ -53,6 +55,11 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
+	/**
+	 * inserts the mirror effect to video
+	 * @param vidPath
+	 * @param outputNamePath
+	 */
 	public void insertEffectMirror(final String vidPath, final String outputNamePath){
 		
 		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
@@ -129,6 +136,11 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
+	/**
+	 * inserts the bounce effect to video
+	 * @param vidPath
+	 * @param outputNamePath
+	 */
 	public void insertEffectBounce(final String vidPath, final String outputNamePath){
 		
 		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
@@ -201,6 +213,11 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
+	/**
+	 * inserts the negate effect to video
+	 * @param vidPath
+	 * @param outputNamePath
+	 */
 	public void insertEffectNegate(final String vidPath, final String outputNamePath){
 		
 		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
@@ -273,6 +290,12 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
+	/**
+	 * applies rotate to video
+	 * @param vidPath
+	 * @param outputNamePath
+	 * @param transposeInput
+	 */
 	public void insertEffectRotate(final String vidPath, final String outputNamePath, final String transposeInput){
 		
 		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
@@ -347,6 +370,9 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
+	/**
+	 * apply fade in effect to video
+	 */
 	public void insertEffectFadeIn(final String vidPath, final String outputNamePath, final int i, final int j){
 		
 		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
@@ -420,6 +446,13 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
+	/**
+	 * apply fade out effect to video
+	 * @param vidPath
+	 * @param outputNamePath
+	 * @param i
+	 * @param j
+	 */
 	public void insertEffectFadeOut(final String vidPath, final String outputNamePath, final int i, final int j){
 		
 		SwingWorker<Integer, Integer> worker = new SwingWorker<Integer, Integer>(){
@@ -493,6 +526,15 @@ public class EffectInserter implements ActionListener {
 		
 	}
 
+	/**
+	 * apply fade in and out effect to video
+	 * @param vidPath
+	 * @param outputNamePath
+	 * @param i
+	 * @param j
+	 * @param k
+	 * @param l
+	 */
 	public void insertEffectFadeIO(final String vidPath, final String outputNamePath, final int i, final int j, 
 			final int k, final int l){
 		
@@ -569,8 +611,9 @@ public class EffectInserter implements ActionListener {
 		
 	}
 	
-	
-
+	/**
+	 * if cancel button is pressed, sets _isCancelled boolean to true
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		

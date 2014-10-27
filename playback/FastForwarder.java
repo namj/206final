@@ -17,12 +17,17 @@ public class FastForwarder extends SwingWorker<Void,Void>{
 	//boolean to command fast forwarding
 	private boolean fastForward = true;
 	
-	//constructor to set up video to operate on
+	/**
+	 * constructor for this class
+	 * @param vid
+	 */
 	public FastForwarder(EmbeddedMediaPlayer vid){
 		currentVideo = vid;
 	}
 	
-	//method to stop/ complete swing worker action of fast forwarding
+	/**
+	 * method to stop/ complete swing worker action of fast forwarding
+	 */
 	public void stop() {
 		fastForward = false;
 	}

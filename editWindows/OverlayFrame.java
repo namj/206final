@@ -69,7 +69,7 @@ public class OverlayFrame extends JFrame{
 		songLoc.setEnabled(false);
 		songLoc.setBounds(10, 80, 160, 30);
 		add(songLoc);
-		ImageIcon icon = new ImageIcon("./icons/open_button.gif");
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("resources/open_button.gif"));
 		selectFile = new JButton(icon);
 		selectFile.setOpaque(false);
 		selectFile.setContentAreaFilled(false);

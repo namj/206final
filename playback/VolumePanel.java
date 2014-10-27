@@ -25,11 +25,10 @@ public class VolumePanel extends JPanel implements MouseListener {
 	
 	private EmbeddedMediaPlayer currentVideo;
 	
-	private String iconPath = "./icons";
-	ImageIcon plus = new ImageIcon(iconPath + "/volumeUp.png");
-	ImageIcon minus = new ImageIcon(iconPath + "/volumeDown.png");
-	ImageIcon muteTrue = new ImageIcon(iconPath + "/muteTrue.png");
-	ImageIcon muteFalse = new ImageIcon(iconPath + "/muteFalse.png");
+	ImageIcon plus = new ImageIcon(this.getClass().getResource("icons/volumeUp.png"));
+	ImageIcon minus = new ImageIcon(this.getClass().getResource("icons/volumeDown.png"));
+	ImageIcon muteTrue = new ImageIcon(this.getClass().getResource("icons/muteTrue.png"));
+	ImageIcon muteFalse = new ImageIcon(this.getClass().getResource("icons/muteFalse.png"));
 	
 	private JSlider volumeSlider;
 	private JButton volumeUp, volumeDown, muteButton;
@@ -38,6 +37,9 @@ public class VolumePanel extends JPanel implements MouseListener {
 		return _volumePanel;
 	}
 	
+	/**
+	 * create the panel
+	 */
 	private VolumePanel() {
 		
 		setOpaque(false);
@@ -131,9 +133,18 @@ public class VolumePanel extends JPanel implements MouseListener {
 		muteButton.setEnabled(false);
 		add(muteButton, "cell 0 0,alignx right");
 	}
+	
+	/**
+	 * sets the curret embedded media player
+	 * @param m
+	 */
 	public void setCurrentVideo(EmbeddedMediaPlayer m) {
 		currentVideo = m;
 	}
+	
+	/**
+	 * enables the volume components
+	 */
 	public void volumeOn() {
 		volumeSlider.setEnabled(true);
 		volumeUp.setEnabled(true);
@@ -141,6 +152,9 @@ public class VolumePanel extends JPanel implements MouseListener {
 		muteButton.setEnabled(true);
 	}
 	
+	/**
+	 * increases volume by 10
+	 */
 	public void upBtnPressed(){
 		int currentVol = volumeSlider.getValue();
 		if (currentVol == 100) {
@@ -150,6 +164,9 @@ public class VolumePanel extends JPanel implements MouseListener {
 		}
 	}
 	
+	/**
+	 * decreases volume by 10
+	 */
 	public void downBtnPressed(){
 		int currentVol = volumeSlider.getValue();
 		if (currentVol == 0) {
@@ -158,7 +175,10 @@ public class VolumePanel extends JPanel implements MouseListener {
 			volumeSlider.setValue(currentVol - 10);
 		}
 	}
-	//set up and return a button using only an image icon
+	
+	/**
+	 * set up and return a button using only an image icon
+	 */
 	private JButton setImageButton(ImageIcon img) {
 		JButton imgButton = new JButton(img);
 		imgButton.setOpaque(false);
@@ -171,6 +191,10 @@ public class VolumePanel extends JPanel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent m) {
 	}
+	
+	/**
+	 * changes cursor to a hand shape when mouse is hovering over volume slider
+	 */
 	@Override
 	public void mouseEntered(MouseEvent m) {
 		JComponent s = (JComponent)m.getSource();

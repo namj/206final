@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import project.SubMainPanel;
+import mainPackage.PrimaryPanel;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 /**
@@ -16,18 +16,22 @@ import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
  */
 
 public class MediaProgressChecker extends SwingWorker<Void,Void>{
-	private SubMainPanel main;
+	private PrimaryPanel main;
 	
-	//constructor of swing worker takes in Main panel as input to invoke update on
-	public MediaProgressChecker(SubMainPanel mp) {
+	/**
+	 * constructor of swing worker takes in Main panel as input to invoke update on
+	 */
+	public MediaProgressChecker(PrimaryPanel mp) {
 		main = mp;
 	}
 	
+	/**
+	 * after a media is opened, continuously checks for media progress
+	 */
 	@Override
 	protected Void doInBackground() throws Exception {
 		EmbeddedMediaPlayer media = main.getMedia();
 		long length = media.getLength();
-		//after a media is opened, continuously checks for media progress
 		//when video is finish and not playable, restart
 		while (true) {
 			Thread.sleep(50);
